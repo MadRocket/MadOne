@@ -1,0 +1,34 @@
+body, html {
+	font-family: Arial, serif;
+	height: 100%;
+	color: #777;
+}
+
+#container {
+	width: 970px;
+	margin: 0 auto;
+}
+
+.copy {
+	margin-left: 0px;
+	line-height: 51px;
+	float: left;
+}
+
+.made-by-madrocket {
+	font-size: 11px;
+	margin-top: 10px;
+	margin-right: 0px;
+	line-height: 11px; 
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	float: right;
+}
+
+.made-by-madrocket img {
+	display: block;
+}
+
+.made-by-madrocket a, .made-by-madrocket a:link, .made-by-madrocket a:hover, .made-by-madrocket a:visited  {
+	text-decoration: none;
+	color: #8e8e8e;
+}

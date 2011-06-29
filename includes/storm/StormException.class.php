@@ -1,0 +1,8 @@
+<?
+
+class StormException extends Exception
+{
+
+}
+
+?>

@@ -1,0 +1,98 @@
+/**
+*	Стили по умолчанию.
+*/
+
+/* Общая типографика */
+strong, th, thead td, h1, h2, h3, h4, h5, h6 {font-weight: bold;}
+cite, em, dfn {font-style: italic;}
+code, kbd, samp, pre, tt, var {font-size: 92%;}
+del {text-decoration:line-through;}
+small, sup, sub {font-size: 85%;}
+abbr, acronym {text-transform: uppercase; font-size: 85%; letter-spacing: .1em;}
+a abbr, a acronym {border: none;}
+abbr[title], acronym[title], dfn[title] {cursor: help;}
+sup {vertical-align: super;}
+sub {vertical-align: sub;}
+
+/* Размеры шрифта */
+body {line-height: 1.4em;}
+h1 {font-size: 1.6em;}
+h2 {font-size: 1.5em;}
+h3 {font-size: 1.4em;}
+h4 {font-size: 1.3em;}
+h5 {font-size: 1.2em;}
+h6 {font-size: 1em;}
+
+/* Списки */
+ul li {text-indent: -.85em; margin-left: .85em;}
+ul li {list-style-position: inside;list-style-type: disc;}
+ol li {list-style-position: outside;list-style-type: decimal;}
+dt {font-weight: bold;}
+
+/* Таблицы */
+th, td {border: 1px solid #ccc;}
+th {text-align: center;}
+
+/* Отступы */
+hr, p, ul, ol, dl, pre, blockquote, address, table, form {margin-bottom: .65em;}
+p+p {margin-top: -.2em;}
+h1,h2,h3,h4,h5,h6 {margin: 1em 0 .5em;}
+th, td {padding: .4em .6em;}
+caption {padding-bottom: .6em;} /* padding instead of margin for IE */
+blockquote {padding: 0 1em; margin: 1.6em 0;}
+fieldset {padding: 0 1em 1em 1em; margin: 1.6em 0;} /* padding-top is margin-top for fieldsets in Opera */
+legend {padding-left: .8em; padding-right: .8em;}
+legend+* {margin-top: 1em;} /* compensates for the opera margin bug */
+ul {margin-left: 1.5em;}
+ol {margin-left: 2.35em;}
+ol ol, ul ol {margin-left: 2.5em;}
+form div {margin-bottom: .65em;}
+dt {margin-top: .65em; margin-bottom: .33em;}
+
+/* Выравнивание изображений */
+img[align=left] {float:left; margin:0 1em .65em 0}
+img[align=right] {float:right; margin:0 0 .65em 1em}
+/* IE6 */
+* html img {
+	float:expression(this['align']=='left'?'left':this['align']=='right'?'right':'none');
+	margin-right:expression(this['align']=='left'?'1em':'0');
+	margin-left:expression(this['align']=='right'?'1em':'0');
+	margin-bottom:expression(this['align']=='right'||this['align']=='left'?'0.65em':'0');
+}
+
+
+/* Фотогалерея http://www.artlebedev.ru/tools/technogrette/html/thumbnails-center/ */
+.gallery {
+	margin: -24px 0 0 -14px;
+	text-align: left;
+}
+.thumbnail {
+	text-decoration: none;
+	display: -moz-inline-box;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+	margin: 24px 0 0 14px;
+	line-height: 16px !important;
+}
+.thumbnail img {
+	border: none !important;
+	background: url(/static/i/gallery-thmb.png) no-repeat;
+	padding: 6px 12px 12px 6px;
+}
+.thumbnail img.photo {
+	border: none !important;
+	background: url(/static/i/gallery-thmb.png) no-repeat;
+	padding: 6px;
+
+}
+.thumbnail .r {
+	float: left;
+/*  Если есть необходимость, то свойства padding, border, background и position со значением relative
+лучше задавать у этого элемента -- это несколько расширит количество поддерживаемых версий браузеров */
+	width: 150px;
+}
+
+.paginator a, .paginator span {
+	margin-right: 10px;
+}

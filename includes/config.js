@@ -1,0 +1,1 @@
+{"site_title":"\u0412\u0430\u0448 \u0441\u0430\u0439\u0442","admin_email":"rojkov.dmitry@gmail.com", "NewsApplication": {"items_on_page": 10}}

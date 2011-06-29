@@ -1,0 +1,11 @@
+RewriteEngine on
+
+# Система управления
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(cms/.*) /cms/? [QSA,L]
+
+# Отображение страниц сайта
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* ? [QSA,L]

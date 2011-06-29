@@ -1,0 +1,7 @@
+<?
+
+class WelcomeModule extends AbstractModule {
+
+}
+
+?>

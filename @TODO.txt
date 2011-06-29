@@ -1,0 +1,12 @@
+Структура папок
+
+/includes
+    /madone - ядро системы управления
+        /model - системные модели
+    /module - модули
+        /module_name
+            /template
+            /model
+
+    /templates - шаблоны
+
