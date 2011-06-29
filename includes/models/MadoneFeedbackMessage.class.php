@@ -19,7 +19,7 @@ class MadoneFeedbackMessage extends StormModel {
     	// Проверим ответ, отправим пользователю уведомление
     	if( $this->email && $this->answer && md5( $this->answer ) != $this->answermd5 ) {
     	
-			$mail = PhpMailerLibrary::create();
+			$mail = Outer_Email::create();
 			$mail->AddAddress( $this->email );
 			$mail->Subject = 'Ответ на Ваше сообщение';
 			$mail->Body = $this->answer;
@@ -33,7 +33,7 @@ class MadoneFeedbackMessage extends StormModel {
     function afterSave( $new ) {
     	// Уведомим админа о новом сообщении
         if( $new ) {
-			$mail = PhpMailerLibrary::create();
+			$mail = Outer_Email::create();
 			$mail->AddAddress( Config::$i->{'admin_email'} );
 			$mail->Subject = 'Письмо с сайта '.$_SERVER['SERVER_NAME'];
 			$mail->Body = $this->name.( $this->email ? " ".$this->email : '' )."\n\n".$this->text;

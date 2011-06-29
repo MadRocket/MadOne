@@ -1,13 +1,12 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/includes/3rdparty/dompdf/dompdf_config.inc.php");
+// require_once($_SERVER['DOCUMENT_ROOT']."/includes/3rdparty/dompdf/dompdf_config.inc.php");
 # Функции автоматической загрузки классов во время выполнения (autoload)
 
 # Тут нужно прописать полные пути к каталогам, в которых можно найти инклудные файлы
 $include_paths = array
 (
-    "{$_SERVER['DOCUMENT_ROOT']}/includes/applications",
     "{$_SERVER['DOCUMENT_ROOT']}/includes",
-    "{$_SERVER['DOCUMENT_ROOT']}/includes/3rdparty",
+    "{$_SERVER['DOCUMENT_ROOT']}/includes/applications",
     "{$_SERVER['DOCUMENT_ROOT']}/includes/module",
 );
 
@@ -17,9 +16,17 @@ class AutoloadException extends Exception { }
 # Обработчик автолоада
 class AutoloadClass {
     public static function autoload( $classname ) {
-        include_once( $classname . '.class.php' );
+        if(mb_strpos($classname, '_') !== false) {
+            $classparts = explode('_', strtolower($classname) );
+            array_pop($classparts);
+            $path = join(DIRECTORY_SEPARATOR, $classparts) . DIRECTORY_SEPARATOR . $classname . ".php";
 
-        #  Удалось ли загрузить класс?
+            include_once($path);
+        }
+        else {
+            include_once( $classname . '.class.php' );
+        }
+
         if( class_exists( $classname ) || interface_exists( $classname ) ) {
             # Если у класса есть метод init -  вызовем его для статической инициализации
             if( method_exists( $classname, 'init' ) ) {

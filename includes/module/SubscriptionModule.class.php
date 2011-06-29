@@ -25,7 +25,7 @@ class SubscriptionModule extends AbstractModule {
 				throw new Exception( "В списке рассылки нет активных подписчиков." );
 			}
 
-			$mail = PhpMailerLibrary::create();
+			$mail = Outer_Email::create();
 			
 			$mail->AddAddress( array_shift( $emails ) );
 			foreach( $emails as $rcpt ) {
