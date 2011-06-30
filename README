@@ -1,3 +1,8 @@
 CMS MadOne
+Requirements:
+PHP 5.2.2 
+MySQL 5.0
+Apache 2.0 + mod_rewirte
 
-All comments in russian language, i'll translate it in near future.
+
+All comments are in russian language, i'll translate in near future.
