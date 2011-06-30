@@ -1,5 +1,5 @@
 <? if( $this->paginator ): ?>
-	<?foreach( $this->paginator->objects as $i ):?>
+	<?foreach( $this->paginator->getObjects() as $i ):?>
 		<p><?= $i->date ?> — <?= $i->name ?></p>
 		<p><?= $i->text ?></p>
 		<div>

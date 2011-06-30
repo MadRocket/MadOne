@@ -57,7 +57,7 @@ class ShowcaseSectionApplication extends AbstractApplication {
 			
 			$paginator = new StormPaginator( MadoneShowcaseItems( array( 'enabled' => true, 'section__in' => $subsections ) )->follow( 2 )->order( 'section__lk' )->order( 'title' ), 'paginator', 10 );
 
-			if( ! $paginator->objects && $paginator->page > 1 ) {
+			if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
 				return false;
 			}
 			

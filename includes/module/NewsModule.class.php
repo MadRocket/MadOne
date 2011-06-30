@@ -6,8 +6,8 @@ class NewsModule extends AbstractModule {
 
         $paginator = new StormPaginator( MadoneNewsList()->orderDesc( 'date' ), 'core/paginator', 10 );
         
-        if( ! $paginator->objects && $paginator->page > 1 ) {
-        	$path = $paginator->pageCount ? "page{$paginator->pageCount}/" : "";
+        if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
+        	$path = $paginator->getPageCount() ? "page{$paginator->getPageCount()}/" : "";
 			header(  "Location: {$this->uri}/{$path}", true );
             exit;
         }

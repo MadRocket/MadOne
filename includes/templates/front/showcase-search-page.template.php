@@ -1,6 +1,6 @@
 <? $this->startBuffering(); ?>
 
-<? if( ! $this->query || ( $this->paginator && ! $this->paginator->objects ) ): ?>
+<? if( ! $this->query || ( $this->paginator && ! $this->paginator->getObjects() ) ): ?>
 	<?= $this->page->text ?>
 <? else: ?>
 		<h1><? if( $this->paginator && $this->paginator->count ): ?>По запросу <i>«<?= $this->query ?>»</i> <?= Mad::decline( $this->paginator->count, '', 'нашлась одна позиция', 'нашлось %n позиции', 'нашлось %n позиций' ) ?></span><? else: ?><?= $this->page->title ?><? endif ?></h1>
@@ -11,7 +11,7 @@
 </form>
 		
 <? if( $this->query ): ?>
-	<? if( $this->paginator && $this->paginator->objects ): ?>
+	<? if( $this->paginator && $this->paginator->getObjects() ): ?>
 	
 		<?= new Template( 'showcase-item-list', array( 'uri' => MadonePages( array( 'type__app_classname' => 'MadoneShowcaseApplication' ) )->first()->uri ) ) ?>
 

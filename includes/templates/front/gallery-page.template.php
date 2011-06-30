@@ -24,7 +24,7 @@
 
 	<!-- Превью картинок выбранного раздела галереи -->
 	<div class="gallery">
-	<? foreach( $this->paginator->objects as $i ): ?>
+	<? foreach( $this->paginator->getObjects() as $i ): ?>
 		<ins class="thumbnail">
 	        <div class="r">
 	            <a href="<?= $i->image->cms->uri ?>"><?= $i->image->cms->getHTML(array('alt' => $i->title, 'class' => "photo")) ?></a><br />

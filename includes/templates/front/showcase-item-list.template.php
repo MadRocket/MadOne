@@ -1,5 +1,5 @@
 <table class="showcase-layout">
-<?foreach( $this->paginator->objects as $i ):?>
+<?foreach( $this->paginator->getObjects() as $i ):?>
 	<? $image = $i->images->first(); ?>
 	<tr>
 		<? if( $image ): ?>

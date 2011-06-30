@@ -16,7 +16,7 @@
 ?>
 <span class="search-result-count"><?= Mad::decline($this->paginator->count, 'По Вашему запросу ничего не найдено', 'Найдено %n совпадение', 'Найдено %n совпадения', 'Найдено %n совпадений') ?></span>
 <ol class="search-results" start="<?= ($this->paginator->page-1) * 15 + 1 ?>">
-	<? foreach($this->paginator->objects as $entry): ?>
+	<? foreach($this->paginator->getObjects() as $entry): ?>
 		<?  
 			preg_match("~([^;\.\!\?\,]*)(".join("|", $words).")([^;\.\!\?\,]*)~siu", $entry->text, $m);
 		?>

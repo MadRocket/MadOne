@@ -7,7 +7,7 @@
 	
 	<div class="a-units a-unit-list" stormModel="MadoneNews">
 	
-	<? foreach( $this->paginator->objects as $i ): ?>
+	<? foreach( $this->paginator->getObjects() as $i ): ?>
 	<div class="a-unit">
 	<div class="a-unit-body<?= $i->enabled ? '' : ' disabled'?>" stormObject="<?=$i->id?>">
 		<div class="actions">

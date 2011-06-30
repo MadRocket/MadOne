@@ -21,7 +21,7 @@ class TableofcontentsApplication extends AbstractApplication
 		$paginator = new StormPaginator( MadonePages()->filterChildren( $page ), 'paginator', 10 );
 
         // Выбрана левая страница - не обрабатываем
-        if( ! $paginator->objects && $paginator->page > 1 )
+        if( ! $paginator->getObjects() && $paginator->getPage() > 1 )
         {
             return false;
         }
