@@ -195,15 +195,9 @@ class Madone {
         }
     
         header( "{$_SERVER['SERVER_PROTOCOL']} 404 Not Found", true, 404 );
-    
-?><!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL <?=$uri?> was not found on this server.</p>
-<hr>
-<?=$_SERVER['SERVER_SIGNATURE']?></body></html><?
+
+        print new Template('default/system/404', array('uri' => $uri));
+        
         return;
     }
 
