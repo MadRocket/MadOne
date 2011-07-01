@@ -148,27 +148,6 @@ class StormPaginator
         return (string)$this->fetch();
     }
 
-    /**
-     * Получение всяких полей, в том числе count и objects, чтобы было удобно использовать
-     * TODO: remove method
-     */
-    function __get($name)
-    {
-        switch ($name)
-        {
-            case 'count':
-                return $this->getCount();
-            case 'objects':
-                return $this->getObjects();
-            case 'pageCount':
-                return ceil($this->getCount() / $this->size);
-        }
-
-        if (in_array($name, array('query', 'uri', 'size', 'page', 'template', 'pages'))) {
-            return $this->$name;
-        }
-    }
-
     public function getPageCount()
     {
         return ceil($this->getCount() / $this->size);
