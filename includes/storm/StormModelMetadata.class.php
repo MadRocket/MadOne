@@ -91,8 +91,11 @@ class StormModelMetadata
     }
     
     /**
-        Получение ссылки на поле
-    */
+     * Получение ссылки на поле
+     * @throws StormException
+     * @param $name
+     * @return StormDbField
+     */
     function getField( $name )
     {
     	if( ! array_key_exists( $name, $this->fields ) ) {
@@ -115,6 +118,26 @@ class StormModelMetadata
     function setPkValue( $value )
     {
         return $this->pk->setValue( $value );
+    }
+
+    public function setFkfields($fkfields)
+    {
+        $this->fkfields = $fkfields;
+    }
+
+    public function getFkfields()
+    {
+        return $this->fkfields;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getPkname()
+    {
+        return $this->pkname;
     }
 }
     

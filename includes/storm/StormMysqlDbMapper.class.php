@@ -212,12 +212,12 @@ class StormMysqlDbMapper extends StormDbMapper
         return "LIMIT ". ( $offset ? "{$offset}," : '' ). $limit;
     }
     
-	function getColumnDefinitionSql( StormDbField $field, $language = null ) {
+	function getColumnDefinitionSql( StormDbField $field, StormLanguage $language = null ) {
 		$sql = parent::getColumnDefinitionSql( $field, $language );
 		if( $language ) {
 			// Для текстовых полей указываем charset и collate :3
 			if( $field instanceof StormCharDbField || $field instanceof StormTextDbField || $field instanceof StormEnumDbField ) {
-				$collation = array_key_exists( $language->name, $this->collations ) ? $this->collations[ $language->name ] : $this->collations['DEFAULT'];
+				$collation = array_key_exists( $language->getName(), $this->collations ) ? $this->collations[ $language->getName() ] : $this->collations['DEFAULT'];
 				$sql .= " {$collation}";
 			}
 		}

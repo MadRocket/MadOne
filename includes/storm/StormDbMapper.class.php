@@ -25,7 +25,7 @@ abstract class StormDbMapper
     }
     
     function getLanguageSuffix( $language ) {
-    	return "_{$language->key}";
+    	return "_{$language->getKey()}";
     }
     
     /**

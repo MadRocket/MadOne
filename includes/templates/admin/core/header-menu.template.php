@@ -24,13 +24,13 @@
 		?>
 		
 		<? if($nextLang): ?>
-		<a href="<?= $this->cmsUri ?>/switchlanguage/<?= $nextLang->name ?>/" title="Текущий язык <?= StormCore::getLanguage()->name ?>"><img src="/cms/static/i/icons/flags/<?= StormCore::getLanguage()->name ?>.gif"></a>
+		<a href="<?= $this->cmsUri ?>/switchlanguage/<?= $nextLang->getName() ?>/" title="Текущий язык <?= StormCore::getLanguage()->getName() ?>"><img src="/cms/static/i/icons/flags/<?= StormCore::getLanguage()->getName() ?>.gif"></a>
 		<? endif; ?>
 	<? foreach( $langs as $lang ): ?>
 		<? if( $lang == StormCore::getLanguage() ): ?>
-		<a><?= ucfirst( $lang->name ) ?></a>
+		<a><?= ucfirst( $lang->getName() ) ?></a>
 		<? else: ?>
-		<a href="<?= $this->cmsUri ?>/switchlanguage/<?= $lang->name ?>/"><?= ucfirst( $lang->name ) ?></a>
+		<a href="<?= $this->cmsUri ?>/switchlanguage/<?= $lang->getName() ?>/"><?= ucfirst( $lang->getName() ) ?></a>
 		<? endif ?>
 	<? endforeach ?>
 	</span>

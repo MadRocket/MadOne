@@ -7,7 +7,10 @@
 class StormQuerySet
 {
     protected static $cache = array();
-	
+
+    /**
+     * @var StormModel
+     */
     protected $model;   // Модель, по которой выполняем выборки
 	
     protected $qc;  // Условия выборки
@@ -345,9 +348,9 @@ class StormQuerySet
             $part->join = new StormQueryJoin
             (
                 $null ? 'LEFT' : 'INNER',
-                $core->mapper->getModelTable( $model ),
+                $core->getMapper()->getModelTable( $model ),
                 $alias,
-                "{$supalias}.{$supfield} = {$alias}.{$meta->pkname}"
+                "{$supalias}.{$supfield} = {$alias}.{$meta->getPkname()}"
             );
 
 
@@ -357,9 +360,9 @@ class StormQuerySet
                 {
                 	if( $v->localized ) {
                 		foreach( StormCore::getAvailableLanguages() as $language ) {
-							$falias = join( '__', array_merge( array( $this->model ), $path, array( $n ) ) ) . "__{$language->name}";
+							$falias = join( '__', array_merge( array( $this->model ), $path, array( $n ) ) ) . "__{$language->getName()}";
 							$part->fields[] = "{$alias}." . StormCore::getMapper()->getFieldColumnName( $v, $language ) . " AS $falias";
-							$part->aliases[ $n ][ $language->name ] = "$falias";
+							$part->aliases[ $n ][ $language->getName() ] = "$falias";
                 		}
                 	} else {
 						$falias = join( '__', array_merge( array( $this->model ), $path, array( $n ) ) );
@@ -372,7 +375,7 @@ class StormQuerySet
         else
         {
             // Мы в начале, разбираем основную сущность запроса
-            $alias = $core->mapper->getModelAlias( $this->model );
+            $alias = $core->getMapper()->getModelAlias( $this->model );
 
             foreach( $meta->getFields() as $n => $v )
             {
@@ -391,9 +394,9 @@ class StormQuerySet
 	                {
 	                	if( $v->localized ) {
 	                		foreach( StormCore::getAvailableLanguages() as $language ) {
-								$falias = "{$this->model}__{$n}__{$language->name}";
+								$falias = "{$this->model}__{$n}__{$language->getName()}";
 								$part->fields[] = "{$alias}." . StormCore::getMapper()->getFieldColumnName( $v, $language ) . " AS $falias";
-								$part->aliases[$n][ $language->name ] = $falias;
+								$part->aliases[$n][ $language->getName() ] = $falias;
 	                		}
 	                	} else {
 							$falias = "{$this->model}__{$n}";
@@ -472,7 +475,7 @@ class StormQuerySet
 
                     // Создаем только если PK != NULL, а такое может быть при FK IS NULL
                     $meta = StormCore::getInstance()->getStormModelMetadata( $f->model );
-                    if( $data[ $meta->pkname ] )
+                    if( $data[ $meta->getPkname() ] )
                     {
                         $dst = new $f->model();
                         $dst->setValuesFromDatabase( $data );
@@ -531,7 +534,7 @@ class StormQuerySet
     {
         $key = array();
         foreach( $params as $k => $v ) $key[] = "{$k}={$v}";
-        return $this->model . ':'. join( ',', $key ) . ':' . StormCore::getLanguage()->key;
+        return $this->model . ':'. join( ',', $key ) . ':' . StormCore::getLanguage()->getKey();
     }
 
     /**

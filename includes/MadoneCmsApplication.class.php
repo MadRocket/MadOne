@@ -19,11 +19,11 @@ class MadoneCmsApplication
                     $request = new MadoneCmsRequest();
                 
                     // Если в настройках есть модуль по умолчанию, и произведен вход в корень сайта — редиректим
-                    if( Mad::getUriPath() == $request->cmsUri && 
+                    if( Mad::getUriPath() == $request->getCmsUri() &&
                     	MadoneSession::getInstance()->getUser()->setting_module && 
                     	MadoneSession::getInstance()->getUser()->setting_module->name )
                     {
-                        header( "Location: {$request->cmsUri}/" . MadoneSession::getInstance()->getUser()->setting_module->name . '/', true );
+                        header( "Location: {$request->getCmsUri()}/" . MadoneSession::getInstance()->getUser()->setting_module->name . '/', true );
                         exit;
                     }
                 }
@@ -52,69 +52,69 @@ class MadoneCmsApplication
         // Проверим авторизованность пользователя, выдадим соответствующий ответ при отсутствии сессии
         if( ! MadoneSession::getInstance()->getUser() )
         {
-            if( $request->type == MadoneCmsRequest::MODULE_AJAX || $request->type == MadoneCmsRequest::MODEL )
+            if( $request->getType() == MadoneCmsRequest::MODULE_AJAX || $request->getType() == MadoneCmsRequest::MODEL )
             {
                 print json_encode( array( 'success' => false, 'message' => 'Вы не авторизованы, или слишком долго бездейстовали. Пожалуйста, обновите страницу, Вам будет предложено ввести имя и пароль.' ) );
             }
             else
             {
-                print new Template( 'core/login-page', array( 'cmsUri' => $request->cmsUri ) );
+                print new Template( 'core/login-page', array( 'cmsUri' => $request->getCmsUri() ) );
             }
             exit;        
         }
         
         // Обрабатываем переключение языка
-        if( $request->type == MadoneCmsRequest::LANG_SWITCH ) {
+        if( $request->getType() == MadoneCmsRequest::LANG_SWITCH ) {
         	try {
-        		StormCore::setLanguage( $request->objectName );
-        		MadoneSession::getInstance()->language = StormCore::getLanguage()->name;
+        		StormCore::setLanguage( $request->getObjectName() );
+        		MadoneSession::getInstance()->language = StormCore::getLanguage()->getName();
         	} catch( StormException $e ) {}
-			$location = array_key_exists( 'HTTP_REFERER', $_SERVER ) ? $_SERVER['HTTP_REFERER'] : $request->cmsUri;
+			$location = array_key_exists( 'HTTP_REFERER', $_SERVER ) ? $_SERVER['HTTP_REFERER'] : $request->getCmsUri();
 			header( "Location: {$location}", true );
 			exit;
         }
         
         // Обрабатываем MODEL
-        else if( $request->type == MadoneCmsRequest::MODEL )
+        else if( $request->getType() == MadoneCmsRequest::MODEL )
         {
             $processor = new StormRestProcessor();
-            print $processor->process( $request->objectName, $request->uri, Mad::vars() );
+            print $processor->process( $request->getObjectName(), $request->getUri(), Mad::vars() );
             exit;
         }
 
         // Остались MODULE запросы. Получим активный модуль
-        $module = $this->getModuleByName( $request->objectName );
+        $module = $this->getModuleByName( $request->getObjectName() );
                 
         // Имя есть, а модуль не нашелся? Непорядок, выдаем 404!
-        if( $request->objectName && ! $module )
+        if( $request->getObjectName() && ! $module )
         {
             Madone::show404( Mad::getUriPath() );
             return false;
         }
         
         // В зависимости от типа запроса вызываем соответствующий обработчик
-        if( $request->type == MadoneCmsRequest::MODULE_AJAX )
+        if( $request->getType() == MadoneCmsRequest::MODULE_AJAX )
         {
             // ajax-запрос
-            print $module ? $module->handleAjaxRequest( $request->uri ) : Madone::show404( Mad::getUriPath() );
+            print $module ? $module->handleAjaxRequest( $request->getUri() ) : Madone::show404( Mad::getUriPath() );
         }
         else
         {
             // Интерфейсный запрос — рисуем его в нашем интерфейсе :3
             $t = new Template( 'core/common-page' );
             $t->menuItems = array();
-            $t->module = $request->objectName;
-            $t->cmsUri = $request->cmsUri;
+            $t->module = $request->getObjectName();
+            $t->cmsUri = $request->getCmsUri();
             
             // Получим модули системы, сформируем из них элементы меню
             foreach( MadoneModules( array( 'enabled' => 1 ) )->order( 'position' )->all() as $m ) {
                 $t->menuItems[] = array(
                     'title' => $m->title,
-                    'uri' => "{$request->cmsUri}/{$m->name}/",
-                    'selected' => $m->name == $request->objectName
+                    'uri' => "{$request->getCmsUri()}/{$m->name}/",
+                    'selected' => $m->name == $request->getObjectName()
                 );
                 
-                if( $m->name == $request->objectName ) {
+                if( $m->name == $request->getObjectName() ) {
                     $t->title = $m->title;
                 }
             }
@@ -127,7 +127,7 @@ class MadoneCmsApplication
             // Проверим наличие title, если нет — выбран встроенный модуль, и тайтл тоже нужно приготовить самостоятельно
             if( ! $t->has( 'title' ) ) {
             
-                switch( $request->objectName ) {
+                switch( $request->getObjectName() ) {
                     case 'settings':
                         $t->title = 'Настройка';
                         break;
@@ -144,7 +144,7 @@ class MadoneCmsApplication
             }
             
             // Позволим модулю обработать запрос и вернуть контент
-            $t->content = $module->handleHtmlRequest( $request->uri );
+            $t->content = $module->handleHtmlRequest( $request->getUri() );
             
             // Шаблон заполнен, выводим его
             print $t;

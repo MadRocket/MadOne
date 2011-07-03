@@ -18,6 +18,9 @@ class StormCore
     private $querysets; // массив названий querysetов для моделей, ключ - имя модели
 
     private $backend;
+    /**
+     * @var StormDbMapper
+     */
     private $mapper;
     
     private $language;	// текущий язык, включенный в ядре. Влияет на выборку и сохранение данных.
@@ -36,8 +39,10 @@ class StormCore
     }
 
     /**
-        Доступ к объекту-синглтону
-    */
+     * Доступ к объекту-синглтону
+     * @static
+     * @return StormCore
+     */
     public static function getInstance()
     {
         if( self::$instance == null )
@@ -68,9 +73,9 @@ class StormCore
     *	Установка текущего языка Storm.
     *	Возвращает true или выбрасывает исключение.
     */
-    public static function setLanguage( $language ) {
+    public static function setLanguage( StormLanguage $language ) {
     	if( $language instanceof StormLanguage ) {
-    		$language = $language->name;
+    		$language = $language->getName();
     	}
 		if( array_key_exists( $language, self::getInstance()->languages ) ) {
 			self::getInstance()->language = self::getInstance()->languages[ $language ];
@@ -80,9 +85,12 @@ class StormCore
     }
     
     /**
-    *	Получение текущего языка Storm.
-    *	Возвращает StormLanguage.
-    */
+     * Получение текущего языка Storm.
+     * @static
+     * @throws StormException
+     * @param null $name
+     * @return StormLanguage
+     */
     public static function getLanguage( $name = null ) {
     	if( ! $name ) {
 			return self::getInstance()->language;
@@ -93,10 +101,11 @@ class StormCore
 		throw new StormException( "Неизвестный язык '{$name}'" );
     }
     
-	/**
-	*	Получение списка доступных языков Storm.
-	*	Возвращает массив StormLanguage.
-	*/
+    /**
+     * Получение списка доступных языков Storm. Возвращает массив StormLanguage.
+     * @static
+     * @return array StormLanguage
+     */
 	public static function getAvailableLanguages() {
 		return self::getInstance()->languages;
 	}
@@ -156,7 +165,7 @@ class StormCore
     	$this->languages = array();
     	foreach( StormConfig::$locales as $locale ) {
     		$language = new StormLanguage( $locale );
-    		$this->languages[ $language->name ] = $language;
+    		$this->languages[ $language->getName() ] = $language;
     		if( ! $this->language ) {
     			$this->language = $language;
     		}
@@ -200,6 +209,10 @@ class StormCore
         Получение метаданных модели
         Возвращает массив метаданных так, как он выглядит в свежесозданном экземпляре модели
     */
+    /**
+     * @param $classname
+     * @return StormModelMetadata
+     */
     public function getStormModelMetadata( $classname )
     {
         // Проверим, нет ли у нас готовой копии метаданных для этой модели

@@ -12,7 +12,7 @@ class Madone {
     protected static $language = null;
     protected static $langRegExp = null;
     
-	protected static $developmentMode;
+	protected static $developmentMode = true;
     
     /**
     *	Инициализация класса
@@ -92,8 +92,8 @@ class Madone {
 			if( ! array_key_exists( 'default', self::$languages ) ) {
 				self::$languages['default'] = $language;
 			} else {
-				self::$languages[ $language->name ] = $language;
-				self::$langRegExp .= self::$langRegExp ? "|{$language->name}" : $language->name;
+				self::$languages[ $language->getName() ] = $language;
+				self::$langRegExp .= self::$langRegExp ? "|{$language->getName()}" : $language->getName();
 			}
 		}
 
@@ -114,11 +114,11 @@ class Madone {
 		}
 
 		// Выбираем локаль PHP в соответствии с локалью шторма
-/* 		setlocale( LC_ALL, StormCore::getLanguage()->locale ); */
+/* 		setlocale( LC_ALL, StormCore::getLanguage()->getLocale() ); */
 /* FIXME: все кроме LC_NUMERIC, иначе ломется StormFloatDbField (значение не правильно эскейпится и поэтому теряется действительная часть, это происходит потому, что в русском разделитель - запятая, а во все мире - точка) */
-		setlocale( LC_COLLATE | LC_CTYPE | LC_MONETARY | LC_TIME | LC_MESSAGES, StormCore::getLanguage()->locale );
+		setlocale( LC_COLLATE | LC_CTYPE | LC_MONETARY | LC_TIME | LC_MESSAGES, StormCore::getLanguage()->getLocale() );
 		// Устанавливаем внутреннюю кодировку мультибайтовых функций
-		mb_internal_encoding( StormCore::getLanguage()->charset );
+		mb_internal_encoding( StormCore::getLanguage()->getCharset() );
 	}
 	
     /**
@@ -258,7 +258,7 @@ class Madone {
 	*/
 	static function postprocess( $text ) {
 		// Добавляем lang-атрибут для текущего языка
-		$text = str_replace( '<html', '<html lang="'. StormCore::getLanguage()->name .'"', $text );
+		$text = str_replace( '<html', '<html lang="'. StormCore::getLanguage()->getName() .'"', $text );
 		
 		// Если включен язык, отличный от default — переписываем все ссылки кроме static
 		if( self::$language ) {
@@ -286,7 +286,7 @@ class Madone {
 	}
 	
 	static function isCurrentLanguage( $name ) {
-		return StormCore::getLanguage()->name == mb_strtolower( $name ) ? true : false;
+		return StormCore::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
 }
 

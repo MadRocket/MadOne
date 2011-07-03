@@ -17,16 +17,33 @@ class StormLanguage {
 			throw new StormException( "Не удается распознать локаль '{$locale}'. Используйте корректную локаль, например, ru_RU.UTF-8." );
 		}
 	}
-	
-	public function __get( $name ) {
-		if( property_exists( $this, $name ) ) {
-			return $this->$name;
-		}
-		throw new StormException( "Обращение к несуществующему полю '{$name}' класса ".__CLASS__ );
-	}
-	
+
 	public function __toString() {
 		return (string) $this->key;
 	}
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
 }
 ?>

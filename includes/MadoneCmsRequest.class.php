@@ -77,7 +77,28 @@ class MadoneCmsRequest {
     */
     function __get( $name )
     {
+        error_log('Deprecated');
         return property_exists( $this, $name ) ? $this->$name : null;
+    }
+
+    public function getCmsUri()
+    {
+        return $this->cmsUri;
+    }
+
+    public function getObjectName()
+    {
+        return $this->objectName;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getUri()
+    {
+        return $this->uri;
     }
 }
 

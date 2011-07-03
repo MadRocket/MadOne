@@ -20,7 +20,7 @@
 		<script type="text/javascript" src="/media/mad.js"></script>
 		<script type="text/javascript" src="/media/madone.js?20110503"></script>
 		<script type="text/javascript">
-			Madone.language = <?= json_encode( StormCore::getLanguage()->name ) ?>;
+			Madone.language = <?= json_encode( StormCore::getLanguage()->getName() ) ?>;
 		</script>
 
 		<script type="text/javascript" src="/media/jquery.tmpl-beta1/jquery.tmpl.min.js"></script>

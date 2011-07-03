@@ -43,11 +43,11 @@ class StormFulltextProcessor {
 			}
 		}
 		
-		if( ! array_key_exists( $language->name, $this->dictionaries ) ) {
+		if( ! array_key_exists( $language->getName(), $this->dictionaries ) ) {
 			return join( ' ', $bulk_words );
 		}
 				
-		$morphy = new phpMorphy( $this->dictionaries[ $language->name ]['path'], $this->dictionaries[ $language->name ]['lang'], $this->options );
+		$morphy = new phpMorphy( $this->dictionaries[ $language->getName() ]['path'], $this->dictionaries[ $language->getName() ]['lang'], $this->options );
 		
 		$base_form = $morphy->getBaseForm( $bulk_words );
 		
@@ -81,11 +81,11 @@ class StormFulltextProcessor {
 			if ( strlen($v) > 3 )
 				$bulk_words[] = mb_strtoupper($v);
 		
-		if( ! array_key_exists( $language->name, $this->dictionaries ) ) {
+		if( ! array_key_exists( $language->getName(), $this->dictionaries ) ) {
 			return join( ' ', $bulk_words );
 		}
 				
-		$morphy = new phpMorphy( $this->dictionaries[ $language->name ]['path'], $this->dictionaries[ $language->name ]['lang'], $this->options );
+		$morphy = new phpMorphy( $this->dictionaries[ $language->getName() ]['path'], $this->dictionaries[ $language->getName() ]['lang'], $this->options );
 		
 		$forms = $morphy->getAllForms( $bulk_words );
 		

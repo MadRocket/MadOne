@@ -55,8 +55,8 @@ abstract class StormDbField
 			if( ! $language ) {
 				$language = StormCore::getLanguage();
 			}
-			if( array_key_exists( $language->name, $this->defaults ) ) {
-				return $this->defaults[ $language->name ];
+			if( array_key_exists( $language->getName(), $this->defaults ) ) {
+				return $this->defaults[ $language->getName() ];
 			}
 			list( $first ) = array_keys( $this->defaults );
 			return $this->defaults[ $first ];

@@ -6,12 +6,21 @@ abstract class StormModel
 {
 	private static $defaultValueCache;
 
+    /**
+     * @var \StormModelMetadata
+     */
     public $meta;           // Мета-информация модели
 
     private $constructed = false;   // Признак сконструированности модели
-    
+
+    /**
+     * @var \StormLanguage
+     */
 	private $language;	// Язык, в которой создан экземпляр модели
-	
+
+    /**
+     * @var array
+     */
 	protected $proxies; // Языковые прокси-объекты
 
     /**
@@ -61,11 +70,11 @@ abstract class StormModel
 		foreach( $this->meta->getFields() as $name => $field ) {
 			$languages = $field->localized ? StormCore::getAvailableLanguages() : array( $this->language );
 			foreach( $languages as $language ) {
-				if( ! @array_key_exists( $language->name, self::$defaultValueCache[ get_class( $this ) ][ $name ] ) ) {
-					self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->name ]  = $field->getDefaultValue( $language );
+				if( ! @array_key_exists( $language->getName(), self::$defaultValueCache[ get_class( $this ) ][ $name ] ) ) {
+					self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->getName() ]  = $field->getDefaultValue( $language );
 				}
-				if( ! @is_null( self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->name ] ) ) {
-					$field->setValue( self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->name ], $language );
+				if( ! @is_null( self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->getName() ] ) ) {
+					$field->setValue( self::$defaultValueCache[ get_class( $this ) ][ $name ][ $language->getName() ], $language );
 				}
 			}
 			
@@ -468,7 +477,7 @@ abstract class StormModel
             {
             	if( $field->localized ) {
             		foreach( StormCore::getAvailableLanguages() as $language ) {
-            			$key = mb_strtoupper( $language->name );
+            			$key = mb_strtoupper( $language->getName() );
             			if( ! array_key_exists( $key, $result ) ) {
             				$result[ $key ] = array();
             			}

@@ -22,7 +22,7 @@ class StormDbFieldValueStorage {
 		if( ! $language instanceof StormLanguage ) {
 			$language = StormCore::getLanguage();
 		}
-		return $language->name;
+		return $language->getName();
 	}
 
 	function get( $language = null ) {
