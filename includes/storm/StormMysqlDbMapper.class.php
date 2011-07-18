@@ -264,6 +264,12 @@ class StormMysqlDbMapper extends StormDbMapper
 
 		return $queries;
 	}
+
+    function getTableCreationSql( $model )
+    {
+        $table_sql = parent::getTableCreationSql($model);
+        return "$table_sql ENGINE = MYISAM";
+    }
 }
 
 ?>
