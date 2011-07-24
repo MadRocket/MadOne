@@ -17,6 +17,7 @@ class StormConfig
     static public $db_charset;
     static public $db_prefix;
     static public $db_debug;
+    static public $dev;
 
     static public $models;
     

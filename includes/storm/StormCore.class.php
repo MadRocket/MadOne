@@ -351,46 +351,49 @@ class StormCore
         Создание функций для быстрого доступа к моделям, StormQueryCheck-ам и прочим прелестям.
         В этом методе все является читерством и извращением в той или иной степени, но что делать? Унылый PHP уныл.
     */
-    function registerUtilities()
-    {
-        if( ! $this->utilities_registered )
-        {
-            // Быстрое создание StormQC
-            function Q( $params )           { return new StormQC( $params ); }
-            function QOR( $left, $right )   { return new StormQCOR( $left, $right ); }
-            function QAND( $left, $right )  { return new StormQCAND( $left, $right ); }
-            function QNOT( $op )            { return new StormQCNOT( $op ); }
+	function registerUtilities() {
+	    if( ! $this->utilities_registered )
+	    {
+	        // Быстрое создание StormQC
+	        function Q( $params )           { return new StormQC( $params ); }
+	        function QOR( $left, $right )   { return new StormQCOR( $left, $right ); }
+	        function QAND( $left, $right )  { return new StormQCAND( $left, $right ); }
+	        function QNOT( $op )            { return new StormQCNOT( $op ); }
 
-            // Быстрое создание StormQuerySet
-            function StormQuerySet( $model ) { return ( class_exists( $model ) && is_subclass_of( $model, 'StormKiModel' ) ) ? new StormKiQuerySet( $model ) : new StormQuerySet( $model ); }
+	        // Быстрое создание StormQuerySet
+	        function StormQuerySet( $model ) { return ( class_exists( $model ) && is_subclass_of( $model, 'StormKiModel' ) ) ? new StormKiQuerySet( $model ) : new StormQuerySet( $model ); }
 
-            // Утилиты для получения моделей и их StormQuerySet-ов
-            $code = '';
-            foreach( $this->querysets as $model => $set )
-            {
-                // Определим класс StormQuerySet-а для этой модели
-                $queryset = ( class_exists( $model ) && is_subclass_of( $model, 'StormKiModel' ) ) ? 'StormKiQuerySet' : 'StormQuerySet';
+	        // Утилиты для получения моделей и их StormQuerySet-ов
+	        if(StormConfig::$dev || !is_file(__DIR__.'/bootstrap.php')) {
+	            // В режиме разработки создаем библиотеку быстрых функций
+	            $bootstrap = fopen(__DIR__.'/bootstrap.php', 'w');
+	            $code = '<?php ';
+	            foreach( $this->querysets as $model => $set )
+	            {
+	                // Определим класс StormQuerySet-а для этой модели
+	                $queryset = ( class_exists( $model ) && is_subclass_of( $model, 'StormKiModel' ) ) ? 'StormKiQuerySet' : 'StormQuerySet';
 
-                $code .=
-                "
-                function {$model}( \$params = null )
-                {
-                    return \$params ? new {$model}( \$params ) : new {$model}();
-                }
+	                $code .=
+	                "
+	                function {$model}( \$params = null )
+	                {
+	                    return \$params ? new {$model}( \$params ) : new {$model}();
+	                }
 
-                function {$set}( \$params = null )
-                {
-                    \$qs = new {$queryset}( '{$model}' );
-                    return \$params ? \$qs->filter( \$params ) :  \$qs;
-                }
-                ";
-            }
+	                function {$set}( \$params = null )
+	                {
+	                    \$qs = new {$queryset}( '{$model}' );
+	                    return \$params ? \$qs->filter( \$params ) :  \$qs;
+	                }
+	                ";
+	            }
+	            fwrite($bootstrap, $code);
+	        }
+	        require_once __DIR__.'/bootstrap.php';
 
-            eval( $code ); // :D
-
-            $this->utilities_registered = true;
-        }
-    }
+	        $this->utilities_registered = true;
+	    }
+	}
 }
 
 ?>
