@@ -1,3 +1,3 @@
-<? if( $this->paginator->pages ):?>
-    <div class="paginator"><? foreach( $this->paginator->pages as $i ):?><? if( array_key_exists('left', $i) && $i['left'] ):?><a href="<?=$i['uri']?>">&larr;</a><? elseif( array_key_exists('right', $i) && $i['right'] ):?><a href="<?=$i['uri']?>">&rarr;</a><? elseif( array_key_exists('ellipsis', $i) && $i['ellipsis'] ):?><span>...</span><? elseif( array_key_exists('uri', $i) && $i['uri'] ):?><a href="<?=$i['uri']?>"><?=$i['title']?></a><? else:?><span><?=$i['title']?></span><? endif?><? endforeach?></div>
+<? if( $this->paginator->getPages() ):?>
+    <div class="paginator"><? foreach( $this->paginator->getPages() as $i ):?><? if( array_key_exists('left', $i) && $i['left'] ):?><a href="<?=$i['uri']?>">&larr;</a><? elseif( array_key_exists('right', $i) && $i['right'] ):?><a href="<?=$i['uri']?>">&rarr;</a><? elseif( array_key_exists('ellipsis', $i) && $i['ellipsis'] ):?><span>...</span><? elseif( array_key_exists('uri', $i) && $i['uri'] ):?><a href="<?=$i['uri']?>"><?=$i['title']?></a><? else:?><span><?=$i['title']?></span><? endif?><? endforeach?></div>
 <? endif?>
