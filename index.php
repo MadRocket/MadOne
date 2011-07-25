@@ -13,5 +13,4 @@ if( preg_match('~^/admin~', $_SERVER['REQUEST_URI']) ) {
 else {
 	Madone::run();
 }
-
 ?>

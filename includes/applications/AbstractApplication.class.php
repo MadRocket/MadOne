@@ -31,6 +31,10 @@ class AbstractApplication {
 
         return true;
     }
+
+    function render($template, $vars) {
+        return Madone::twig()->loadTemplate($template)->render($vars);
+    }
 }
 
 ?>

@@ -180,6 +180,9 @@ abstract class StormModel
 		throw new StormException( "There is no field '$name' in {$this->meta->name} model"  );
     }
 
+    function __isset($name) {
+        return $this->meta->fieldExists( $name );
+    }
     /**
         Представление объекта в виде строки - generic-овая версия.
         Отображает объект в виде Имя_модели(имя_первичного_ключа: значение_первичного_ключа)

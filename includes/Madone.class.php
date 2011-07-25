@@ -288,6 +288,10 @@ class Madone {
 	static function isCurrentLanguage( $name ) {
 		return StormCore::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
+
+    static function twig() {
+        return Outer_Twig::get();
+    }
 }
 
 ?>

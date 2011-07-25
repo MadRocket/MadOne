@@ -219,7 +219,7 @@ class Mad
 	*	Форматированние трейса, полученного из Exception->getTrace() или debug_backtrace().
 	*	Возвращает трейс в виде HTML-таблицы.
 	*/
-	function formatDebugTrace( array $rawTrace ) {
+	static function formatDebugTrace( array $rawTrace ) {
 		$traces = array();
 		$num = count( $rawTrace );
 		
@@ -279,7 +279,7 @@ class Mad
 		return $dump;
 	}
 	
-	function str_replace_once($needle , $replace , $haystack){
+	static function str_replace_once($needle , $replace , $haystack){
 		// Looks for the first occurence of $needle in $haystack
 		// and replaces it with $replace.
 		$pos = strpos($haystack, $needle);

@@ -12,11 +12,9 @@
  * priority = 1
  */
 
-class IndexPageApplication extends AbstractApplication
-{
-    function run( MadonePage $page, $uri = '' )
-    {
-        print new Template( 'index-page', array( 'page' => $page ) );
+class IndexPageApplication extends AbstractApplication {
+    function run( MadonePage $page, $uri = '' ) {
+        print $this->render("index-page.twig", array('page' => $page ));
         return true;
     }
 }
