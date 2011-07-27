@@ -16,7 +16,7 @@
 
     <div class="a-units" stormModel="MadonePage">
 
-    {% macro pageitem(item) %}
+    {% macro pageitem(item, full) %}
         <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
                <div class="a-unit-body{{ item.enabled ? '' : 'disabled' }}">
                    <div class="actions">
@@ -28,77 +28,66 @@
                    <h2>{{ item.title }}</h2>
                    <p>{{ item.name }}</p>
                </div>
+               {% if full %}
                <span class="a-unit-list">
                     {% for child in item.getChildren() %}
-                        {{ _self.pageitem(child) }}
+                        {{ _self.pageitem(child, full) }}
                     {% endfor %}
                </span>
+               {% endif %}
            </div>
     {% endmacro %}
 
-    <div class="a-unit" stormObject="{{ root.id }}" id="a-unit-{{ root.id }}">
-        <div class="a-unit-body{{ root.enabled ? '' : 'disabled' }}">
-            <div class="actions">
-                <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-                <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ root.enabled ? 'on' : 'off' }}.png"/>
-                <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ root.enabled ? 'on' : 'off' }}.png"/>
-                <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
-            </div>
-            <h2>{{ root.title }}</h2>
-            <p>{{ root.name }}</p>
-        </div>
-    </div>
+    {{ _self.pageitem(root, full) }}
 
     <span id="pages" class="a-unit-list">
     {% for item in items %}
-    {{ _self.pageitem(item) }}
+        {{ _self.pageitem(item, true) }}
     {% endfor %}
     </span>
     </div>
 </div>
    <!-- форма редактирования страницы -->
-   <div id="page-form" class="a-unit-form" style="display:none;">
-       <div class="block"><label>Название страницы:</label><input class="width-100" type="text" name="title"/></div>
+    <div id="page-form" class="a-unit-form" style="display:none;">
+        <div class="block"><label>Название страницы:</label><input class="width-100" type="text" name="title"/></div>
+        <div class="block"><label>Название по-английски:</label><input class="width-100" type="text" name="name"/></div>
 
-       <div class="block"><label>Название по-английски:</label><input class="width-100" type="text" name="name"/></div>
+        <div class="block">
+            <label>Тип страницы:</label>
+            <select name="type">
+            {% for type in types %}
+                <option value="{{ type.id }}">{{ type.title }}</option>
+            {% endfor %}
+            </select>
+            <select name="app_settings"></select>
+        </div>
 
-       <div class="block">
-   	    <label>Тип страницы:</label>
-   		<select name="type">
-   		{% for type in types %}
-   			<option value="{{ type.id }}">{{ type.title }}</option>
-   		{% endfor %}
-   		</select>
-   		<select name="app_settings">
-   		</select>
-       </div>
+        <div class="block text-block" style="display:block;">
+            <label>Текст страницы:</label>
+            <textarea name="text" class="width-100 height-300" rich="yes"></textarea>
+        </div>
 
-   	<div class="block text-block" style="display:block;">
-           <label>Текст страницы:</label>
-           <textarea name="text" class="width-100 height-300" rich="yes"></textarea>
-       </div>
+        <div class="block meta-block" style="display:none;">
+            <a class="ajax" extra="metaVisible" href="">Ключевые слова, описание и заголовок (SEO)</a>
+            <div style="display:none;">
+                <label>Заголовок:</label>
+                <input class="width-100" name="meta_title"/>
+                <div class="block">
+                <label>Ключевые слова:</label>
+                <textarea class="width-100" name="meta_keywords" wrap="wrap"></textarea>
+                </div>
+                <div class="block">
+                <label>Описание:</label>
+                <textarea class="width-100" name="meta_description" wrap="wrap"></textarea>
+                </div>
+            </div>
+        </div>
 
-       <div class="block meta-block" style="display:none;">
-           <a class="ajax" extra="metaVisible" href="">Ключевые слова, описание и заголовок (SEO)</a>
-           <div style="display:none;">
-               <label>Заголовок:</label>
-               <input class="width-100" name="meta_title"/>
-               <div class="block">
-               <label>Ключевые слова:</label>
-               <textarea class="width-100" name="meta_keywords" wrap="wrap"></textarea>
-               </div>
-               <div class="block">
-               <label>Описание:</label>
-               <textarea class="width-100" name="meta_description" wrap="wrap"></textarea>
-               </div>
-           </div>
-       </div>
-
-   	<div class="block">
-   		<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-   		<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
-   	</div>
-   </div>
+        <div class="block">
+            <button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
+            <button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
+        </div>
+    </div>
    <!-- /форма редактирования страницы -->
 
    <!-- шаблон страницы в дереве -->
