@@ -1,31 +1,7 @@
 <?
 
 class StormFulltextProcessor {
-
-	protected $dictionaries;
-	protected $options;
-	
-	function __construct() {
-		// Подключаем phpMorphy, готовоим опции
-		require_once( dirname( __FILE__ )."/3rdparty/phpmorphy-0.3.7/src/common.php" );
-
-		$this->dictionaries = array(
-			'ru' => array(
-				'path'	=> dirname( __FILE__ )."/3rdparty/phpmorphy-dicts/morphy-0.3.x-ru_RU-nojo-utf8",
-				'lang'	=> 'ru_RU',
-			),
-		);
-
-		$this->options = array(
-			'storage'			=> PHPMORPHY_STORAGE_FILE,
-			'predict_by_suffix'	=> true,
-			'predict_by_db'		=> true,
-			'graminfo_as_text'	=> false,
-		);
-	}
-	
 	function getBaseForm( $text, $language = null ) {
-	
 		if( ! $language ) {
 			$language = StormCore::getLanguage();
 		}
@@ -42,15 +18,14 @@ class StormFulltextProcessor {
 				$bulk_words[] = mb_strtoupper( $v );
 			}
 		}
-		
-		if( ! array_key_exists( $language->getName(), $this->dictionaries ) ) {
+
+        if( ! Outer_Phpmorphy::checkLanguage( $language->getName() ) ) {
 			return join( ' ', $bulk_words );
 		}
-				
-		$morphy = new phpMorphy( $this->dictionaries[ $language->getName() ]['path'], $this->dictionaries[ $language->getName() ]['lang'], $this->options );
-		
-		$base_form = $morphy->getBaseForm( $bulk_words );
-		
+
+        $morphy = new Outer_Phpmorphy();
+		$base_form = $morphy->get( $language->getName() )->getBaseForm( $bulk_words );
+
 		$fullList = array();
 		if( $base_form ) {
 			foreach( $base_form as $k => $v ) {
@@ -77,17 +52,18 @@ class StormFulltextProcessor {
 		$words = preg_split('/[\s,.:;!?"\'()]/u', mb_strtolower( strip_tags( $text ) ), -1, PREG_SPLIT_NO_EMPTY);
 		
 		$bulk_words = array();
-		foreach ( $words as $v )
-			if ( strlen($v) > 3 )
-				$bulk_words[] = mb_strtoupper($v);
-		
-		if( ! array_key_exists( $language->getName(), $this->dictionaries ) ) {
+		foreach ( $words as $v ) {
+            if ( strlen($v) > 3 ) {
+                $bulk_words[] = mb_strtoupper($v);
+            }
+        }
+
+		if( ! Outer_Phpmorphy::checkLanguage( $language->getName() ) ) {
 			return join( ' ', $bulk_words );
 		}
 				
-		$morphy = new phpMorphy( $this->dictionaries[ $language->getName() ]['path'], $this->dictionaries[ $language->getName() ]['lang'], $this->options );
-		
-		$forms = $morphy->getAllForms( $bulk_words );
+		$morphy = new Outer_Phpmorphy();
+		$forms = $morphy->get( $language->getName() )->getAllForms( $bulk_words );
 		
 		if(!is_array($forms) && is_string($forms)) {
 			$forms = array( $forms => array( $forms ) );
