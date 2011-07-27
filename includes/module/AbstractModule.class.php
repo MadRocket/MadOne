@@ -42,8 +42,15 @@ class AbstractModule {
         foreach( get_object_vars( $this ) as $name => $value ) {
             $vars[ $name ] = $value;
         }
-        
-        return new Template( "modules/". get_class( $this ). "/{$file}", $vars );
+
+        if(strpos($file, '.twig') === false) {
+            $file = "{$file}.twig";
+        }
+
+        $twig = Outer_Twig::get("{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template");
+        return $twig->loadTemplate($file)->render($vars);
+
+        //return new Template( "modules/". get_class( $this ). "/{$file}", $vars );
     }
     
     /**

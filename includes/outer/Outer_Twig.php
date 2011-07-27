@@ -21,7 +21,11 @@ class Outer_Twig {
         ));
     }
 
-    public static function get() {
+    public static function get($path = null) {
+        if($path) {
+            $loader = new Twig_Loader_Filesystem($path);
+            self::$twig->setLoader($loader);
+        }
         return self::$twig;
     }
 }
