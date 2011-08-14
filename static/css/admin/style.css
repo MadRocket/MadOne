@@ -204,19 +204,23 @@ button, button:active, button:focus {
 }
 
 .madone-content, .madone-header, .madone-menu, .madone-menu-items {
-/*
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -moz-box-sizing: border-box;    
-*/
     padding: 0 60px 0;
 }
 
 .madone-header {
-    background: url(/static/i/admin/head-bg.png) repeat-x;
+    background: #cdcdcd;
+    background: -moz-linear-gradient(top, #cdcdcd 0%, #b2b2b2 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cdcdcd), color-stop(100%,#b2b2b2));
+    background: -webkit-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -o-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -ms-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cdcdcd', endColorstr='#b2b2b2',GradientType=0 );
+    background: linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+
+    border-bottom: 1px solid #757575;
+
     color: #373737;                      
-    height: 42px;
+    height: 38px;
     margin-bottom: 32px;
 }
 
@@ -399,7 +403,7 @@ h1.madone-menu-title:hover span {
 
 .a-unit {
 	display: inline-block;
-   ~display: block;
+   /*~display: block;*/
 	width: 100%;
 }
 .a-unit-body {
@@ -437,7 +441,6 @@ h1.madone-menu-title:hover span {
 
 .a-unit-body .actions img {
 	opacity:0.6;
-    -moz-opacity:0.6;
 	filter: alpha(opacity = 60);    
     vertical-align: middle;
     margin:0 5px;
@@ -447,7 +450,6 @@ h1.madone-menu-title:hover span {
 
 .a-unit-body .actions img:hover {
 	opacity:1;
-    -moz-opacity:1;
 	filter: alpha(opacity = 100);
 	cursor: pointer;
 }

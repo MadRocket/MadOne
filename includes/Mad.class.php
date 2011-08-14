@@ -7,7 +7,7 @@ class Mad
 {
     static private $vars = array();
     static private $showExceptionsTrace = true;
-
+    
     /**
     * Инициализация класса
     */
@@ -60,6 +60,13 @@ class Mad
     	else {
     		return self::$vars;
     	}
+    }
+
+    static function server($name = null) {
+        if($name) {
+            return $_SERVER[$name];
+        }
+        return $_SERVER;
     }
 
     /**
@@ -274,7 +281,7 @@ class Mad
 			$num--;
 		}
 		
-		$dump .= '<table class="trace"><tr><th>#</th><th>Call</th><th>Source file</th><th>Line</th></tr>' . join( $traces ) . "</table></body></html>";
+		$dump .= '<table class="trace"><tr><th>#</th><th>Call</th><th>Source file</th><th>Line</th></tr>' . join( "", $traces ) . "</table></body></html>";
 		
 		return $dump;
 	}
@@ -285,7 +292,7 @@ class Mad
 		$pos = strpos($haystack, $needle);
 		if ($pos === false) {
 			// Nothing found
-		return $haystack;
+		    return $haystack;
 		}
 		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	} 			

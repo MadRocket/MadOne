@@ -1,0 +1,19 @@
+{% macro pager(pager) %}
+{% if pager.hasPages() %}
+    <div class="paginator">
+    {% for i in pager.getPages() %}
+        {% if i.left is defined %}
+            <a class="larr" href="{{i.uri}}">&larr;</a>
+        {% elseif i.right is defined %}
+            <a class="rarr" href="{{i.uri}}">&rarr;</a>
+        {% elseif i.ellipsis is defined %}
+            <a class="ellipsis">...</a>
+        {% elseif i.uri is defined %}
+            <a href="{{i.uri}}">{{ i.title }}</a>
+        {% else %}
+            <a class="active">{{ i.title }}</a>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endif %}
+{% endmacro %}

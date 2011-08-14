@@ -3,7 +3,9 @@ $(function() {
     $('.madone-menu-title span').click( function( e ) {
     	$( '.madone-menu-title').addClass('madone-menu-title-active');
         $( '.madone-menu-items' ).show();
-	});
+    	$( '.madone-menu-items a').css( '~width: ' + $('.madone-menu-title').width() + 'px; min-width: ' + $('.madone-menu-title').width() + 'px' );
+
+    });
     
     $('.madone-menu-title').bind( 'mouseleave', function( e ) {
         $( '.madone-menu-items' ).hide();
@@ -19,11 +21,11 @@ $(function() {
 </script>
 <button class="helpbutton" title="Помощь по текущему модулю"><b>&nbsp;</b></button>
 <h1 class="madone-menu-title" title="Меню. Кликните, чтобы открыть."><div class="madone-menu-items">
-    <? foreach( $this->menuItems as $i ): ?>
-        <? if( $i['selected'] ): ?>
-        <a class="active"><i><?=$i['title']?></i></a>
-        <? else: ?>
-        <a href="<?=$i['uri']?>"><i><?=$i['title']?></i></a>
-        <? endif; ?>
-    <? endforeach ?>
-</div><span><?= $this->title ?></span></h1>
+    {% for i in menuItems %}
+        {% if i.selected %}
+        <a class="active">{{ i.title }}</a>
+        {% else %}
+        <a href="{{ i.uri }}">{{ i.title }}</a>
+        {% endif %}
+    {% endfor %}
+</div><span>{{ title }}</span></h1>

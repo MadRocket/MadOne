@@ -33,7 +33,7 @@ class AbstractApplication {
     }
 
     function render($template, $vars) {
-        return Madone::twig()->loadTemplate($template)->render($vars);
+        return Madone::twig("{$_SERVER['DOCUMENT_ROOT']}/includes/template")->loadTemplate($template)->render($vars);
     }
 }
 

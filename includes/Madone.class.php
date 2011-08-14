@@ -289,8 +289,8 @@ class Madone {
 		return StormCore::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
 
-    static function twig() {
-        return Outer_Twig::get();
+    static function twig($path) {
+        return Outer_Twig::get($path);
     }
 }
 

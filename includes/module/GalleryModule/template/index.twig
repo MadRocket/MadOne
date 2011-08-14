@@ -1,45 +1,42 @@
-<?
-    $root = $this->items[0];
-    $this->items = $this->items[0]->getChildren();
-?>
-
 <div class="module-buttons">
 	<button class="create-section styled-button"><b><b>Создать раздел</b></b></button>
 </div>
 
 <div class="module-content">
-	
+
 	<div class="createFormPlace"></div>
-	
+
 	<div class="a-units" stormModel="MadoneGallerySection">
-	<span id="sections" class="a-unit-list">
-	    <? foreach( $this->items as $i ): ?>
-	        <? printItem( $i, $this ) ?>
-	    <? endforeach ?>
-	</span>
+    <span id="sections" class="a-unit-list">
+    {% for item in items %}
+        {{ _self.category(item, true) }}
+    {% endfor %}
+    </span>
 	</div>
 </div>
-<? function printItem( $p, $template ) { ?>
-    <div class="a-unit" stormObject="<?=$p->id?>" id="a-unit-<?=$p->id?>">
-            <div class="a-unit-body<?= $p->enabled ? '' : ' disabled'?>">
+
+{% macro category(item, full) %}
+    <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+            <div class="a-unit-body{{ item.enabled ? '' : ' disabled'}}">
                 <div class="actions">
 					<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
                     <img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-<?= $p->enabled ? 'on' : 'off'?>.png"/>
+					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
 					<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
                 </div>
-                <h2><?= $p->title ? $p->title : "&nbsp;" ?><? if( ! Madone::isCurrentLanguage( 'ru' ) && $p->RU->title ) :?><i class="ru-hint">(<?= $p->RU->title ?>)</i><? endif ?></h2>
-                <p><?=$p->name?></p>
+                <h2>{{ item.title }}</h2>
+                <p>{{ item.name }}</p>
             </div>
-            <? if( count( $p->getChildren() ) ):?>
-                <span class="a-unit-list">
-                <? foreach( $p->getChildren() as $c ):?>
-                    <? printItem( $c, $template ) ?>
-                <? endforeach?>
-                </span>
-            <? endif ?>
+            {% if full %}
+            <span class="a-unit-list">
+                {% for child in item.getChildren() %}
+                    {{ _self.category(child, full) }}
+                {% endfor %}
+            </span>
+            {% endif %}
     </div>
-<? } ?>
+{% endmacro %}
+
 
 <div id="section-form" class="a-unit-form" style="display:none;">
 	<div class="block"><label>Название раздела:</label><input class="width-100" type="text" name="title"/></div>
@@ -70,7 +67,7 @@ $( function () {
 	function initSortable() {
 		$( '#sections' ).NestedSortableDestroy().NestedSortable( Object.create( Madone.NestedSortableOptions ).extend( {
 			onChange: function ( serialized ) {
-				Storm.reorder( 'MadoneGallerySection', { id: <?=$root->id?>, children: serialized[0].o.sections } );
+				Storm.reorder( 'MadoneGallerySection', { id: {{ root.id }}, children: serialized[0].o.sections } );
 			}
 		} ) );
 		$( '.a-unit-body:not( .root )' ).addClass( 'movable' );
@@ -87,9 +84,9 @@ $( function () {
 				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
 			}
 			else {
-				$( this ).parents('.a-unit-body:first').addClass('disabled');			
+				$( this ).parents('.a-unit-body:first').addClass('disabled');
 				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
-			}	
+			}
 		}));
 	});
 
@@ -111,7 +108,7 @@ $( function () {
 			} ) );
 		}
 	} );
-	
+
 	var sectionForm = Object.create( Storm.Form ).extend( {
 		form: $( '#section-form' ),
 		onFillItem: function ( item, data ) {
@@ -127,8 +124,8 @@ $( function () {
 			}
 			item.find( 'p:first' ).html( data.name );
 		},
-		onShowItem: function() { 
-			initSortable(); 
+		onShowItem: function() {
+			initSortable();
 		}
 	} );
 
@@ -156,11 +153,11 @@ $( function () {
     $( '.image-list' ).bind( 'click', function( event ) {
 		Object.create( Madone.ImageGallery ).extend({
 			stormModel: 'MadoneGalleryImage',
-			PHPSESSID: '<?= $_COOKIE['PHPSESSID'] ?>',
+			PHPSESSID: '{{ sessid }}',
 			object:	Storm.buildPath( this ),
 			item:	$( this ).parents( '.a-unit-body' )
 		}).start();
-    } );	
+    } );
 });
 
 </script>

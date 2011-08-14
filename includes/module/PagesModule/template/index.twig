@@ -38,7 +38,7 @@
            </div>
     {% endmacro %}
 
-    {{ _self.pageitem(root, full) }}
+    {{ _self.pageitem(root, false) }}
 
     <span id="pages" class="a-unit-list">
     {% for item in items %}
@@ -107,7 +107,7 @@
 
    <!--/ шаблон страницы в дереве -->
 
-   <script type="text/javascript">
+<script type="text/javascript">
    $( function () {
    	// Сортировка страниц перетаскиванием
    	function initSortable() {
@@ -144,7 +144,7 @@
    				}
 
    				var types = {{ types_json|json_encode|raw }};
-   				
+
    				form.find( '.text-block' ).toggle( !! types[ $(this).val() ].has_text );
    				form.find( '.meta-block' ).toggle( !! types[ $(this).val() ].has_meta );
 

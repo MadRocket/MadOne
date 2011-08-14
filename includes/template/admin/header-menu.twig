@@ -1,5 +1,5 @@
-<span class="system-menu"><span><span class="first"><a href="http://<?= $_SERVER['SERVER_NAME']?>/">Перейти на сайт</a></span>
-
+<span class="system-menu"><span><span class="first"><a href="http://{{ server.SERVER_NAME }}/">Перейти на сайт</a></span>
+{#
 <?
 	$langs = array_values( StormCore::getAvailableLanguages() );
 ?>
@@ -35,4 +35,5 @@
 	<? endforeach ?>
 	</span>
 <? endif ?>
-<span><a href="/cms/password/">Смена пароля</a></span><span><a href="/cms/settings/">Настройка</a></span><span class="last"><a href="/cms/logout/">Выход</a></span></span></span>
+#}
+<span><a href="/admin/password/">Смена пароля</a></span><span><a href="/admin/settings/">Настройка</a></span><span class="last"><a href="/admin/logout/">Выход</a></span></span></span>
