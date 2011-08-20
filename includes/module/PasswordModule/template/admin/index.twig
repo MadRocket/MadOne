@@ -1,28 +1,29 @@
-<style type="text/css">
-    .password-block {
-        margin: 10px 0;
-        width: 500px;
-        clear:both;
-    } 
-
-    .double {
-        margin-top:15px;
-    }
-    
-    .password-block label {
-        float: left;
-        width: 180px;
-    } 
-    
-    .password-block input {
-        width: 300px;
-    }
-</style>
-
-<div class="password-block"><label>Старый пароль:</label><input type="password" id="old-password" /></div>
-<div class="password-block double"><label>Новый пароль:</label><input type="password" id="new-password" /></div>
-<div class="password-block"><label>Повторите новый пароль:</label><input type="password" id="new-password-retype" /></div>
-<div class="password-block double"><button id="change-password" disabled="disabled" class="styled-button"><b><b>Изменить пароль</b></b></button></div>
+<div class="module-content">
+    <h1>Смена пароля</h1>
+    <form>
+        <div class="clearfix">
+            <label>Старый пароль:</label>
+            <div class="input">
+                <input type="password" name="old_password" id="old-password" />
+            </div>
+        </div>
+        <div class="clearfix">
+            <label>Новый пароль:</label>
+            <div class="input">
+                <input type="password" name="new_password" id="new-password" />
+            </div>
+        </div>
+        <div class="clearfix">
+            <label>Повторите новый пароль:</label>
+            <div class="input">
+                <input type="password"  name="new_password_retype" id="new-password-retype" />
+            </div>
+        </div>
+        <div class="actions">
+            <button id="change-password" disabled="disabled" class="btn primary">Изменить пароль</button>
+        </div>
+    </form>
+</div>
 
 <script type="text/javascript">
 
