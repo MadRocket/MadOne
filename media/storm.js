@@ -850,6 +850,18 @@ Storm.Form.show = function () {
 		}
 	}
 
+    // Обработка табов
+    this.form.find('.tabs > li > a').click(function(){
+        var tab_name = this.hash.slice(1);
+
+        $(this).parents('.tabs').find('li').removeClass('active');
+        $(this).parent('li').addClass('active');
+        $(this).parents('.a-unit-form').find('.m-tab-active').removeClass('m-tab-active');
+        $(this).parents('.a-unit-form').find('.tab-'+ tab_name).addClass('m-tab-active');
+
+        return false;
+    });
+
 	// 	В этот момент форма отправляется в свободное плавание; ждем нажатия submit или cancel пользователем
 	return this;
 };

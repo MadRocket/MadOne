@@ -52,142 +52,9 @@ a.ajax:hover {
 	left: 15px;
 }
 
-/* Красивые Кнопки */
-
-button, button:active, button:focus {
-	border:0;
-	margin:0;
-	padding: 0;
-	outline: none;
-	background: transparent;
-	~overflow: visible;
-}
-* html button { overflow: visible; } /* Укорачивание длинных кнопок в IE */
-
-.styled-button a {
-	text-decoration: none;
-}
-.styled-button b, .styled-button b b {
-	background: url(/static/i/admin/button.png) no-repeat;	
-	background-position: left bottom;	
-	display:-moz-inline-block;
-	display:inline-block; /* Эмуляция для FF2 */
-	font-size: 14px;
-	cursor: default;
-	outline: none;
-	font-weight: normal;
-
-	text-decoration: none;
-	color: #343434;
-	text-shadow: #fff 0px 1px 0;	
-}
-.styled-button b b {
-	border:0;
-	margin:0;
-	padding:0 16px 0 0px;
-	height:34px;
-	line-height:34px;
-	background-position:top right;
-	white-space:nowrap;
-	margin-left: 16px;
-}
-
-.styled-button:active b, .styled-button:active b b {
-	background-image: url(/static/i/admin/button-active.png) !important;
-	outline: none;
-}
-.styled-button:hover b, .styled-button:hover b b, .styled-button:focus b, .styled-button:focus b b {
-	background-image: url(/static/i/admin/orange/button-hover.png);
-	outline: 0;
-	color: #412402;
-}
-
-.small-styled-button b, .small-styled-button b b {
-	background: url(/static/i/admin/small-button.png) no-repeat;	
-	background-position: left bottom;	
-	display:-moz-inline-block;
-	display:inline-block; /* Эмуляция для FF2 */
-	font-size: 14px;
-	cursor: default;
-	outline: 0;
-	font-weight: normal;
-
-	text-decoration: none;
-	color: #343434;
-	text-shadow: #fff 0px 1px 0;	
-}
-.small-styled-button b b {
-	border:0;
-	margin:0;
-	padding:0 14px 0 0px;
-	height:31px;
-	line-height:31px;
-	background-position:top right;
-	white-space:nowrap;
-	margin-left: 14px;
-	outline: 0;	
-}
-
-.small-styled-button:active b, .small-styled-button:active b b {
-	background-image: url(/static/i/admin/small-button-active.png) !important;
-	outline: 0;	
-}
-.small-styled-button:hover b, .small-styled-button:hover b b, .small-styled-button:focus b, .small-styled-button:focus b b {
-	background-image: url(/static/i/admin/orange/small-button-hover.png);
-	color: #412402;	
-}
-
-.helpbutton {
-	display: none;
-	width: 32px;
-	height: 32px;
-	float: right;
-}
-.helpbutton b {
-	width: 32px;
-	height: 32px;
-	display: -moz-inline-block;	
-	display: inline-block;
-	background: url(/static/i/admin/helpbutton.png) no-repeat;
-}
-.helpbutton:hover b {
-	background: url(/static/i/admin/orange/helpbutton-hover.png) no-repeat;
-}
-.helpbutton:active b {
-	background: url(/static/i/admin/helpbutton-active.png) no-repeat;
-}
-/* /Красивые Кнопки */
-
-#quick-help {
-	display: none;
-	border: 1px solid #eee;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-	padding: 7px 9px;
-	margin: 0px 0px 18px 0px;	
-	font-size: 13px;
-	clear: both;
-}
-#quick-help ul {
-	padding: 0;
-	margin: 2px;
-}
-#quick-help li {
-	list-style: none;
-	margin-bottom: 7px;
-}
-#quick-help li img {
-	margin-right: 5px;
-	vertical-align: bottom;
-}
-
-
-
-
 .left {
     float:left;
      ~display: inline;
-
 }
 .right {
     float:right;
@@ -335,21 +202,20 @@ h1.madone-menu-title:hover span {
 
 .module-buttons {
 	height: 34px;
+    margin-bottom: 1em;
 }
 
 .module-header {
-	clear: both;
     margin: 0 9px 19px;
 }
 
 .module-content {
-	clear: both;
     padding-bottom: 60px;
 }
 
 .madone-module {
-	padding: 0 57px 0 51px;
-    clear: left;
+	margin: 40px 0 0;
+	padding: 15px 0 0;
 }
 .madone-menu-items {
 	display: none; 
@@ -432,9 +298,13 @@ h1.madone-menu-title:hover span {
 .a-unit-body p {
     font-size: 11px;
     color: #888;
+    margin: 0;
 }
 
 .a-unit-body .actions {
+    background: none;
+    border: none;
+    padding: 0;
     float: right;
     margin: 7px 0 0;
 }
@@ -474,16 +344,12 @@ h1.madone-menu-title:hover span {
 	background: #fff;
 	border: 1px solid #d59f35;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+	box-shadow: 0px 0px 8px #ccc;
 
-	-webkit-box-shadow: 0px 0px 8px #ccc;
-	-moz-box-shadow: 0px 0px 8px #ccc;	
-	-box-shadow: 0px 0px 8px #ccc;		
-
-	clear: both;
-	padding: 0 8px;
+	padding: 10px 8px 0;
  	margin: 10px 0px 15px 0px;
+
+    display: none;
 }
 
 .a-units .a-unit-form {
@@ -701,4 +567,19 @@ img.ajax-loader {
 
 .gallery-form .form textarea {
 	height: 50px;
+}
+
+.m-tab {
+    display: none;
+}
+.m-tab-active {
+    display: block;
+}
+
+form.form-stacked {
+    padding-left: 8px;
+}
+form.form-stacked div.actions {
+    margin-left: 0;
+    padding-left: 10px;
 }

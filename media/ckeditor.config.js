@@ -35,8 +35,8 @@ CKEDITOR.editorConfig = function( config ) {
 	    ['Link','Unlink','Anchor'],
 /* 	    ['Image','Flash','Table','HorizontalRule','SpecialChar'], */
 	    ['Image','Flash','Table'],
-	    '/',
-   	    ['Styles','Format'],
+
+   	    ['Styles','Format']
 //	    ['Styles','Format','Font','FontSize'],
 //	    ['TextColor','BGColor'],
 	];

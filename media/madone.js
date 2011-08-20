@@ -15,7 +15,7 @@ Madone.createRichTextEditor = function( name, options ) {
 		options.value = '';
 	}
 
-	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110104';
+	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110820';
 	
 	var editor = CKEDITOR.replace( name );
 /*
@@ -157,14 +157,15 @@ Madone.uploadify = Object.create( Object.Extendable ).extend({
 // Галерея
 Madone.ImageGallery = Object.create( Storm.Form ).extend({
 	stormModel: '',
-	form: $("<div>").addClass("a-unit-form").append(
+	form: $("<form>").addClass("a-unit-form").addClass("form-stacked").append(
 			'<h2 text="title">Заголовок:</h2>' +
 			'<div class="block"><div class="gallery"></div></div>' +
 			'<div class="block">' +
 				'<input type="file" name="image" class="uploadify" />' +
 			'</div>' +
-			'<div class="block">' +
-				'<button style="margin-left:0;" class="cancel small-styled-button"><b><b>Закрыть</b></b></button>' +
+			'<div class="actions">' +
+				'<button class="cancel btn">Закрыть</button>' +
+				'<button class="cancel btn">Закрыть</button>' +
 			'</div>'
 	),
 	getItemFormTemplate: function(){
@@ -173,8 +174,8 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 						'<img class="image" src=""><div class="form">' +
 						'<div><label>Название:</label><textarea class="width-100" name="title"></textarea></div>' +
 							'<div class="block">' +
-								'<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>' +
-								'<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>' +
+								'<button class="submit btn primary">Сохранить</button>' +
+								'<button class="cancel btn">Отмена</button>' +
 							'</div>' +
 						'</div>'
 					)

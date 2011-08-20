@@ -1,3 +1,6 @@
+<div class="module-buttons">
+
+</div>
 <div class="module-content">
 {% if items %}
     <div class="a-units" stormModel="MadoneTextBlock">
@@ -8,32 +11,23 @@
 					<img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
 					<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ i.enabled ? 'on' : 'off' }}.png"/>
 				</div>
-				<h2 stormText="name">{{ i.name }}</h2>
+				<h2>{{ i.name }}</h2>
 				<p stormHtml="preview">{{ i.preview ? i.preview : '&nbsp;' }}</p>
 			</div>
 			</div>
 		{% endfor %}
     </div>
 
-    <form id="block-form" class="a-unit-form form-stacked">
+    <div id="block-form" class="a-unit-form" style="display:none;">
         <h2 text="name">Имя блока</h2>
-		<div class="clearfix">
-		    <label>Текст</label>
-		    <div class="input">
-		        <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
-		    </div>
-        </div>
-		<div class="actions">
-			<button class="submit btn primary">Сохранить</button>
-			<button class="cancel btn">Отмена</button>
+		<div class="block"><textarea rich="yes" class="width-100 height-300" name="text"></textarea></div>
+		<div class="block">
+			<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
+			<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
 		</div>
-    </form>
-{% else %}
-	<p>Ни одного текстового блока не найдено.</p>
-{% endif %}
-</div>
+    </div>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 	$( function() {
 		$( '.enabled' ).click( function( e ) {
 			Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
@@ -61,4 +55,8 @@
 			} ).start();
 		} )
 	} )
-</script>
+    </script>
+{% else %}
+	<p>Ни одного текстового блока не найдено.</p>
+{% endif %}
+</div>

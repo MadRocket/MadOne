@@ -1,19 +1,33 @@
 {% macro pager(pager) %}
 {% if pager.hasPages() %}
-    <div class="paginator">
+    <div class="pagination">
+    <ul>
     {% for i in pager.getPages() %}
         {% if i.left is defined %}
-            <a class="larr" href="{{i.uri}}">&larr;</a>
+            <li class="prev"><a href="{{i.uri}}">&larr;</a></li>
         {% elseif i.right is defined %}
-            <a class="rarr" href="{{i.uri}}">&rarr;</a>
+            <li class="next"><a href="{{i.uri}}">&rarr;</a></li>
         {% elseif i.ellipsis is defined %}
-            <a class="ellipsis">...</a>
+            <li><a class="disabled">...</a></li>
         {% elseif i.uri is defined %}
-            <a href="{{i.uri}}">{{ i.title }}</a>
+            <li><a href="{{i.uri}}">{{ i.title }}</a></li>
         {% else %}
-            <a class="active">{{ i.title }}</a>
+            <li class="active"><a>{{ i.title }}</a></li>
         {% endif %}
     {% endfor %}
+    </ul>
     </div>
 {% endif %}
 {% endmacro %}
+
+<div class="pagination" style="display: none;">
+  <ul>
+    <li class="prev disabled"><a href="">&larr; Previous</a></li>
+    <li class="active"><a href="">1</a></li>
+    <li><a href="">2</a></li>
+    <li><a href="">3</a></li>
+    <li><a href="">4</a></li>
+    <li><a href="">5</a></li>
+    <li class="next"><a href="">Next &rarr;</a></li>
+  </ul>
+</div>
