@@ -1,5 +1,7 @@
+<h1>Галерея</h1>
+
 <div class="module-buttons">
-	<button class="create-section btn primary">Создать раздел</button>
+	<button id="create-section-button" class="btn primary">Создать раздел</button>
 </div>
 
 <div class="module-content">
@@ -24,8 +26,8 @@
 					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
 					<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
                 </div>
-                <h2>{{ item.title }}</h2>
-                <p>{{ item.name }}</p>
+                <h2 stromText="title">{{ item.title }}</h2>
+                <p stromText="title">{{ item.name }}</p>
             </div>
             {% if full %}
             <span class="a-unit-list">
@@ -37,15 +39,31 @@
     </div>
 {% endmacro %}
 
-<div id="section-form" class="a-unit-form" style="display:none;">
-	<div class="block"><label>Название раздела:</label><input class="width-100" type="text" name="title"/></div>
-	<div class="block"><label>Название по-английски:</label><input class="width-100" type="text" name="name"/></div>
-	<div class="block"><label>Описание:</label><textarea class="width-100 height-300" rich="yes" name="text"></textarea></div>
-	<div class="block">
-		<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-		<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
+
+<form id="section-form" class="a-unit-form form-stacked">
+	<div class="clearfix">
+	    <label>Название раздела:</label>
+	    <div class="input">
+	        <input class="xxlarge" type="text" name="title"/>
+	    </div>
+    </div>
+	<div class="clearfix">
+	    <label>Название по-английски:</label>
+	    <div class="input">
+	        <input class="xlarge" type="text" name="name"/>
+        </div>
+    </div>
+	<div class="clearfix">
+	    <label>Описание:</label>
+	    <div class="input">
+	        <textarea class="width-100 height-300" rich="yes" name="text"></textarea>
+        </div>
+    </div>
+	<div class="actions">
+		<button class="submit btn primary">Сохранить</button>
+		<button class="cancel btn">Отмена</button>
 	</div>
-</div>
+</form>
 
 <div class="a-unit" id="section-template" style="display:none;">
     <div class="a-unit-body">
@@ -55,8 +73,8 @@
 			<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
 			<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
         </div>
-        <h2>Название раздела</h2>
-        <p>name</p>
+        <h2 stormText="title">Название раздела</h2>
+        <p stormText="name">name</p>
     </div>
 </div>
 
@@ -117,11 +135,6 @@ $( function () {
 			}
 			item.attr( 'stormObject', data.id );
 			item.attr( 'id', 'a-unit-' + data.id );
-			item.find( 'h2:first' ).html( data.title );
-			if( Madone.language !== 'ru' ) {
-				item.find( 'h2:first' ).append( $( '<i class="ru-hint">(' + data.RU.title + ')</i>' ) );
-			}
-			item.find( 'p:first' ).html( data.name );
 		},
 		onShowItem: function() {
 			initSortable();
@@ -129,14 +142,14 @@ $( function () {
 	} );
 
     // Создание раздела
-    $( '.create-section' ).click( function ( e ) {
+    $( '#create-section-button' ).click( function ( e ) {
         e.preventDefault();
-		Object.create( sectionForm ).extend( {
-			object:		'MadoneGallerySection',
-			formPlace:	$( '.createFormPlace' ),
-			item:		$( '#section-template' ),
-			itemPlace:	$( '#sections' )
-		} ).start();
+        Object.create( sectionForm ).extend( {
+            object:		'MadoneGallerySection',
+            formPlace:	$( '.createFormPlace' ),
+            item:		$( '#section-template' ),
+            itemPlace:	$( '#sections' )
+        } ).start();
 	} );
 
     // Редактирование раздела

@@ -1,7 +1,9 @@
 {% import 'macros.twig' as common %}
 
+<h1>Новости</h1>
+
 <div class="module-buttons">
-	<button class="create-unit styled-button"><b><b>Добавить новость</b></b></button>
+	<button class="create-unit btn primary">Добавить новость</button>
 </div>
 
 <div class="module-content">
@@ -16,8 +18,8 @@
                 <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
                 <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
             </div>
-            <h2>{{ item.title }}</h2>
-            <p>{{ item.date }}</p>
+            <h2 stormText="title">{{ item.title }}</h2>
+            <p stormText="date">{{ item.date }}</p>
         </div>
         </div>
 	{% endfor %}
@@ -25,19 +27,38 @@
     {{ common.pager(paginator) }}
 </div>
 
-<div id="news-form" class="a-unit-form" style="display:none;">
-	<div class="block"><label>Заголовок новости:</label><input class="width-100" type="text" name="title"/></div>
-	<div class="block"><label>Дата публикации:</label><input datepicker="yes" class="width-100" type="text" name="date"/></div>
-	<div class="block"><label>Анонс:</label><textarea rich="no" class="width-100 height-200" name="announce"></textarea></div>
-	<div class="block"><textarea rich="yes" class="width-100 height-300" name="text"></textarea></div>
-	<div class="block">
-		<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-		<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
+<form id="news-form" class="a-unit-form form-stacked">
+	<div class="clearfix">
+	    <label>Заголовок новости:</label>
+	    <div class="input">
+	        <input class="xxlarge" type="text" name="title"/>
+	    </div>
+    </div>
+	<div class="clearfix">
+	    <label>Дата публикации:</label>
+	    <div class="input">
+	        <input datepicker="yes" class="width-100" type="text" name="date"/>
+        </div>
+    </div>
+	<div class="clearfix">
+	    <label>Анонс:</label>
+	    <div class="input">
+	        <textarea rich="no" class="xxlarge" name="announce"></textarea>
+        </div>
+    </div>
+	<div class="clearfix">
+	    <label>Текст новости:</label>
+	    <div class="input">
+	        <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
+        </div>
+    </div>
+	<div class="actions">
+		<button class="submit btn primary">Сохранить</button>
+		<button class="cancel btn">Отмена</button>
 	</div>
-</div>
+</form>
 
 <script type="text/javascript">
-
 $( function() {
 	$( '.enabled' ).click( function( e ) {
 		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
@@ -91,14 +112,8 @@ $( function() {
 					item.find( '.a-unit-body' ).addClass( 'disabled' );
 				}
 				item.attr( 'stormObject', data.id );
-				item.find( 'h2:first' ).html( data.title );
-				if( Madone.language !== 'ru' ) {
-					item.find( 'h2:first' ).append( $( '<i class="ru-hint">(' + data.RU.title + ')</i>' ) );
-				}
-				item.find( 'p:first' ).html( data.date );
 			}
 		} ).start();
 	} )
 } )
-
 </script>

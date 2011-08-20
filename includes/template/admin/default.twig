@@ -56,71 +56,35 @@
 	</head>
     <body>
     	<div id="ajaxInfo">Жду ответ от сервера...</div>
-    	<div class="topbar" style="display: none;">
+        <div class="topbar">
             <div class="container fixed">
-            <h3><a class="logo" href="#">
-            <!-- <img src="assets/img/twitter-logo-no-bird.png" alt="Twitter" /> --> <span>Bootstrap</span>
-            </a></h3>
-            <ul>
-            <li class=""><a href="#masthead">Overview</a></li>
-            <li class=""><a href="#grid-system">Grid</a></li>
-            <li class=""><a href="#layouts">Layouts</a></li>
-            <li class=""><a href="#typography">Typography</a></li>
-            <li class=""><a href="#tables">Tables</a></li>
-            <li class="active"><a href="#forms">Forms</a></li>
-            <li class=""><a href="#navigation">Navigation</a></li>
-            <li class=""><a href="#alerts">Alerts</a></li>
-            <li class=""><a href="#popovers">Popovers</a></li>
-            <li class=""><a href="#less">Less</a></li>
-            </ul>
+                <h3><a class="logo" href="/admin" title="Перейти к стартовой странице системы управления">{{ config.site_title }}</a></h3>
+                {% include "header-menu.twig" %}
             </div>
         </div>
-
-    <div class="topbar">
-      <div class="container fixed">
-        <h3>
-            <a class="logo" href="/admin" title="Перейти к стартовой странице системы управления">{{ config.site_title }}</a>
-        </h3>
-        {% include "header-menu.twig" %}
-        {#
-        <ul class="nav secondary-nav">
-          <li class="menu">
-            <a href="#" class="menu">Dropdown</a>
-            <ul class="menu-dropdown" style="display: none; ">
-              <li><a href="">Secondary link</a></li>
-              <li><a href="">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="">Another link</a></li>
-            </ul>
-          </li>
-        </ul>
-        #}
-      </div>
-    </div>
-    <div class="container-fluid">
-        <div class="sidebar">
-            {% include 'menu.twig' %}
-        </div>
-        <div class="content">
-            <div class="madone-module">
-                {{ content|raw }}
+        <div class="container-fluid">
+            <div class="sidebar">
+                {% include 'menu.twig' %}
+            </div>
+            <div class="content">
+                <div class="madone-module">
+                    {{ content|raw }}
+                </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        $(function(){
-        	/* Информер активности ajax-гейта */
-        	var timer = null;
-        	$("#ajaxInfo").ajaxStart(function(){
-        		timer = setTimeout('$("#ajaxInfo").show();', 500);
-			});
-        	$("#ajaxInfo").ajaxStop(function(){
-        		clearTimeout(timer);
-				$(this).hide();
-			});
-        });
-    </script>
-    {% block script %}
-    {% endblock %}
+        <script type="text/javascript">
+            $(function(){
+                /* Информер активности ajax-гейта */
+                var timer = null;
+                $("#ajaxInfo").ajaxStart(function(){
+                    timer = setTimeout('$("#ajaxInfo").show();', 500);
+                });
+                $("#ajaxInfo").ajaxStop(function(){
+                    clearTimeout(timer);
+                    $(this).hide();
+                });
+            });
+        </script>
+        {% block script %}{% endblock %}
     </body>
 </html>

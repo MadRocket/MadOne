@@ -53,8 +53,13 @@ class MadoneCmsApplication
                 print json_encode(array('success' => false, 'message' => 'Вы не авторизованы, или слишком долго бездейстовали. Пожалуйста, обновите страницу, Вам будет предложено ввести имя и пароль.'));
             }
             else {
-                $twig = Outer_Twig::get("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin");
-                $twig->loadTemplate('login-page.twig')->display( array('_madone_login' => Mad::vars('_madone_login') ) );
+                $twig = Madone::twig("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin");
+                $twig->loadTemplate('login-page.twig')->display(
+                    array(
+                        'login_attempt' => MadoneSession::getInstance()->getLoginAttempt(),
+                        '_madone_login' => Mad::vars('_madone_login')
+                    )
+                );
             }
             exit;
         }
@@ -143,11 +148,9 @@ class MadoneCmsApplication
             // Позволим модулю обработать запрос и вернуть контент
             $vars['content'] =  $module->handleHtmlRequest( $request->getUri() );
 
-            $twig = Outer_Twig::get(array(
+            $twig = Madone::twig(array(
                 "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
             ));
-            $twig->addGlobal('config', Config::$i);
-            $twig->addGlobal('server', Mad::server());
             print $twig->render('default.twig', $vars);
         }
 

@@ -290,7 +290,11 @@ class Madone {
 	}
 
     static function twig($path) {
-        return Outer_Twig::get($path);
+        $twig = Outer_Twig::get($path);
+        $twig->addGlobal('config', Config::$i);
+        $twig->addGlobal('server', Mad::server());
+
+        return $twig;
     }
 }
 

@@ -165,7 +165,6 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 			'</div>' +
 			'<div class="actions">' +
 				'<button class="cancel btn">Закрыть</button>' +
-				'<button class="cancel btn">Закрыть</button>' +
 			'</div>'
 	),
 	getItemFormTemplate: function(){
