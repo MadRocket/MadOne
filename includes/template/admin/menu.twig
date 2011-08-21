@@ -1,11 +1,13 @@
-<ul class="unstyled" style="margin-top: 40px; padding-top: 15px;">
-    {% for i in menuItems %}
-    <li>
-        {% if i.selected %}
-        <a class="active">{{ i.title }}</a>
-        {% else %}
-        <a href="{{ i.uri }}">{{ i.title }}</a>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+<div class="well">
+    <ul class="unstyled">
+        {% for i in menuItems %}
+        <li>
+            {% if i.selected %}
+            <a class="active">{{ i.title }}</a>
+            {% else %}
+            <a href="{{ i.uri }}">{{ i.title }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>

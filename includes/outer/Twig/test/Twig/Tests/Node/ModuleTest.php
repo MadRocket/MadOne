@@ -91,7 +91,7 @@ EOF
 
         $import = new Twig_Node_Import(new Twig_Node_Expression_Constant('foo.twig', 0), new Twig_Node_Expression_AssignName('macro', 0), 0);
 
-        $body = new Twig_Node(array($import, new Twig_Node_Text('foo', 0)));
+        $body = new Twig_Node(array($import));
         $extends = new Twig_Node_Expression_Constant('layout.twig', 0);
 
         $node = new Twig_Node_Module($body, $extends, $blocks, $macros, $traits, $filename);
@@ -105,11 +105,16 @@ class __TwigTemplate_be925a7b06dda0dfdbd18a1509f7eb34 extends Twig_Template
 
     public function getParent(array \$context)
     {
-        if (null === \$this->parent) {
-            \$this->parent = \$this->env->loadTemplate("layout.twig");
+        \$parent = "layout.twig";
+        if (\$parent instanceof Twig_Template) {
+            \$name = \$parent->getTemplateName();
+            \$this->parent[\$name] = \$parent;
+            \$parent = \$name;
+        } elseif (!isset(\$this->parent[\$parent])) {
+            \$this->parent[\$parent] = \$this->env->loadTemplate(\$parent);
         }
 
-        return \$this->parent;
+        return \$this->parent[\$parent];
     }
 
     protected function doDisplay(array \$context, array \$blocks = array())
@@ -133,7 +138,7 @@ class __TwigTemplate_be925a7b06dda0dfdbd18a1509f7eb34 extends Twig_Template
 EOF
         , $twig);
 
-        $body = new Twig_Node_Text('foo', 0);
+        $body = new Twig_Node();
         $extends = new Twig_Node_Expression_Conditional(
                         new Twig_Node_Expression_Constant(true, 0),
                         new Twig_Node_Expression_Constant('foo', 0),
@@ -152,14 +157,16 @@ class __TwigTemplate_be925a7b06dda0dfdbd18a1509f7eb34 extends Twig_Template
 
     public function getParent(array \$context)
     {
-        if (null === \$this->parent) {
-            \$this->parent = ((true) ? ("foo") : ("foo"));
-            if (!\$this->parent instanceof Twig_Template) {
-                \$this->parent = \$this->env->loadTemplate(\$this->parent);
-            }
+        \$parent = ((true) ? ("foo") : ("foo"));
+        if (\$parent instanceof Twig_Template) {
+            \$name = \$parent->getTemplateName();
+            \$this->parent[\$name] = \$parent;
+            \$parent = \$name;
+        } elseif (!isset(\$this->parent[\$parent])) {
+            \$this->parent[\$parent] = \$this->env->loadTemplate(\$parent);
         }
 
-        return \$this->parent;
+        return \$this->parent[\$parent];
     }
 
     protected function doDisplay(array \$context, array \$blocks = array())

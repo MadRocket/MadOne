@@ -1,10 +1,27 @@
-<?
-    $root = $this->items[0];
-    $this->items = $this->items[0]->getChildren();
-?>
+{% macro section(item, full) %}
+    <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+        <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+            <div class="actions">
+                <a class="items" href="./{{ item.id }}/" title="Перейти к списку позиций"><img class="item-list" width="16" height="16" src="/static/i/admin/icons/16/items.png"/></a>
+                <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+            </div>
+            <h2 stormText="title">{{ item.title }}</h2>
+            <p stormText="name">{{ item.name }}</p>
+        </div>
+        {% if full %}
+        <span class="a-unit-list">
+            {% for child in item.getChildren() %}
+                {{ _self.pageitem(child, full) }}
+            {% endfor %}
+        </span>
+        {% endif %}
+    </div>
+{% endmacro %}
 
 <div class="module-buttons">
-	<button class="create-section styled-button"><b><b>Создать раздел</b></b></button>
+	<button class="create-section btn primary">Создать раздел</button>
 </div>
 
 <div class="module-content">
@@ -12,44 +29,32 @@
 	<div class="createFormPlace"></div>
 
 	<div class="a-units" stormModel="MadoneShowcaseSection">
-	<span id="sections" class="a-unit-list">
-		<?foreach( $this->items as $i ):?>
-			<? printItem( $i, $this ) ?>
-		<?endforeach?>
-	</span>
+        <span id="sections" class="a-unit-list">
+        {% for item in items %}
+            {{ _self.section(item, true) }}
+        {% endfor %}
+        </span>
 	</div>
 </div>
 
-<? function printItem( $p, $template ) { ?>
-    <div class="a-unit" stormObject="<?=$p->id?>" id="a-unit-<?=$p->id?>">
-            <div class="a-unit-body<?= $p->enabled ? '' : ' disabled'?>">
-                <div class="actions">
-					<a class="items" href="./<?= $p->id ?>/" title="Перейти к списку позиций"><img class="item-list" width="16" height="16" src="/static/i/admin/icons/16/items.png"/></a>
-                    <img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-<?= $p->enabled ? 'on' : 'off'?>.png"/>
-					<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
-                </div>
-                <h2><?= $p->title ? $p->title : "&nbsp;" ?><? if( ! Madone::isCurrentLanguage( 'ru' ) && $p->RU->title ) :?><i class="ru-hint">(<?= $p->RU->title ?>)</i><? endif ?></h2>
-                <p><?=$p->name?></p>
-            </div>
-            <?if( count( $p->getChildren() ) ):?>
-                <span class="a-unit-list">
-                <?foreach( $p->getChildren() as $c ):?>
-                    <? printItem( $c, $template ) ?>
-                <?endforeach?>
-                </span>
-            <?endif?>
+<form id="section-form" class="a-unit-form form-stacked">
+	<div class="clearfix">
+	    <label>Название:</label>
+	    <div class="input">
+	        <input class="width-100" type="text" name="title"/>
+	    </div>
     </div>
-<? } ?>
-
-<div id="section-form" class="a-unit-form" style="display:none;">
-	<div class="block"><label>Название:</label><input class="width-100" type="text" name="title"/></div>
-	<div class="block"><label>Название по-английски:</label><input class="width-100" type="text" name="name"/></div>
-	<div class="block">
-		<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-		<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
+	<div class="clearfix">
+	    <label>Название по-английски:</label>
+	    <div class="input">
+	        <input class="width-100" type="text" name="name"/>
+        </div>
+    </div>
+	<div class="actions">
+		<button class="submit btn primary">Сохранить</button>
+		<button class="cancel btn">Отмена</button>
 	</div>
-</div>
+</form>
 
 <div class="a-unit" id="section-template" style="display:none;">
     <div class="a-unit-body">
@@ -59,19 +64,18 @@
 			<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
 			<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
         </div>
-        <h2>Название раздела</h2>
-        <p>name</p>
+        <h2 stormText="title">Название раздела</h2>
+        <p stormText="name">name</p>
     </div>
 </div>
 
-<script>
-
+<script type="text/javascript">
 $( function () {
 	// Инициализация (и переинициализация) сортировки дерева разделов
 	function initSortable() {
 		$( '#sections' ).NestedSortableDestroy().NestedSortable( Object.create( Madone.NestedSortableOptions ).extend( {
 			onChange: function ( serialized ) {
-				Storm.reorder( 'MadoneShowcaseSection', { id: <?=$root->id?>, children: serialized[0].o.sections } );
+				Storm.reorder( 'MadoneShowcaseSection', { id: {{root.id}}, children: serialized[0].o.sections } );
 			}
 		} ) );
 		$( '.a-unit-body:not( .root )' ).addClass( 'movable' );
@@ -151,8 +155,5 @@ $( function () {
 			item:	$( this ).parents( '.a-unit-body' )
 		} ).start();
     } );
-    
-} );
-
-
+});
 </script>

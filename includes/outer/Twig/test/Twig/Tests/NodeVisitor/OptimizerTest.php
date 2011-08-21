@@ -17,7 +17,22 @@ class Twig_Tests_NodeVisitor_OptimizerTest extends PHPUnit_Framework_TestCase
 
         $stream = $env->parse($env->tokenize('{{ block("foo") }}', 'index'));
 
-        $this->assertInstanceOf('Twig_Node_BlockReference', $stream->getNode('body'));
+        $node = $stream->getNode('body');
+
+        $this->assertInstanceOf('Twig_Node_Expression_BlockReference', $node);
+        $this->assertTrue($node->getAttribute('output'));
+    }
+
+    public function testRenderVariableBlockOptimizer()
+    {
+        $env = new Twig_Environment(new Twig_Loader_String(), array('cache' => false, 'autoescape' => false));
+        $env->addExtension(new Twig_Extension_Optimizer());
+        $stream = $env->parse($env->tokenize('{{ block(name|lower) }}', 'index'));
+
+        $node = $stream->getNode('body');
+
+        $this->assertInstanceOf('Twig_Node_Expression_BlockReference', $node);
+        $this->assertTrue($node->getAttribute('output'));
     }
 
     /**

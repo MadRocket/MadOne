@@ -52,20 +52,6 @@ a.ajax:hover {
 	left: 15px;
 }
 
-.left {
-    float:left;
-     ~display: inline;
-}
-.right {
-    float:right;
-     ~display: inline;
-}
-
-.error-msg {
-    color: #f06030;
-    font-style: italic;
-}
-
 .movable {
     cursor: move;
 }
@@ -74,131 +60,6 @@ a.ajax:hover {
     padding: 0 60px 0;
 }
 
-.madone-header {
-    background: #cdcdcd;
-    background: -moz-linear-gradient(top, #cdcdcd 0%, #b2b2b2 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cdcdcd), color-stop(100%,#b2b2b2));
-    background: -webkit-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
-    background: -o-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
-    background: -ms-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cdcdcd', endColorstr='#b2b2b2',GradientType=0 );
-    background: linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
-
-    border-bottom: 1px solid #757575;
-
-    color: #373737;                      
-    height: 38px;
-    margin-bottom: 32px;
-}
-
-.madone-header .left {
-    line-height: 38px;
-    text-shadow: #ddd 0px 1px 0;
-    font-size: 20px;
-}
-.madone-header .left a {
-	text-decoration: none;
-	color: #000;
-}
-.madone-header .left a:hover {
-	text-decoration: underline;
-}
-.madone-header .left span {
-	font-size: 12px;
-	font-weight: normal;
-}
-
-.madone-header .right {
-    font-size: 12px;
-    color: #aacfde;
-}
-
-.system-menu {
-	background: url(/static/i/admin/header-plate.png) left bottom no-repeat;
-	color: #000;
-	display: -moz-inline-box;
-	display: inline-block;
-	line-height: 25px;
-	margin-top: 5px;
-}
-
-.system-menu span {
-	background: url(/static/i/admin/header-plate.png) right top no-repeat;
-	margin-left: 5px;
-	padding-left: 6px;
-	display: -moz-inline-box;
-	display: inline-block;
-}
-.system-menu span span {
-	display: -moz-inline-block;
-	display: inline-block;
-	background: transparent url(/static/i/admin/header-plate-sep.png) right 1px no-repeat;
-	margin: 0;
-	padding: 0 12px 0 10px;
-}
-
-.system-menu a {
-	color: #000;
-}
-
-.system-menu .last {
-	padding: 0 12px 0 10px;
-	background: transparent;
-}
-.system-menu .first {
-	padding: 0 12px 0 0px;
-}
-.lang a {
-	margin-right: 5px;
-}
-.lang a img {
-	vertical-align:  middle;
- 	margin-bottom: 2px;
-}
-
-
-h1.madone-menu-title, h1.madone-menu-title-active {
-	background: url(/static/i/admin/menu-combo.png) no-repeat;
-	line-height: 30px;
-    font-weight: normal;
-    font-size: 18px;
-    display: -moz-inline-box;
-    display: inline-block;
-   ~display: inline;
-   
-	margin: 1px 40px 30px 0px;
-	padding-left: 4px;	
-
-	float: left;
-	
-	position: relative;
-}
-
-h1.madone-menu-title span, h1.madone-menu-title-active span {
-	background: url(/static/i/admin/menu-combo.png) right top no-repeat;
-	line-height: 32px;
-    display: -moz-inline-block;
-	display: inline-block;
-	padding-right: 35px;
-	padding-left: 5px;	
-    cursor: pointer;
-}
-
-h1.madone-menu-title-active {
-	background: url(/static/i/admin/orange/menu-combo-hover.png?1) left bottom no-repeat !important;
-}
-
-h1.madone-menu-title-active span {
-	background: url(/static/i/admin/orange/menu-combo-hover.png?1) right bottom no-repeat !important;
-}
-
-
-h1.madone-menu-title:hover {
-	background: url(/static/i/admin/orange/menu-combo-hover.png) no-repeat;
-}
-h1.madone-menu-title:hover span {
-	background: url(/static/i/admin/orange/menu-combo-hover.png) right top no-repeat;
-}
 
 .module-buttons {
 	height: 34px;
@@ -214,41 +75,10 @@ h1.madone-menu-title:hover span {
 }
 
 .madone-module {
-	margin: 40px 0 0;
 	padding: 15px 0 0;
     overflow: hidden;
 }
-.madone-menu-items {
-	display: none; 
-	position: absolute; 
-	background: #fff; 
-	padding: 0px;
-	z-index: 3;
-	border: 1px solid #fecc47;
-	font-size: 16px;
-	line-height: 24px;
-	margin-top: 32px;
-	left: 0;
-	top: -1px;
-	white-space: nowrap;
-	min-width: 100%;
-}
-.madone-menu-items a {
-	background: #fff;
-	display: block;
-	padding: 4px 9px;
-	outline: none;
-}
-.madone-menu-items a:hover {
-/*
-	background: #fecc47;
-	color: #fff;
-	text-decoration: none;
-*/
-}
-.madone-menu-items a.active, .madone-menu-items a:hover.active {
-	color: #000 !important;
-}
+
 .a-units {
 	background: #f1f1f1;
 	border-top: 1px solid #ddd;	

@@ -100,8 +100,7 @@ class MadoneCmsApplication
             // ajax-запрос
             print $module ? $module->handleAjaxRequest($request->getUri()) : Madone::show404(Mad::getUriPath());
         }
-        else
-        {
+        else {
             // Интерфейсный запрос — рисуем его в нашем интерфейсе :3
             $vars = array();
 
@@ -124,7 +123,7 @@ class MadoneCmsApplication
 
             // Если есть активный модуль — рендерим его содержимое, иначе — welcome-страница
             if (!$module) {
-                $module = new WelcomeModule("/");
+                $module = new DashboardModule("/");
             }
 
             // Проверим наличие title, если нет — выбран встроенный модуль, и тайтл тоже нужно приготовить самостоятельно
@@ -140,7 +139,7 @@ class MadoneCmsApplication
                         $vars['title'] = 'Помощь';
                         break;
                     default:
-                        $vars['title'] = 'Добро пожаловать!';
+                        $vars['title'] = 'Панель управления';
                         break;
                 }
             }

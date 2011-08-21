@@ -49,8 +49,7 @@ class AbstractModule {
                 "{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin",
                 "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
             )
-        )
-        ;
+        );
         
         return $twig->loadTemplate($file)->render($vars);
     }

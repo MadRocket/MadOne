@@ -1,26 +1,30 @@
-<style type="text/css">
-	.a-unit-form .cancel {
-		margin-left: -4px;
-	}
-</style>
-
+{% import 'macros.twig' as common %}
+<h1>Обратная связь</h1>
 <div class="module-content">
 
 	<div class="a-units a-unit-list" stormModel="MadoneFeedbackMessage">
-	
-	<? foreach( $this->paginator->getObjects() as $i ): ?>
-	<div class="a-unit">
-	<div class="a-unit-body<?= $i->enabled ? '' : ' disabled'?>" stormObject="<?=$i->id?>">
-		<div class="actions">
-			<img title="Просмотреть" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-			<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-<?= $i->enabled ? 'on' : 'off'?>.png"/>
-			<img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
-		</div>
-		<h2><?= $i->name ?> <?= $i->email ?></h2>
-		<p><?= $i->date ?></p>
-	</div>
-	</div>
-	<? endforeach ?>
+        {% for item in items %}
+        <div class="a-unit">
+            <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
+                <div class="actions">
+                    <img title="Просмотреть" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                    <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+                </div>
+                <h2>{{ item.name }} {{ item.email }}</h2>
+                <p>{{ item.date }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if items is empty %}
+        <div class="alert-message info">
+            <p><strong>Сообщений нет.</strong> Видимо еще никто не пользовался формой обратной связи.</p>
+        </div>
+    {% endif %}
+
+    {{ common.pager(paginator) }}
 </div>
 
 <div class="a-unit" id="item-template" style="display:none;">
@@ -41,12 +45,9 @@
 	<div class="block"><pre text="text"></pre></div>
 	<div class="block" style="display:none;"><label>Текст ответа</label><textarea class="width-100 height-200" name="answer"></textarea></div>
 	<div class="block">
-		<button class="submit small-styled-button" style="display:none;"><b><b>Сохранить</b></b></button>		
-		<button class="cancel small-styled-button"><b><b>Закрыть</b></b></button>		
+		<button class="submit small-styled-button" style="display:none;"><b><b>Сохранить</b></b></button>
+		<button class="cancel small-styled-button"><b><b>Закрыть</b></b></button>
 	</div>
-</div>
-
-<?= $this->paginator ?>
 </div>
 
 <script type="text/javascript">

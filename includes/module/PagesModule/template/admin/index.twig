@@ -9,7 +9,7 @@
 
     {% macro pageitem(item, full) %}
         <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
-               <div class="a-unit-body{{ item.enabled ? '' : 'disabled' }}">
+               <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
                    <div class="actions">
                        <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
                     <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
