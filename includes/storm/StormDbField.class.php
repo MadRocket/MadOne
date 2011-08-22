@@ -7,7 +7,7 @@
 
 abstract class StormDbField
 {
-    private $value = null; // Поле хранения данных
+    protected $value = null; // Поле хранения данных
     protected $null = true; // Может ли поле быть null, флаг
     protected $default = null; // Значение по умолчанию
     protected $default_callback = null; // Функция, подставляющая значение по умолчанию
