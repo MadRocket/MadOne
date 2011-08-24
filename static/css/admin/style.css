@@ -1,54 +1,16 @@
-body {
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    font-size: 14px;
-    background: #fff;
-}
-
-h1 {
-    font-size: 20px;
-    line-height: 25px;
-}
-
-h2 {
-    font-size: 18px;
-    line-height: 23px;
-}
-
-h3 {
-    font-size: 16px;
-    line-height: 21px;
-}
-
-a, a:visited {
-    color: #56add0;
-}
-
-a:hover {
-    color: #60c0e7;
-}
-
-a.ajax, a.ajax:visited {
-    color: #d0764e;
-}
-
-a.ajax:hover {
-    color: #e99570;
-}
-
-
 #ajaxInfo {
-	background: #fce7be url(/static/i/admin/ajax-load.gif) 6px 8px no-repeat;
+	/*background: #fce7be url(/static/i/admin/ajax-load.gif) 6px 8px no-repeat;*/
 	display: none;
+    background: #fce7be;
 	position: fixed;
 	z-index: 100;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+	border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
 	border: 1px solid #d59f34;
 	color: #000;
-	padding: 9px 6px 6px 30px;
-		
-	top: -3px;
+	padding: 9px 6px 6px 6px;
+
+    top:39px;
 	left: 15px;
 }
 
@@ -59,7 +21,6 @@ a.ajax:hover {
 .madone-content, .madone-header, .madone-menu, .madone-menu-items {
     padding: 0 60px 0;
 }
-
 
 .module-buttons {
 	height: 34px;
@@ -81,17 +42,8 @@ a.ajax:hover {
 
 .a-units {
 	background: #f1f1f1;
-	border-top: 1px solid #ddd;	
-	padding-bottom: 1px;
+	padding-top: 1px;
 	overflow: hidden;
-	~overflow: visible;
-	~display: inline-block; 
-	
-/*
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;	
-	border-radius: 5px;
-*/
 }
 
 .a-unit-list {
@@ -100,7 +52,6 @@ a.ajax:hover {
 
 .a-unit {
 	display: inline-block;
-   /*~display: block;*/
 	width: 100%;
 }
 .a-unit-body {
@@ -109,8 +60,6 @@ a.ajax:hover {
 	margin: 0;
     padding: 7px 9px;
     margin-top: -1px;
-
-	~display: inline-block;    
 }
 .a-unit > div.a-unit-body:hover {
     background: #fce7be !important;
@@ -142,7 +91,7 @@ a.ajax:hover {
 
 .a-unit-body .actions img {
 	opacity:0.6;
-	filter: alpha(opacity = 60);    
+	filter: alpha(opacity = 60);
     vertical-align: middle;
     margin:0 5px;
 	cursor: pointer;
@@ -167,93 +116,21 @@ a.ajax:hover {
 	/margin-top: 0px !important;	
 }
 
-.a-unit-list > .a-unit-sortable-helper {
-
-}
-
 .a-unit-form {
 	background: #fff;
 	border: 1px solid #d59f35;
     border-radius: 5px;
-	box-shadow: 0px 0px 8px #ccc;
+	box-shadow: 0 0 8px #ccc;
 
 	padding: 10px 8px 0;
- 	margin: 10px 0px 15px 0px;
+ 	margin: 10px 0 15px 0;
 
     display: none;
 }
 
 .a-units .a-unit-form {
 	border-radius: 0;
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
  	margin: 0 0 1px 0;
-}
-
-.a-unit-form label {
-	display: block;
-	color: #777;
-	font-size: 13px;
-	margin: 0 0 1px 0;
-}
-
-.a-unit-form .block {
-    margin: 8px 0;
-} 
-
-.a-unit-form .submit {
-	margin-left: -4px;
-}
-
-.a-unit-form .cancel {
-/*     margin-left: 14px; */
-}
-
-.width-100 {
-    width:100%;
-    ~width: 99.5%;
-}
-
-.height-200 {
-    height:200px;
-}
-
-.height-300 {
-    height:300px;
-}
-
-.height-400 {
-    height:400px;
-}
-
-.a-unit-form h2 {
-    font-size: 14px;
-    margin: 7px 0 2px 0;
-    line-height: 14px;
-}
-
-.a-unit-form a {
-    font-size: 15px;
-}
-
-.paginator {
-    margin: 20px 0 0;
-    font-size: 18px;
-}
-
-.paginator a {
-    margin: 0 5px;
-}
-
-.link-block {
-    margin: 0 0 20px;
-    font-size: 16px;
-}
-
-.link-block a img {
-    vertical-align: middle;
-    margin: -1px 5px 0;
-    ~margin: 0 5px;
 }
 
 img.ajax-loader {
@@ -265,14 +142,6 @@ img.ajax-loader {
 
 .ui-datepicker {
     font-size: 11px !important;
-}
-
-.ru-hint {
-    color: #888;
-	font-style: normal;
-	font-size: 12px;
-	line-height: 12px;
-	margin-left: 6px;
 }
 
 /* Multiupload */
@@ -308,8 +177,6 @@ img.ajax-loader {
 	display: block;
 	margin:0;
 	background:#fff;
-	-moz-border-radius:5px;
-    -webkit-border-radius: 5px;
     border-radius: 5px;
 	border: 1px solid #d59f35;
 	padding:2px;
@@ -356,9 +223,7 @@ img.ajax-loader {
 	border: 1px solid #888;
 	cursor: pointer;
 	
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;	
-	border-radius: 4px;	
+	border-radius: 4px;
 }
 
 .gallery a.thumb:hover .control {
@@ -367,7 +232,6 @@ img.ajax-loader {
 
 .semitransparent {
 	opacity: 0.2;
-	-moz-opacity: 0.2;
 	filter: alpha(opacity=20);
 }
 
@@ -378,10 +242,8 @@ img.ajax-loader {
 	border: 1px solid #d59f35;
 	margin: 3px;
 	padding: 0;
-	
-	-webkit-box-shadow: 0px 0px 8px #ccc;
-	-moz-box-shadow: 0px 0px 8px #ccc;	
-	-box-shadow: 0px 0px 8px #ccc;		
+
+	box-shadow: 0px 0px 8px #ccc;
 }
 
 .gallery-form img {

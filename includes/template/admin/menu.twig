@@ -1,9 +1,9 @@
 <div class="well">
-    <ul class="unstyled">
+    <ul id="madone-navigation" class="unstyled">
         {% for i in menuItems %}
         <li>
             {% if i.selected %}
-            <a class="active">{{ i.title }}</a>
+            <span class="active">{{ i.title }}</span>
             {% else %}
             <a href="{{ i.uri }}">{{ i.title }}</a>
             {% endif %}
