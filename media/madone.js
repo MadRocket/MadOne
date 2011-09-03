@@ -18,15 +18,7 @@ Madone.createRichTextEditor = function( name, options ) {
 	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110820';
 	
 	var editor = CKEDITOR.replace( name );
-/*
-	if(CKFinder.hasOwnProperty('setupCKEditor')) {
-		CKFinder.setupCKEditor( editor, { basePath: '/media/ckfinder-2.0/'} );
-	}
-	else {
-		CKFinder.SetupCKEditor( editor, '/media/ckfinder-2.0/' );
-	}
-*/
-	
+
 	editor.config.height = options.height;
 	return editor;
 };
@@ -55,18 +47,19 @@ Madone.RichTextEditorGetHTML = function( name ) {
 
 
 
-Madone.NestedSortableOptions = Object.create( Object.Extendable ).extend( {
-	accept:				'a-unit',
-	handle:				'.a-unit-body',
-	opacity:			0.7,
-	helperclass:		'a-unit-sortable-helper',
-	nestingPxSpace:		30,
-	fx:					80,
-	revert:				true,
-	autoScroll:			true,
-	scrollSensitivity:	50,
-	scrollSpeed:		40
-} );
+Madone.nestedSortableOptions = Object.create( Object.Extendable ).extend({
+    disableNesting: 'no-nest',
+    forcePlaceholderSize: true,
+    handle: 'div',
+    helper:	'clone',
+    items: 'li',
+    opacity: .6,
+    placeholder: 'placeholder',
+    revert: 100,
+    tabSize: 15,
+    tolerance: 'pointer',
+    toleranceElement: '> div'
+});
 
 Madone.addAjaxLoader = function( object, position ) {
 	object = $( object );

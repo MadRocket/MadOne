@@ -6,38 +6,37 @@
     <div class="createFormPlace"></div>
 
     <div class="a-units" stormModel="MadonePage">
+        {{ _self.pageitem(root, false) }}
 
-    {% macro pageitem(item, full) %}
-        <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
-               <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
-                   <div class="actions">
-                       <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-                    <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ item.enabled ? 'on' : 'off' }}.png"/>
-                    <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
-                   </div>
-                   <h2 stormText="title">{{ item.title }}</h2>
-                   <p stormText="name">{{ item.name }}</p>
-               </div>
-               {% if full %}
-               <span class="a-unit-list">
-                    {% for child in item.getChildren() %}
-                        {{ _self.pageitem(child, full) }}
-                    {% endfor %}
-               </span>
-               {% endif %}
-           </div>
-    {% endmacro %}
-
-    {{ _self.pageitem(root, false) }}
-
-    <span id="pages" class="a-unit-list">
-    {% for item in items %}
-        {{ _self.pageitem(item, true) }}
-    {% endfor %}
-    </span>
+        <ol id="pages">
+        {% for item in items %}
+            {{ _self.pageitem(item, true) }}
+        {% endfor %}
+        <ol>
     </div>
 </div>
+
+{% macro pageitem(item, full) %}
+    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+           <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+               <div class="actions">
+                    <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                    <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ item.menu ? 'on' : 'off' }}.png"/>
+                    <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+               </div>
+               <h2 stormText="title">{{ item.title }}</h2>
+               <p stormText="name">{{ item.name }}</p>
+           </div>
+           {% if full %}
+           <ol>
+                {% for child in item.getChildren() %}
+                    {{ _self.pageitem(child, full) }}
+                {% endfor %}
+           </ol>
+           {% endif %}
+       </li>
+{% endmacro %}
 
 <form id="page-form" class="a-unit-form form-stacked" style="display:none;">
     <ul class="tabs">
@@ -74,7 +73,7 @@
 
         <div class="clearfix">
             <label>Текст страницы:</label>
-            <div class="input"><textarea name="text" class="width-100 height-300" rich="yes"></textarea></div>
+            <div class="input"><textarea name="text" rich="yes"></textarea></div>
         </div>
     </div>
     <div class="m-tab tab-seo">
@@ -107,7 +106,7 @@
     </div>
 </form>
 
-<div class="a-unit" id="page-template" style="display:none;">
+<li class="a-unit" id="page-template" style="display:none;">
     <div class="a-unit-body">
         <div class="actions">
             <img class="edit "width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
@@ -118,19 +117,17 @@
         <h2 stormText="title"></h2>
         <p stormText="name"></p>
     </div>
-</div>
+</li>
 
 <script type="text/javascript">
 $( function () {
-   	// Сортировка страниц перетаскиванием
-   	function initSortable() {
-   		$('#pages').NestedSortableDestroy().NestedSortable( Object.create( Madone.NestedSortableOptions ).extend( {
-   			onChange: function ( serialized ) {
-   				Storm.reorder( 'MadonePage', { id: {{ root.id }}, children: serialized[0].o.pages } );
-   			}
-   		}));
-   	}
-   	initSortable();
+   	$('#pages').nestedSortable(
+   	    Object.create( Madone.nestedSortableOptions ).extend({
+            stop: function(event, ui){
+                Storm.reorder( 'MadonePage', { id: {{ root.id }}, children: $('#pages').nestedSortable('toHierarchy') } );
+            }
+        })
+    );
 
    	var pageForm = Object.create( Storm.Form ).extend( {
    		form: $( '#page-form' ),
@@ -199,14 +196,8 @@ $( function () {
    			}
    			item.attr( 'stormObject', data.id );
    			item.attr( 'id', 'a-unit-' + data.id );
-//   			item.find( 'h2:first' ).html( data.title );
-//   			item.find( 'p:first' ).html( data.name );
-   		},
-
-   		onShowItem: function () {
-   			initSortable();
    		}
-   	} );
+   	});
 
        // Новая страница
     $(".create-page").click( function ( e ) {
@@ -220,7 +211,7 @@ $( function () {
    	} );
 
     // Редактирование страницы
-    $( '.edit' ).bind( 'click', function( event ) {
+    $( '.a-units .edit' ).bind( 'click', function( event ) {
         event.preventDefault();
         Object.create( pageForm ).extend( {
             object:	Storm.buildPath( this ),
@@ -228,7 +219,7 @@ $( function () {
         } ).start();
     } );
 
-   	$( '.enabled' ).click( function( e ) {
+   	$( '.a-units .enabled' ).click( function( e ) {
    		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
    			if(data.enabled) {
    				$( this ).parents('.a-unit-body:first').removeClass('disabled');
@@ -241,7 +232,7 @@ $( function () {
    		}));
    	} );
 
-   	$( '.menu' ).click( function( e ) {
+   	$( '.a-units .menu' ).click( function( e ) {
    		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
    			$( this ).attr( 'src', data.menu ?
    			'/static/i/admin/icons/16/flag-on.png' :
@@ -249,7 +240,7 @@ $( function () {
    		}));
    	});
 
-   	$( '.delete' ).click( function( e ) {
+   	$( '.a-units .delete' ).click( function( e ) {
    		var title = $( this ).parents( '.a-unit:first' ).find( 'h2:first' ).text();
 
            if( confirm( 'Вы действительно хотите удалить страницу «' + title  + '»?' ) ) {

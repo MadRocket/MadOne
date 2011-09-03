@@ -1,5 +1,23 @@
+<h1>Каталог</h1>
+
+<div class="module-buttons">
+	<button class="create-section btn primary">Создать раздел</button>
+</div>
+
+<div class="module-content">
+	
+	<div class="createFormPlace"></div>
+
+	<div class="a-units" stormModel="MadoneShowcaseSection">
+        <ol id="sections">
+        {% for item in items %}
+            {{ _self.section(item, true) }}
+        {% endfor %}
+        </ol>
+	</div>
+</div>
 {% macro section(item, full) %}
-    <div class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
         <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
             <div class="actions">
                 <a class="items" href="./{{ item.id }}/" title="Перейти к списку позиций"><img class="item-list" width="16" height="16" src="/static/i/admin/icons/16/items.png"/></a>
@@ -11,31 +29,14 @@
             <p stormText="name">{{ item.name }}</p>
         </div>
         {% if full %}
-        <span class="a-unit-list">
+        <ol>
             {% for child in item.getChildren() %}
-                {{ _self.pageitem(child, full) }}
+                {{ _self.section(child, full) }}
             {% endfor %}
-        </span>
+        </ol>
         {% endif %}
-    </div>
+    </li>
 {% endmacro %}
-
-<div class="module-buttons">
-	<button class="create-section btn primary">Создать раздел</button>
-</div>
-
-<div class="module-content">
-	
-	<div class="createFormPlace"></div>
-
-	<div class="a-units" stormModel="MadoneShowcaseSection">
-        <span id="sections" class="a-unit-list">
-        {% for item in items %}
-            {{ _self.section(item, true) }}
-        {% endfor %}
-        </span>
-	</div>
-</div>
 
 <form id="section-form" class="a-unit-form form-stacked">
 	<div class="clearfix">
@@ -56,7 +57,7 @@
 	</div>
 </form>
 
-<div class="a-unit" id="section-template" style="display:none;">
+<li class="a-unit" id="section-template" style="display:none;">
     <div class="a-unit-body">
         <div class="actions">
 			<a class="items" href="#" title="Перейти к списку позиций"><img class="item-list" width="16" height="16" src="/static/i/admin/icons/16/items.png"/></a>
@@ -67,22 +68,15 @@
         <h2 stormText="title">Название раздела</h2>
         <p stormText="name">name</p>
     </div>
-</div>
+</li>
 
 <script type="text/javascript">
 $( function () {
-	// Инициализация (и переинициализация) сортировки дерева разделов
-	function initSortable() {
-		$( '#sections' ).NestedSortableDestroy().NestedSortable( Object.create( Madone.NestedSortableOptions ).extend( {
-			onChange: function ( serialized ) {
-				Storm.reorder( 'MadoneShowcaseSection', { id: {{root.id}}, children: serialized[0].o.sections } );
-			}
-		} ) );
-		$( '.a-unit-body:not( .root )' ).addClass( 'movable' );
-	}
-
-	// Сортировку запускаем сразу же
-	initSortable();
+    $( '#sections' ).nestedSortable( Object.create( Madone.nestedSortableOptions ).extend( {
+        stop: function ( event, ui ) {
+            Storm.reorder( 'MadoneShowcaseSection', { id: {{root.id}}, children: $( '#sections' ).nestedSortable('toHierarchy') } );
+        }
+    } ) );
 
 	// Вкл/выкл раздела
 	$( '.enabled' ).click( function( e ) {
@@ -132,8 +126,7 @@ $( function () {
 			}
 			item.find( 'p:first' ).html( data.name );
 			item.find( 'a.items:first' ).attr( 'href', './' + data.id + '/' );
-		},
-		onShowItem: initSortable
+		}
 	} );
 
     // Создание раздела

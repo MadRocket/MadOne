@@ -45,9 +45,12 @@
 	padding-top: 1px;
 	overflow: hidden;
 }
+.a-units > ol {
+    margin: 0;
+}
 
-.a-unit-list {
-	display: block;
+.placeholder {
+    list-style: none;
 }
 
 .a-unit {
@@ -131,6 +134,10 @@
 .a-units .a-unit-form {
 	border-radius: 0;
  	margin: 0 0 1px 0;
+}
+
+.a-unit-form textarea[rich="yes"] {
+    height: 300px;
 }
 
 img.ajax-loader {
