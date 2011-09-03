@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>{{ title ? title : config.site_title }} &mdash; MadOne</title>
 
-        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.0.0.min.css">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/admin/style.css"/>
         		
 		<script type="text/javascript" src="/media/jquery-1.5.2.min.js"></script>
@@ -46,9 +46,11 @@
     <body>
     	<div id="ajaxInfo">Жду ответ от сервера...</div>
         <div class="topbar">
-            <div class="container fixed">
-                <h3><a class="logo" href="http://{{ server.SERVER_NAME }}/" title="Перейти на сайт">{{ config.site_title }}</a></h3>
-                {% include "header-menu.twig" %}
+            <div class="topbar-inner">
+                <div class="container fixed">
+                    <h3><a class="logo" href="http://{{ server.SERVER_NAME }}/" title="Перейти на сайт">{{ config.site_title }}</a></h3>
+                    {% include "header-menu.twig" %}
+                </div>
             </div>
         </div>
         <div class="container-fluid">

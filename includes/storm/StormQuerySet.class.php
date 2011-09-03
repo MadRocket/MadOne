@@ -257,7 +257,11 @@ class StormQuerySet
         return $next;
     }
 
-    // Переключение проследования
+    /**
+     * Переключение проследования
+     * @param $depth
+     * @return StormQuerySet
+     */
     function follow( $depth )
     {
         $next = clone $this;
