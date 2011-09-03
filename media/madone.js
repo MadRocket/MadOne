@@ -57,7 +57,7 @@ Madone.nestedSortableOptions = Object.create( Object.Extendable ).extend({
     placeholder: 'placeholder',
     revert: 100,
     tabSize: 15,
-    tolerance: 'pointer',
+    tolerance: 'intersect',
     toleranceElement: '> div'
 });
 

@@ -10,16 +10,9 @@ class MadonePage extends StormKiModel {
 			'name'		=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100, 'index' => true ) ),
             'uri'		=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 700, 'index' => true ) ),
         	'text'		=> new StormTextDbField( array( 'default' => '' ) ),
-        	'type'		=> new StormFkDbField( array( 
-        									'model' => 'MadonePageType', 
-        									'related' => 'pages', 
-        									'null' => false, 
-        									'index' => true, 
-        									'default_callback' => "return MadonePageTypes()->order( 'position' )->first();" ) ),
 
-            'template' => new StormCharDbField( array('maxlength' => 255, 'localized' => false, 'default' => 'default') ),
-
-        	'app_settings'	=> new StormTextDbField( array( 'localized' => false ) ),
+            'module' => new StormCharDbField( array('default' => 'content') ),
+            'template' => new StormCharDbField( array( 'localized' => false, 'default' => 'default') ),
 
             'menu'			=> new StormBoolDbField( array( 'default' => 1, 'index' => 'nav' ) ),
             'enabled'		=> new StormBoolDbField( array( 'localized'=> true, 'default' => 0, 'index' => 'nav' ) ),

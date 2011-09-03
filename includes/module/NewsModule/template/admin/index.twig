@@ -84,6 +84,9 @@ $( function() {
 
 	var newsForm = Object.create( Storm.Form ).extend( {
 		form: $( '#news-form' ),
+		onFetchData: function( form, data ) {
+			data.page = {{ page }};
+        },
 		onSubmit: function( form, data, result ) {
 			if( this.mode === 'create' || this.loadedData.date != result.date ) {
 				location.reload();
@@ -93,7 +96,6 @@ $( function() {
 
 	var createFormOpened = false
 	$( '.create-unit' ).click( function( e ) {
-		e.preventDefault();
 		Object.create( newsForm ).extend( {
 			object: 'MadoneNews',
 			formPlace: $( '.createFormPlace' )

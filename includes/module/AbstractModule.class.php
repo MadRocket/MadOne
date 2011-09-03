@@ -44,8 +44,12 @@ class AbstractModule {
             $file = "{$file}.twig";
         }
 
+        $name = explode('_', get_class( $this ) );
+        $name = array_key_exists(1, $name) ? lcfirst($name[1]) : get_class( $this );
+
         $twig = Madone::twig(
             array(
+                "{$_SERVER['DOCUMENT_ROOT']}/includes/module/{$name}/template/admin",
                 "{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin",
                 "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
             )

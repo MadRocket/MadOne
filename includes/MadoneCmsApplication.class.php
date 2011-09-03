@@ -164,8 +164,7 @@ class MadoneCmsApplication
     protected function getModuleByName($name)
     {
         // Сначала проверяем встроенные модули административного интерфейса
-        switch ($name)
-        {
+        switch ($name) {
             case 'logout':
                 return new LogoutModule($name);
 
