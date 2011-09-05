@@ -15,7 +15,7 @@ Madone.createRichTextEditor = function( name, options ) {
 		options.value = '';
 	}
 
-	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110820';
+	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110906';
 	
 	var editor = CKEDITOR.replace( name );
 
