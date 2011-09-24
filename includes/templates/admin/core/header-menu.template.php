@@ -35,4 +35,4 @@
 	<? endforeach ?>
 	</span>
 <? endif ?>
-<span><a href="/cms/password/">Смена пароля</a></span><span><a href="/cms/settings/">Настройка</a></span><span class="last"><a href="/cms/logout/">Выход</a></span></span></span>
+<span><a href="/admin/password/">Смена пароля</a></span><span><a href="/admin/settings/">Настройка</a></span><span class="last"><a href="/admin/logout/">Выход</a></span></span></span>
