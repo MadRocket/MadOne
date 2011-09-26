@@ -4,7 +4,7 @@ var Madone = window.Madone = {};
 Madone.uri = /(\/[^\/]+)/.test( location.pathname ) ? RegExp.$1 : '';
 
 // Создание Визуального редактора
-Madone.createRichTextEditor = function( name, options ) {
+Madone.createRichTextEditor = function( id, options ) {
 	if( ! options ) {
 		options = {};
 	}
@@ -15,11 +15,10 @@ Madone.createRichTextEditor = function( name, options ) {
 		options.value = '';
 	}
 
-	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110906';
+	options.customConfig = '/media/ckeditor.config.js?20110906';
 	
-	var editor = CKEDITOR.replace( name );
+	var editor = $( '#' + id ).ckeditor(options);
 
-	editor.config.height = options.height;
 	return editor;
 };
 
