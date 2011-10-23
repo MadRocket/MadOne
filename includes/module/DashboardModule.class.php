@@ -1,0 +1,7 @@
+<?
+
+class DashboardModule extends AbstractModule {
+
+}
+
+?>

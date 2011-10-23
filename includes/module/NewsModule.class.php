@@ -1,6 +1,6 @@
 <?php
 
-class Module_News_Admin extends Madone_Module {
+class NewsModule extends AbstractModule {
 
     function handleHtmlRequest( $uri ) {
         $path = Mad::getUriPathNames($uri);
