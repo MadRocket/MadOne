@@ -132,7 +132,6 @@ $( function () {
 		$('#pages').NestedSortableDestroy().NestedSortable( Object.create( Madone.NestedSortableOptions ).extend( {
 			onChange: function ( serialized ) {
 				Storm.reorder( 'MadonePage', { id: <?=$root->id?>, children: serialized[0].o.pages } );
-				findFirstLast('.a-units .a-unit-body');
 			}
 		}));
 		

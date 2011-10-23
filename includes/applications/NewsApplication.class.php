@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Вывод страницы новостей
@@ -38,8 +38,6 @@ class NewsApplication extends AbstractApplication {
 			print new Template( 'news-rss', array( 'page' => $page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
         });
 
-        return dispatch($uri);
+        return dispatch($uri, null, null, true);
     }
 }
-
-?>

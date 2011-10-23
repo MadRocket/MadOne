@@ -339,13 +339,8 @@ $( function () {
 		    }
 		}
 	});
-	
-	$(grid).bind('gridRendered', function(){ Mad.findFirstLast( '.a-units .a-unit .a-unit-body' ) });
-	
+		
 	grid.start();
-	
-	$(grid).bind('itemRemoved itemAdded itemsReordered', function(){ Mad.findFirstLast( '.a-units .a-unit .a-unit-body' ) });
-
 
 
     // Создание раздела

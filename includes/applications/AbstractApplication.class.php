@@ -32,5 +32,3 @@ class AbstractApplication {
         return true;
     }
 }
-
-?>

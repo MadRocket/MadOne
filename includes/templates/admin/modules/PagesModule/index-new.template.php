@@ -235,13 +235,8 @@ $( function () {
 	// Эксклюзивный обработчик для корневого элемента, пока не придумал как его внедрить в общую сетку
 	$('.root .edit').click(grid.editHandler);
 	
-	$(grid).bind('gridRendered', function(){ Mad.findFirstLast( '.a-units .a-unit .a-unit-body' ) });
-	
 	grid.start();
 	
-	$(grid).bind('itemRemoved itemAdded itemsReordered', function(){ Mad.findFirstLast( '.a-units .a-unit .a-unit-body' ) });
-
-
     // Новая страница
     $(".create-page").click( function ( e ) {
 		Object.create( pageForm ).extend( {

@@ -38,27 +38,6 @@ class Madone {
 		}
 	}
 	
-	static function install() {
-		// Пользователь по умолчанию
-		MadoneUsers()->create( array( 'login' => 'admin', 'password' => md5('admin') ) );
-		
-		// Приложения по умолчанию
-		MadonePageTypes()->create(array( 'title' => 'Обычная страница (текст с картинками)', 'app_classname'  => 'TextPageApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => false, 'priority' => 1));
-		MadonePageTypes()->create(array( 'title' => 'Новости', 'app_classname'  => 'NewsApplication', 'enabled' => true, 'has_text' => false, 'has_meta' => false, 'has_subpages' => false, 'priority' => 2));
-		MadonePageTypes()->create(array( 'title' => 'Фотогалерея', 'app_classname'  => 'GalleryApplication', 'enabled' => true, 'has_text' => false, 'has_meta' => true, 'has_subpages' => true, 'priority' => 2));
-		MadonePageTypes()->create(array( 'title' => 'Обратная связь', 'app_classname'  => 'FeedbackApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => true, 'priority' => 2));
-		MadonePageTypes()->create(array( 'title' => 'Главная страница', 'app_classname'  => 'IndexPageApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => false, 'priority' => 1));
-		
-		// Модули по умолчанию
-		MadoneModules()->create(array( 'title' => 'Страницы сайта', 'name' => 'pages', 'enabled' => true, 'classname' => 'PagesModule' ));
-		MadoneModules()->create(array( 'title' => 'Новости', 'name' => 'news', 'enabled' => true, 'classname' => 'NewsModule' ));
-		MadoneModules()->create(array( 'title' => 'Фотогалерея', 'name' => 'gallery', 'enabled' => true, 'classname' => 'GalleryModule' ));
-		MadoneModules()->create(array( 'title' => 'Обратная связь', 'name' => 'feedback', 'enabled' => true, 'classname' => 'FeedbackModule' ));
-		MadoneModules()->create(array( 'title' => 'Текстовые блоки', 'name' => 'text-blocks', 'enabled' => true, 'classname' => 'TextBlocksModule' ));
-		MadoneModules()->create(array( 'title' => 'Модули', 'name' => 'modules', 'enabled' => true, 'classname' => 'ModulesModule' ));
-		MadoneModules()->create(array( 'title' => 'Приложения', 'name' => 'apps', 'enabled' => true, 'classname' => 'ApplicationsModule' ));
-	}
-	
 	/**
 	*	Определение режима разработки
 	*/
@@ -128,8 +107,7 @@ class Madone {
     */
     static function run() {
 		ob_start( );
-		
-		// Тут будут условия фильтрации страниц    
+		// Тут будут условия фильтрации страниц
 		$filter = null;
 		
 		// Получаем текущий URI, выделяем из него имена каталогов/файлов
@@ -173,7 +151,8 @@ class Madone {
 			$app_uri = mb_substr( $uri, mb_strlen( $p->uri, 'utf-8' ), mb_strlen( $uri, 'utf-8' ), 'utf-8' );
 			
 			// Запускаем приложение, соответствующее типу страницы, если оно отработало — завершаем работу
-			if(($response = $p->type->getApplicationInstance()->run($p, $app_uri)) !== null ) {
+            $response = $p->type->getApplicationInstance()->run($p, $app_uri);
+            if($response) {
                 print $response;
 
 				print( self::postprocess( ob_get_clean() ) );

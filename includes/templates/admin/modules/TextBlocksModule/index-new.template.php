@@ -48,8 +48,6 @@
 			}
 		});
 		
-		$(grid).bind('gridRendered', function(){ Mad.findFirstLast( '#textblocks .a-unit .a-unit-body' ) });
-		
 		grid.start();
 	} )
     </script>
