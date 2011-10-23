@@ -1,8 +1,10 @@
 <?php
 /**
-Постраничный навигатор по StormQuerySet-ам.
-Использует шаблон, переданный в конструкторе.
-Имеет магию приведения к строке для вывода HTML-кода.
+ * Постраничный навигатор по StormQuerySet-ам.
+ * Использует шаблон, переданный в конструкторе.
+ * Имеет магию приведения к строке для вывода HTML-кода.
+ *
+ * TODO: Добавить обработку наличия GET параметров
  */
 class StormPaginator
 {
@@ -23,26 +25,7 @@ class StormPaginator
         $this->query = $query;
         $this->template = $template;
         $this->size = $size;
-
-        // Не указан uri - получим текущий
-        if (!$uri) {
-            $uri = Mad::getUriPath();
-        }
-
-        // Если в uri не встречается %{page} - сделаем его самостоятельно
-        if (mb_strstr($uri, '%{page}', false, 'utf-8') === false) {
-            if ($parts = Mad::getUriPathNames($uri)) {
-                if (preg_match('/^page\d+$/', $parts[count($parts) - 1])) {
-                    array_pop($parts);
-                }
-            }
-
-            $parts[] = 'page%{page}';
-
-            $uri = '/' . join('/', $parts) . '/';
-        }
-
-        $this->uri = $uri;
+        $this->uri = Mad::getUriPath();
 
         $this->detectPage();
     }
@@ -61,11 +44,10 @@ class StormPaginator
         }
 
         if ($pcnt > 1) {
-            for ($i = 1; $i <= $pcnt; $i++)
-            {
+            for ($i = 1; $i <= $pcnt; $i++) {
                 $pg = array('title' => $i);
                 if ($this->page != $i) {
-                    $pg['uri'] = StormUtilities::array_printf($this->uri, array('page' => $i));
+                    $pg['uri'] = $this->uri."/?page=".$i;
                 }
                 $this->pages[] = $pg;
             }
@@ -129,11 +111,11 @@ class StormPaginator
 
             # Добавим ссылки на предыдущий и следующий элементы
             if ($this->page > 1) {
-                array_unshift($this->pages, array('left' => 1, 'uri' => StormUtilities::array_printf($this->uri, array('page' => $this->page - 1))));
+                array_unshift($this->pages, array('left' => 1, 'uri' =>  $this->uri."/?page=".($this->page - 1) ));
             }
 
             if ($this->page < $pcnt) {
-                $this->pages[] = array('right' => 1, 'uri' => StormUtilities::array_printf($this->uri, array('page' => $this->page + 1)));
+                $this->pages[] = array('right' => 1, 'uri' =>  $this->uri."/?page=".($this->page + 1) );
             }
 
         }
@@ -141,7 +123,8 @@ class StormPaginator
     }
 
     /**
-    Приведение объекта к строке — заменим его вызовом fetch(), весьма пригодится.
+     * Приведение объекта к строке — заменим его вызовом fetch(), весьма пригодится.
+     * @return string
      */
     public function __toString()
     {
@@ -173,8 +156,8 @@ class StormPaginator
     {
         $this->page = 1;
 
-        if (preg_match('/page(\d+)$/', Mad::getUriPath(), $m) && (int)$m[1] > 0) {
-            $this->page = (int)$m[1];
+        if(array_key_exists('page', $_GET)) {
+            $this->page = $_GET['page'];
         }
     }
 

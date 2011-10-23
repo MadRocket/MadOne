@@ -1,55 +1,55 @@
 <?
 
-/**
-    Вывод страницы новостей
-*/
+require_once(__DIR__."/../outer/router/klein.php");
 
+/**
+ * Вывод страницы новостей
+ */
 class NewsApplication extends AbstractApplication {
     /**
-        Запуск приложения!
-            $page - соответствующий объект структуры сайта
-            $uri - путь к искомой странице _внутри_ приложения.
-        Возвращает true, если страница обработана этим приложением, false, если страница приложением не обработана.
-    */
+     * Запуск приложения!
+     * @param MadonePage $page - соответствующий объект структуры сайта
+     * @param string $uri - путь к искомой странице _внутри_ приложения.
+     * @return bool Возвращает true, если страница обработана этим приложением, false, если страница приложением не обработана.
+     */
     function run( MadonePage $page, $uri = '' ) {
-		if( $uri && preg_match( '/\/rss$/', $uri ) ) {
-        	if( ! headers_sent() ) {
-        		header("Content-type: application/rss+xml");
-        	}
-			print new Template( 'news-rss', array( 'page' => $page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
-        } 
-        elseif( $uri && preg_match( '/\/news(\d+)$/', $uri, $m ) ) {
-        	$id = intval($m[1]);
-        	
-        	$item = MadoneNewsList(array('id' => $id))->first();
-        	
+        respond('/?', function($request, $response) use ($page, $uri) {
+            $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 'paginator', 10 );
+
+            // Выбрана левая страница - не обрабатываем
+            if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
+                return false;
+            }
+
+            print new Template( 'news-page', array( 'page' => $page, 'paginator' => $paginator, 'type' => 'companynews' ) );
+
+            return true;
+        });
+
+        respond('/news[i:id]', function($request, $response) use ($page) {
+        	$item = MadoneNewsList(array('id' => $request->id))->first();
+
         	if($item) {
-				print new Template( 'news-item-page', array( 'page' => $page, 'item' => $item ) );	        	
+				print new Template( 'news-item-page', array( 'page' => $page, 'item' => $item ) );
+                return true;
         	}
         	else {
-	        	return false;
+	        	return null;
         	}
-        }
-        else {
-			$paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 'paginator', 10 );
-	        
-	        // Выбрана левая страница - не обрабатываем
-	        if( ! $paginator->getObjects() && $paginator->getPage() > 1 )
-	        {
-	            return false;
-	        }
-	
-	        // Передан не наш uri - не обрабатываем
-	        if( $uri && ! preg_match( '/^\/page\d+$/', $uri ) )
-	        {
-	            return false;
-	        }
-	        
-	        // Остальное - обрабатываем
-	        print new Template( 'news-page', array( 'page' => $page, 'paginator' => $paginator, 'type' => 'companynews' ) );
-        }
-        
-		return true;        
+        });
+
+        respond('/rss', function($request, $response) use($page) {
+            if( ! headers_sent() ) {
+        		header("Content-type: application/rss+xml");
+        	}
+                
+			print new Template( 'news-rss', array( 'page' => $page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
+            return true;
+        });
+
+        dispatch($uri);
+
+        return true;
     }
 }
 

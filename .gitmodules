@@ -1,0 +1,3 @@
+[submodule "includes/outer/router"]
+	path = includes/outer/router
+	url = git://github.com/chriso/klein.php.git
