@@ -1,0 +1,622 @@
+body {
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 14px;
+    background: #fff;
+}
+
+h1 {
+    font-size: 20px;
+    line-height: 25px;
+}
+
+h2 {
+    font-size: 18px;
+    line-height: 23px;
+}
+
+h3 {
+    font-size: 16px;
+    line-height: 21px;
+}
+
+a, a:visited {
+    color: #56add0;
+}
+
+a:hover {
+    color: #60c0e7;
+}
+
+a.ajax, a.ajax:visited {
+    color: #d0764e;
+}
+
+a.ajax:hover {
+    color: #e99570;
+}
+
+
+#ajaxInfo {
+	background: #fce7be url(/cms/static/i/ajax-load.gif) 6px 8px no-repeat;
+	display: none;
+	position: fixed;
+	z-index: 100;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #d59f34;
+	color: #000;
+	padding: 9px 6px 6px 30px;
+		
+	top: -3px;
+	left: 15px;
+}
+
+/* Красивые Кнопки */
+
+button, button:active, button:focus {
+	border:0;
+	margin:0;
+	padding: 0;
+	outline: none;
+	background: transparent;
+	~overflow: visible; /* Укорачивание длинных кнопок в IE */
+}
+
+.styled-button a {
+	text-decoration: none;
+}
+.styled-button b, .styled-button b b {
+	background: url(/cms/static/i/button.png) no-repeat;	
+	background-position: left bottom;	
+	display:-moz-inline-block;
+	display:inline-block; /* Эмуляция для FF2 */
+	font-size: 14px;
+	cursor: default;
+	outline: none;
+	font-weight: normal;
+
+	text-decoration: none;
+	color: #343434;
+	text-shadow: #fff 0px 1px 0;	
+}
+.styled-button b b {
+	border:0;
+	margin:0;
+	padding:0 16px 0 0px;
+	height:34px;
+	line-height:34px;
+	background-position:top right;
+	white-space:nowrap;
+	margin-left: 16px;
+}
+
+.styled-button:active b, .styled-button:active b b {
+	background-image: url(/cms/static/i/button-active.png) !important;
+	outline: none;
+}
+.styled-button:hover b, .styled-button:hover b b, .styled-button:focus b, .styled-button:focus b b {
+	background-image: url(/cms/static/i/orange/button-hover.png);
+	outline: 0;
+	color: #412402;
+}
+
+.small-styled-button b, .small-styled-button b b {
+	background: url(/cms/static/i/small-button.png) no-repeat;	
+	background-position: left bottom;	
+	display:-moz-inline-block;
+	display:inline-block; /* Эмуляция для FF2 */
+	font-size: 14px;
+	cursor: default;
+	outline: 0;
+	font-weight: normal;
+
+	text-decoration: none;
+	color: #343434;
+	text-shadow: #fff 0px 1px 0;	
+}
+.small-styled-button b b {
+	border:0;
+	margin:0;
+	padding:0 14px 0 0px;
+	height:31px;
+	line-height:31px;
+	background-position:top right;
+	white-space:nowrap;
+	margin-left: 14px;
+	outline: 0;	
+}
+
+.small-styled-button:active b, .small-styled-button:active b b {
+	background-image: url(/cms/static/i/small-button-active.png) !important;
+	outline: 0;	
+}
+.small-styled-button:hover b, .small-styled-button:hover b b, .small-styled-button:focus b, .small-styled-button:focus b b {
+	background-image: url(/cms/static/i/orange/small-button-hover.png);
+	color: #412402;	
+}
+
+.helpbutton {
+	display: none;
+	width: 32px;
+	height: 32px;
+	float: right;
+}
+.helpbutton b {
+	width: 32px;
+	height: 32px;
+	display: -moz-inline-block;	
+	display: inline-block;
+	background: url(/cms/static/i/helpbutton.png) no-repeat;
+}
+.helpbutton:hover b {
+	background: url(/cms/static/i/orange/helpbutton-hover.png) no-repeat;
+}
+.helpbutton:active b {
+	background: url(/cms/static/i/helpbutton-active.png) no-repeat;
+}
+/* /Красивые Кнопки */
+
+#quick-help {
+	display: none;
+	border: 1px solid #eee;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+	padding: 7px 9px;
+	margin: 0px 0px 18px 0px;	
+	font-size: 13px;
+	clear: both;
+}
+#quick-help ul {
+	padding: 0;
+	margin: 2px;
+}
+#quick-help li {
+	list-style: none;
+	margin-bottom: 7px;
+}
+#quick-help li img {
+	margin-right: 5px;
+	vertical-align: bottom;
+}
+
+
+
+
+.left {
+    float:left;
+     ~display: inline;
+
+}
+.right {
+    float:right;
+     ~display: inline;
+}
+
+.error-msg {
+    color: #f06030;
+    font-style: italic;
+}
+
+.movable {
+    cursor: move;
+}
+
+.madone-content, .madone-header, .madone-menu, .madone-menu-items {
+/*
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -moz-box-sizing: border-box;    
+*/
+    padding: 0 60px 0;
+}
+
+.madone-header {
+    background: #cdcdcd;
+    background: -moz-linear-gradient(top, #cdcdcd 0%, #b2b2b2 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cdcdcd), color-stop(100%,#b2b2b2));
+    background: -webkit-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -o-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -ms-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cdcdcd', endColorstr='#b2b2b2',GradientType=0 );
+    background: linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+
+    border-bottom: 1px solid #757575;
+
+    color: #373737;                      
+    height: 42px;
+    margin-bottom: 32px;
+}
+
+.madone-header .left {
+    line-height: 38px;
+    text-shadow: #ddd 0px 1px 0;
+    font-size: 20px;
+}
+.madone-header .left a {
+	text-decoration: none;
+	color: #000;
+}
+.madone-header .left a:hover {
+	text-decoration: underline;
+}
+.madone-header .left span {
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.madone-header .right {
+    font-size: 12px;
+    color: #aacfde;
+}
+
+.system-menu {
+	background: url(/cms/static/i/header-plate.png) left bottom no-repeat;
+	color: #000;
+	display: -moz-inline-box;
+	display: inline-block;
+	line-height: 25px;
+	margin-top: 5px;
+}
+
+.system-menu span {
+	background: url(/cms/static/i/header-plate.png) right top no-repeat;
+	margin-left: 5px;
+	padding-left: 6px;
+	display: -moz-inline-box;
+	display: inline-block;
+}
+.system-menu span span {
+	display: -moz-inline-block;
+	display: inline-block;
+	background: transparent url(/cms/static/i/header-plate-sep.png) right 1px no-repeat;
+	margin: 0;
+	padding: 0 12px 0 10px;
+}
+
+.system-menu a {
+	color: #000;
+}
+
+.system-menu .last {
+	padding: 0 12px 0 10px;
+	background: transparent;
+}
+.system-menu .first {
+	padding: 0 12px 0 0px;
+}
+.lang a {
+	margin-right: 5px;
+}
+.lang a img {
+	vertical-align:  middle;
+ 	margin-bottom: 2px;
+}
+
+h1.madone-menu-title, h1.madone-menu-title-active {
+	background: url(/cms/static/i/menu-combo.png) no-repeat;
+	line-height: 30px;
+    font-weight: normal;
+    font-size: 18px;
+    display: -moz-inline-box;
+    display: inline-block;
+   ~display: inline;
+   
+	margin: 1px 40px 30px 0px;
+	padding-left: 4px;	
+
+	float: left;
+	
+	position: relative;
+}
+
+h1.madone-menu-title span, h1.madone-menu-title-active span {
+	background: url(/cms/static/i/menu-combo.png) right top no-repeat;
+	line-height: 32px;
+    display: -moz-inline-block;
+	display: inline-block;
+	padding-right: 35px;
+	padding-left: 5px;	
+    cursor: pointer;
+}
+
+h1.madone-menu-title-active {
+	background: url(/cms/static/i/orange/menu-combo-hover.png?1) left bottom no-repeat !important;
+}
+
+h1.madone-menu-title-active span {
+	background: url(/cms/static/i/orange/menu-combo-hover.png?1) right bottom no-repeat !important;
+}
+
+
+h1.madone-menu-title:hover {
+	background: url(/cms/static/i/orange/menu-combo-hover.png) no-repeat;
+}
+h1.madone-menu-title:hover span {
+	background: url(/cms/static/i/orange/menu-combo-hover.png) right top no-repeat;
+}
+
+.module-buttons {
+	height: 34px;
+}
+
+.module-header {
+	clear: both;
+    margin: 0 9px 19px;
+}
+
+.module-content {
+	clear: both;
+    padding-bottom: 60px;
+}
+
+.madone-module {
+	padding: 0 57px 0 51px;
+    clear: left;
+}
+.madone-menu-items {
+	display: none; 
+	position: absolute; 
+	background: #fff; 
+	padding: 0px;
+	z-index: 3;
+	border-top: 1px solid #fecc47;
+	border-bottom: 1px solid #fecc47;	
+	font-size: 16px;
+	line-height: 24px;
+	margin: 32px 0 0 0;
+	left: 0;
+	top: -1px;
+	white-space: nowrap;
+	min-width: 100%;
+}
+.madone-menu-items a {
+	color: #000 !important;
+	background: #fff;
+	display: block;
+	border-left: 1px solid  #fecc47;
+	border-right: 1px solid  #fecc47;
+	padding: 4px 9px;
+	outline: none;
+	text-decoration: none;
+}
+.madone-menu-items i {
+	font-style: normal;
+	display: block;
+	outline: none;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+* html .madone-menu-items i { width: 100%; } /* Привет IE6! */
+.madone-menu-items a, x:-moz-any-link { display: table;	width: 100%; } /* Привет FF2! */
+.madone-menu-items a:first-child { border-top: 1px solid #fecc47; margin-top: -1px; } /* Привет FF2! */
+.madone-menu-items a:last-child { border-bottom: 1px solid #fecc47; margin-bottom: -1px; } /* Привет FF2! */
+.madone-menu-items a, x:-moz-any-link, x:default { display: block; width: auto; } /* Отменяем для понятливых */
+
+
+
+.madone-menu-items a:hover {
+	background: #fecc47;
+	color: #fff !important;
+	text-decoration: none;
+}
+.madone-menu-items a.active, .madone-menu-items a:hover.active {
+	color: #fecc47 !important;
+	background: #fff !important;
+	cursor: default;
+}
+.madone-menu-items a.active i {
+	cursor: default;
+}
+.a-units {
+	background: #f1f1f1;
+	border-top: 1px solid #ddd;	
+	padding-bottom: 1px;
+	overflow: hidden;
+	~overflow: visible;
+	~display: inline-block; 
+	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;	
+	border-radius: 5px;
+}
+
+.a-unit-list {
+	display: block;
+}
+
+.a-unit {
+	display: inline-block;
+   ~display: block;
+	width: 100%;
+}
+.a-unit-body {
+	background: #fff; 
+	border: 1px solid #ddd;	
+	margin: 0;
+    padding: 7px 9px;
+    margin-top: -1px;
+
+	~display: inline-block;    
+}
+.a-unit > div.a-unit-body:hover {
+    background: #fce7be !important;
+}
+
+
+.disabled p, .disabled h2, .disabled i {
+	color: #ccc !important;
+}
+
+.a-unit-body h2 {
+    font-size: 14px;
+    margin: 0 0 2px 0;
+    line-height: 14px;
+}
+
+.a-unit-body p {
+    font-size: 11px;
+    color: #888;
+}
+
+.a-unit-body .actions {
+    float: right;
+    margin: 7px 0 0;
+}
+
+.a-unit-body.first {
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;	
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;	
+}
+
+.a-unit-body.last {
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;	
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;	
+}
+
+.a-unit-body .actions img {
+	opacity:0.6;
+    -moz-opacity:0.6;
+	filter: alpha(opacity = 60);    
+    vertical-align: middle;
+    margin:0 5px;
+	cursor: pointer;
+	padding: 2px;	
+}
+
+.a-unit-body .actions img:hover {
+	opacity:1;
+    -moz-opacity:1;
+	filter: alpha(opacity = 100);
+	cursor: pointer;
+}
+.a-unit-body .actions img.noclick {
+	cursor: default;
+}
+.a-unit-body .actions img:hover.noclick {
+	cursor: default;
+}
+
+.a-unit-sortable-helper {
+	background: #fce7be;
+	margin-top: -1px !important;
+	/margin-top: 0px !important;	
+}
+
+.a-unit-list > .a-unit-sortable-helper {
+
+}
+
+.a-unit-form {
+	background: #fff;
+	border: 1px solid #d59f35;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+
+	-webkit-box-shadow: 0px 0px 8px #ccc;
+	-moz-box-shadow: 0px 0px 8px #ccc;	
+	-box-shadow: 0px 0px 8px #ccc;		
+
+	clear: both;
+	padding: 0 8px;
+ 	margin: 10px 0px 15px 0px;
+}
+
+.a-units .a-unit-form {
+	border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+ 	margin: 0 0 1px 0;
+}
+
+.a-unit-form label {
+	display: block;
+	color: #777;
+	font-size: 13px;
+	margin: 0 0 1px 0;
+}
+
+.a-unit-form .block {
+    margin: 8px 0;
+} 
+
+.a-unit-form .submit {
+	margin-left: -4px;
+}
+
+.a-unit-form .cancel {
+/*     margin-left: 14px; */
+}
+
+.width-100 {
+    width:100%;
+    ~width: 99.5%;
+}
+
+.height-200 {
+    height:200px;
+}
+
+.height-300 {
+    height:300px;
+}
+
+.height-400 {
+    height:400px;
+}
+
+.a-unit-form h2 {
+    font-size: 14px;
+    margin: 7px 0 2px 0;
+    line-height: 14px;
+}
+
+.a-unit-form a {
+    font-size: 15px;
+}
+
+.paginator {
+    margin: 20px 0 0;
+    font-size: 18px;
+}
+
+.paginator a {
+    margin: 0 5px;
+}
+
+.link-block {
+    margin: 0 0 20px;
+    font-size: 16px;
+}
+
+.link-block a img {
+    vertical-align: middle;
+    margin: -1px 5px 0;
+    ~margin: 0 5px;
+}
+
+img.ajax-loader {
+	vertical-align: text-top;
+	margin: 0 8px;
+	width: 16px;
+	height: 16px;
+}
+
+.ui-datepicker {
+    font-size: 11px !important;
+}
+
+.ru-hint {
+    color: #888;
+	font-style: normal;
+	font-size: 12px;
+	line-height: 12px;
+	margin-left: 6px;
+}
