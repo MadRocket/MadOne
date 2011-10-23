@@ -173,8 +173,11 @@ class Madone {
 			$app_uri = mb_substr( $uri, mb_strlen( $p->uri, 'utf-8' ), mb_strlen( $uri, 'utf-8' ), 'utf-8' );
 			
 			// Запускаем приложение, соответствующее типу страницы, если оно отработало — завершаем работу
-			if( $p->type->getApplicationInstance()->run( $p, $app_uri ) ) {
+			if(($response = $p->type->getApplicationInstance()->run($p, $app_uri)) !== null ) {
+                print $response;
+
 				print( self::postprocess( ob_get_clean() ) );
+                
 				return;
 			}
 			// продолжаем обработку среди всех выбранных приложений, попадающих в этот же uri
@@ -262,16 +265,7 @@ class Madone {
 		
 		// Если включен язык, отличный от default — переписываем все ссылки кроме static
 		if( self::$language ) {
-/*
-			// TODO: не удалять эту строку, пока не обкатаем на вялом VPS
-			$text = str_repeat( $text, 10 );
-*/
 			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text );
-/*
-			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text, -1, $cnt );
-			$end = microtime( 1 );
-			printf( '%.9f %d, %9f', $end - $start, $cnt, ($end-$start)/$cnt );
-*/
 		}
 		
 		return $text;

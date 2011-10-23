@@ -1,5 +1,5 @@
 <?
-
+require_once(__DIR__."/../outer/router/klein.php");
 /**
  * Прародитель приложений
  */
@@ -25,7 +25,7 @@ class AbstractApplication {
                 <a href="<?=$p->uri?>"><?=$p->title?></a>
             <?endif?>
             </li>
-        <? endforeach?>        
+        <? endforeach?>
         </ul>
         <?
 

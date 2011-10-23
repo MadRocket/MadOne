@@ -1,7 +1,5 @@
 <?
 
-require_once(__DIR__."/../outer/router/klein.php");
-
 /**
  * Вывод страницы новостей
  */
@@ -22,8 +20,6 @@ class NewsApplication extends AbstractApplication {
             }
 
             print new Template( 'news-page', array( 'page' => $page, 'paginator' => $paginator, 'type' => 'companynews' ) );
-
-            return true;
         });
 
         respond('/news[i:id]', function($request, $response) use ($page) {
@@ -31,10 +27,6 @@ class NewsApplication extends AbstractApplication {
 
         	if($item) {
 				print new Template( 'news-item-page', array( 'page' => $page, 'item' => $item ) );
-                return true;
-        	}
-        	else {
-	        	return null;
         	}
         });
 
@@ -42,14 +34,11 @@ class NewsApplication extends AbstractApplication {
             if( ! headers_sent() ) {
         		header("Content-type: application/rss+xml");
         	}
-                
+
 			print new Template( 'news-rss', array( 'page' => $page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
-            return true;
         });
 
-        dispatch($uri);
-
-        return true;
+        return dispatch($uri);
     }
 }
 
