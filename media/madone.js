@@ -15,18 +15,10 @@ Madone.createRichTextEditor = function( name, options ) {
 		options.value = '';
 	}
 
-	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20110104';
+	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20111023';
 	
 	var editor = CKEDITOR.replace( name );
-/*
-	if(CKFinder.hasOwnProperty('setupCKEditor')) {
-		CKFinder.setupCKEditor( editor, { basePath: '/media/ckfinder-2.0/'} );
-	}
-	else {
-		CKFinder.SetupCKEditor( editor, '/media/ckfinder-2.0/' );
-	}
-*/
-	
+
 	editor.config.height = options.height;
 	return editor;
 };
