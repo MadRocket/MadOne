@@ -109,21 +109,37 @@ class MadoneCmsApplication
             $vars['cmsUri'] = $request->getCmsUri();
 
             // Получим модули системы, сформируем из них элементы меню
-            foreach (MadoneModules(array('enabled' => 1))->order('position')->all() as $m) {
-                $vars['menuItems'][] = array(
-                    'title' => $m->title,
-                    'uri' => "{$request->getCmsUri()}/{$m->name}/",
-                    'selected' => $m->name == $request->getObjectName()
-                );
+//            foreach (MadoneModules(array('enabled' => 1))->order('position')->all() as $m) {
+//                $vars['menuItems'][] = array(
+//                    'title' => $m->title,
+//                    'uri' => "{$request->getCmsUri()}/{$m->name}/",
+//                    'selected' => $m->name == $request->getObjectName()
+//                );
+//
+//                if ($m->name == $request->getObjectName()) {
+//                    $vars['title'] = $m->title;
+//                }
+//            }
+            $modules_dir = "{$_SERVER['DOCUMENT_ROOT']}/includes/module";
+            foreach(scandir($modules_dir) as $dir) {
+                if($dir == '..' || $dir == '.') {
+                    continue;
+                }
 
-                if ($m->name == $request->getObjectName()) {
-                    $vars['title'] = $m->title;
+                if(is_dir("{$_SERVER['DOCUMENT_ROOT']}/includes/module/{$dir}") && class_exists("Module_".ucfirst($dir)."_Service")) {
+                    $serviceClass = "Module_".ucfirst($dir)."_Service";
+
+                    $vars['menuItems'][] = array(
+                        'title' => $serviceClass::getTitle(),
+                        'uri' => "{$request->getCmsUri()}/{$dir}/",
+                        'selected' => $dir == $request->getObjectName()
+                    );
                 }
             }
 
             // Если есть активный модуль — рендерим его содержимое, иначе — welcome-страница
             if (!$module) {
-                $module = new DashboardModule("/");
+                $module = new Module_Dashboard_Service("/");
             }
 
             // Проверим наличие title, если нет — выбран встроенный модуль, и тайтл тоже нужно приготовить самостоятельно
@@ -178,7 +194,14 @@ class MadoneCmsApplication
                 return new HelpModule($name);
         }
 
-        return MadoneModules(array('name' => $name, 'enabled' => true))->first();
+        if( class_exists("Module_".ucfirst($name)."_Admin") ) {
+            $module = "Module_".ucfirst($name)."_Admin";
+            return new $module($name);
+        }
+
+        else {
+            return MadoneModules(array('name' => $name, 'enabled' => true))->first();
+        }
     }
 }
 
