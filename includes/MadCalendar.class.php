@@ -1,5 +1,5 @@
 <?
-/**
+/**
  *	$cal = new MadCalendar( $time );
  *	$events = MadoneEvents( array( 'date__ge' => $cal->begin, 'date__le' => $cal->end, 'enabled' => true ) )->all();
  *	$cal->attachObjects( $events, 'date' );

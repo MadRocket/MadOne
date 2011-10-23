@@ -21,9 +21,8 @@ loadStorm( array
     'models' => array
     (
         'MadoneModule',
+		'MadonePageType',
         'MadonePage',
-        'MadonePageContent',
-        
         'MadoneTextBlock',
         'MadoneUser',
         array( 'MadoneNews', 'MadoneNewsList' ),

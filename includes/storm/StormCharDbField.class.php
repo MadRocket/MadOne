@@ -4,15 +4,21 @@
  */
 class StormCharDbField extends StormDbField
 {
-    protected $maxlength = 255; // Максимальная длина поля
+    protected $maxlength; // Максимальная длина поля
 	protected $localized = true;
 
     /**
      * Конструктор.
      * Проверяет параметры, касающиеся настроек поля
      */
-    function __construct( array $params = array() )
+    function __construct( array $params )
     {
+        // Проверим длину поля
+        if( ! ( isset( $params['maxlength'] ) && $params['maxlength'] > 0 ) )
+        {
+            throw new StormException( "Must specify maxlength as positive integer" );
+        }
+
         // Вызовем родительский конструктор, он прочитает все настройки
         parent::__construct( $params );
     }

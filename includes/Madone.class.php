@@ -37,10 +37,31 @@ class Madone {
 			StormCore::sync();
 		}
 	}
-
+	
+	static function install() {
+		// Пользователь по умолчанию
+		MadoneUsers()->create( array( 'login' => 'admin', 'password' => md5('admin') ) );
+		
+		// Приложения по умолчанию
+		MadonePageTypes()->create(array( 'title' => 'Обычная страница (текст с картинками)', 'app_classname'  => 'TextPageApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => false, 'priority' => 1));
+		MadonePageTypes()->create(array( 'title' => 'Новости', 'app_classname'  => 'NewsApplication', 'enabled' => true, 'has_text' => false, 'has_meta' => false, 'has_subpages' => false, 'priority' => 2));
+		MadonePageTypes()->create(array( 'title' => 'Фотогалерея', 'app_classname'  => 'GalleryApplication', 'enabled' => true, 'has_text' => false, 'has_meta' => true, 'has_subpages' => true, 'priority' => 2));
+		MadonePageTypes()->create(array( 'title' => 'Обратная связь', 'app_classname'  => 'FeedbackApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => true, 'priority' => 2));
+		MadonePageTypes()->create(array( 'title' => 'Главная страница', 'app_classname'  => 'IndexPageApplication', 'enabled' => true, 'has_text' => true, 'has_meta' => true, 'has_subpages' => false, 'priority' => 1));
+		
+		// Модули по умолчанию
+		MadoneModules()->create(array( 'title' => 'Страницы сайта', 'name' => 'pages', 'enabled' => true, 'classname' => 'PagesModule' ));
+		MadoneModules()->create(array( 'title' => 'Новости', 'name' => 'news', 'enabled' => true, 'classname' => 'NewsModule' ));
+		MadoneModules()->create(array( 'title' => 'Фотогалерея', 'name' => 'gallery', 'enabled' => true, 'classname' => 'GalleryModule' ));
+		MadoneModules()->create(array( 'title' => 'Обратная связь', 'name' => 'feedback', 'enabled' => true, 'classname' => 'FeedbackModule' ));
+		MadoneModules()->create(array( 'title' => 'Текстовые блоки', 'name' => 'text-blocks', 'enabled' => true, 'classname' => 'TextBlocksModule' ));
+		MadoneModules()->create(array( 'title' => 'Модули', 'name' => 'modules', 'enabled' => true, 'classname' => 'ModulesModule' ));
+		MadoneModules()->create(array( 'title' => 'Приложения', 'name' => 'apps', 'enabled' => true, 'classname' => 'ApplicationsModule' ));
+	}
+	
 	/**
-	 * Определение режима разработки
-	 */
+	*	Определение режима разработки
+	*/
 	static function detectDevelompentMode() {
 		if( ! is_bool( self::$developmentMode ) ) {
 			self::$developmentMode = $_SERVER['SERVER_ADDR'] === '127.0.0.1' ? true : false;
@@ -106,7 +127,7 @@ class Madone {
     *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
     */
     static function run() {
-		ob_start();
+		ob_start( );
 		
 		// Тут будут условия фильтрации страниц    
 		$filter = null;
@@ -146,17 +167,13 @@ class Madone {
 		}
 		
 		// Выбираем страницы, сортируем так: сначала самые глубоко вложеные, среди одинаково вложенных — с большим приоритетом типа
-		foreach( MadonePages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->all() as $p ) {
+		foreach( MadonePages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->order( 'type__priority' )->follow( 1 )->all() as $p ) {
 			// в $uri как раз оказывается полный uri запрошенной страницы :D
 			// Отделим uri приложение внутри страницы
 			$app_uri = mb_substr( $uri, mb_strlen( $p->uri, 'utf-8' ), mb_strlen( $uri, 'utf-8' ), 'utf-8' );
 			
 			// Запускаем приложение, соответствующее типу страницы, если оно отработало — завершаем работу
-            $app = self::getApp( $p->module );
-			if( $app && ($content = $app->run($p, $app_uri) ) !== false ) {
-
-                print $content;
-
+			if( $p->type->getApplicationInstance()->run( $p, $app_uri ) ) {
 				print( self::postprocess( ob_get_clean() ) );
 				return;
 			}
@@ -166,15 +183,6 @@ class Madone {
 		ob_end_clean();
 		// Не сработало ни одно приложение — ничего не найдено
 		Madone::show404();
-    }
-
-    protected static function getApp($name) {
-        $name = ucfirst($name);
-        $classname = "Module_{$name}_Application";
-        
-        if(class_exists( $classname )) {
-            return new $classname ();
-        }
     }
 
     /**

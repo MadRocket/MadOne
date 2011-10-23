@@ -32,17 +32,6 @@
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
-	                function MadonePageContent( $params = null )
-	                {
-	                    return $params ? new MadonePageContent( $params ) : new MadonePageContent();
-	                }
-
-	                function MadonePageContents( $params = null )
-	                {
-	                    $qs = new StormQuerySet( 'MadonePageContent' );
-	                    return $params ? $qs->filter( $params ) :  $qs;
-	                }
-	                
 	                function MadoneTextBlock( $params = null )
 	                {
 	                    return $params ? new MadoneTextBlock( $params ) : new MadoneTextBlock();

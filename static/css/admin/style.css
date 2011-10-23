@@ -14,7 +14,7 @@
 	left: 15px;
 }
 
-.ui-sortable .a-unit {
+.movable {
     cursor: move;
 }
 
@@ -77,18 +77,11 @@
     margin: 0 0 2px 0;
     line-height: 14px;
 }
-.a-unit-body h2 a {
-    text-decoration: underline;
-}
 
 .a-unit-body p {
     font-size: 11px;
     color: #888;
     margin: 0;
-}
-.a-unit-body p a {
-    color: #888;
-        
 }
 
 .a-unit-body .actions {

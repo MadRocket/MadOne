@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>{{ title ? title : config.site_title }} &mdash; MadOne</title>
 
-        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
+        <link rel="stylesheet" href="/media/bootstrap-1.3.0.css">
         <link rel="stylesheet" type="text/css" href="/static/css/admin/style.css"/>
         		
 		<script type="text/javascript" src="/media/jquery-1.5.2.min.js"></script>
@@ -16,7 +16,7 @@
 		<script type="text/javascript" src="/media/improved.js"></script>
 		<script type="text/javascript" src="/media/storm.js?20100707"></script>
 		<script type="text/javascript" src="/media/mad.js"></script>
-		<script type="text/javascript" src="/media/madone.js?12"></script>
+		<script type="text/javascript" src="/media/madone.js"></script>
 
 		<!-- Jquery UI -->
 		<script type="text/javascript" src="/media/jquery-ui-1.8.4/jquery-ui-1.8.4.custom.min.js"></script>
@@ -36,7 +36,6 @@
 
 		<!-- Визуальный редактор -->
 		<script type="text/javascript" src="/media/ckeditor-3.6.1/ckeditor.js"></script>
-		<script type="text/javascript" src="/media/ckeditor-3.6.1/adapters/jquery.js"></script>
 		
 		<!-- Лайтбокс. Используется в галереях для просмотра крупных изображений -->
 		<script type="text/javascript" src="/media/jquery.fancybox-1.3.1/jquery.fancybox-1.3.1.pack.js"></script>
@@ -47,12 +46,13 @@
     <body>
     	<div id="ajaxInfo">Жду ответ от сервера...</div>
         <div class="topbar">
-            <div class="topbar-inner">
-                <div class="container fixed">
-                    <h3><a class="logo" href="http://{{ server.SERVER_NAME }}/" title="Перейти на сайт">{{ config.site_title }}</a></h3>
-                    {% include "header-menu.twig" %}
-                </div>
+        <div class="topbar-inner">
+            <div class="container fixed">
+                <h3><a class="logo" href="http://{{ server.SERVER_NAME }}/" title="Перейти на сайт">{{ config.site_title }}</a></h3>
+                {% include "header-menu.twig" %}
             </div>
+
+        </div>
         </div>
         <div class="container-fluid">
             <div class="sidebar" style="padding-top:60px;">

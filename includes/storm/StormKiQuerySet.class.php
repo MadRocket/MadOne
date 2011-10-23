@@ -33,11 +33,6 @@ class StormKiQuerySet extends StormQuerySet
         $parent — объект или id родителя
         $params — данные для кинициализации объекта, как в конструкторе
     */
-    /**
-     * @param $parent
-     * @param array $params
-     * @return
-     */
     function createFirstChild( $parent, array $params )
     {
         return $this->_create( $parent, 'first-child', $params );
@@ -228,7 +223,7 @@ class StormKiQuerySet extends StormQuerySet
         $table = StormCore::getMapper()->getModelTable( $this->model );
         $alias = StormCore::getMapper()->getModelAlias( $this->model );
         $item_alias = "{$alias}__ki__{$item}__".self::$joinNumber++;
-        $pk = StormCore::getInstance()->getStormModelMetadata( $this->model )->getPkname();
+        $pk = StormCore::getInstance()->getStormModelMetadata( $this->model )->pkname;
         
         $qc = new StormQCSIMPLE( 
         new StormQCSimpleOp( array
@@ -292,7 +287,7 @@ class StormKiQuerySet extends StormQuerySet
         $alias = StormCore::getMapper()->getModelAlias( $this->model );
         $item_alias = "{$alias}__ki__{$item}__".self::$joinNumber++;
         $parent_alias = "{$alias}__ki__parent__{$item}__".self::$joinNumber++;
-        $pk = StormCore::getInstance()->getStormModelMetadata( $this->model )->getPkname();
+        $pk = StormCore::getInstance()->getStormModelMetadata( $this->model )->pkname;
         
         $qc = new StormQCSIMPLE( 
         new StormQCSimpleOp( array

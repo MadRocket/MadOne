@@ -1,12 +1,10 @@
-<?php
+<?
 
 class NewsModule extends AbstractModule {
 
     function handleHtmlRequest( $uri ) {
-        $path = Mad::getUriPathNames($uri);
-        $page = array_key_exists(0, $path) ? $path[0] : null;
 
-        $paginator = new StormPaginator( MadoneNewsList(array('page' => $page))->orderDesc( 'date' ), 10 );
+        $paginator = new StormPaginator( MadoneNewsList()->orderDesc( 'date' ), 10 );
         
         if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
         	$path = $paginator->getPageCount() ? "page{$paginator->getPageCount()}/" : "";
@@ -14,6 +12,8 @@ class NewsModule extends AbstractModule {
             exit;
         }
         
-        return $this->getTemplate( 'index.twig', array( 'paginator' => $paginator, 'items' => $paginator->getObjects(), 'page' => $page ) );
+        return $this->getTemplate( 'index.twig', array( 'paginator' => $paginator, 'items' => $paginator->getObjects() ) );
     }
 }
+
+?>

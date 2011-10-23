@@ -13,7 +13,7 @@ CKEDITOR.addStylesSet( 'my_styles', []);
     },
 */
 
-var kcfinderPath = '/media/kcfinder-2.51';
+var kcfinderPath = '/media/kcfinder-2.21';
 
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
