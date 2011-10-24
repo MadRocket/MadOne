@@ -57,7 +57,8 @@ Storm.Query.use = function () {
  * Возвращает json-кодированые параметры запроса.
  */
 Storm.Query.get = function () {
-	return { query: $.json.encode( this.query ) };
+    return { query: JSON.stringify(this.query) };
+//	return { query: $.json.encode( this.query ) };
 };
 
 
@@ -280,7 +281,7 @@ Storm.update = function ( path, data, onSuccess, onFailure ) {
 	path = this.getPath( path );
 
 	if( path.pointsAtModel() || path.pointsAtObject() ) {
-		$.post( path.getUri() + '/update/', path.pointsAtObject() ? { json_data: $.json.encode( data ) } : { objects: $.json.encode( data ) }, function ( r ) {
+		$.post( path.getUri() + '/update/', path.pointsAtObject() ? { json_data: JSON.stringify( data ) } : { objects: JSON.stringify( data ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
@@ -300,7 +301,7 @@ Storm.update = function ( path, data, onSuccess, onFailure ) {
 Storm.create = function ( path, data, onSuccess, onFailure ) {
 	path = this.getPath( path );
 	if( path.pointsAtModel() ) {
-		$.post( path.getModelUri() + '/create/', { json_data: $.json.encode( data ) }, function ( r ) {
+		$.post( path.getModelUri() + '/create/', { json_data: JSON.stringify( data ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
@@ -320,7 +321,7 @@ Storm.create = function ( path, data, onSuccess, onFailure ) {
 Storm.reorder = function ( path, tree, onSuccess, onFailure ) {
 	path = this.getPath( path );
 	if( path.pointsAtModel() ) {
-		$.post( path.getModelUri() + '/reorder/', { objects: $.json.encode( tree ) }, function ( r ) {
+		$.post( path.getModelUri() + '/reorder/', { objects: JSON.stringify( tree ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
