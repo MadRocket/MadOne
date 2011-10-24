@@ -2,3 +2,4 @@
 .DS_Store
 includes/storm/bootstrap.php
 upload
+includes/outer/router
