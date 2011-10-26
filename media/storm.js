@@ -58,7 +58,6 @@ Storm.Query.use = function () {
  */
 Storm.Query.get = function () {
     return { query: JSON.stringify(this.query) };
-//	return { query: $.json.encode( this.query ) };
 };
 
 

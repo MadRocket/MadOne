@@ -246,14 +246,33 @@ Validating the Template Syntax
 When template code is providing by a third-party (through a web interface for
 instance), it might be interesting to validate the template syntax before
 saving it. If the template code is stored in a `$template` variable, here is
-how you can do it:
+how you can do it::
 
-try {
-     $twig->parse($twig->tokenize($template));
+    try {
+        $twig->parse($twig->tokenize($template));
 
-     // the $template is valid
-} catch (Twig_Error_Syntax $e) {
-     // $template contains one or more syntax errors
-}
+        // the $template is valid
+    } catch (Twig_Error_Syntax $e) {
+        // $template contains one or more syntax errors
+    }
+
+Refreshing modified Templates when APC is enabled and apc.stat = 0
+------------------------------------------------------------------
+
+When using APC with ``apc.stat`` set to ``0`` and Twig cache enabled, clearing
+the template cache won't update the APC cache. To get around this, one can
+extend ``Twig_Environment`` and force the update of the APC cache when Twig
+rewrites the cache::
+
+    class Twig_Environment_APC extends Twig_Environment
+    {
+        protected function writeCacheFile($file, $content)
+        {
+            parent::writeCacheFile($file, $content);
+
+            // Compile cached file into bytecode cache
+            apc_compile_file($file);
+        }
+    }
 
 .. _callback: http://www.php.net/manual/en/function.is-callable.php

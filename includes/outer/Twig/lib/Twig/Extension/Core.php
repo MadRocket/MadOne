@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ENT_SUBSTITUTE')) {
+    define('ENT_SUBSTITUTE', 8);
+}
+
 /*
  * This file is part of Twig.
  *
@@ -47,8 +51,9 @@ class Twig_Extension_Core extends Twig_Extension
             'replace' => new Twig_Filter_Function('twig_strtr'),
 
             // encoding
-            'url_encode'  => new Twig_Filter_Function('twig_urlencode_filter'),
-            'json_encode' => new Twig_Filter_Function('twig_jsonencode_filter'),
+            'url_encode'       => new Twig_Filter_Function('twig_urlencode_filter'),
+            'json_encode'      => new Twig_Filter_Function('twig_jsonencode_filter'),
+            'convert_encoding' => new Twig_Filter_Function('twig_convert_encoding'),
 
             // string filters
             'title'      => new Twig_Filter_Function('twig_title_string_filter', array('needs_environment' => true)),
@@ -129,6 +134,9 @@ class Twig_Extension_Core extends Twig_Extension
                 '+'   => array('precedence' => 50, 'class' => 'Twig_Node_Expression_Unary_Pos'),
             ),
             array(
+                'b-and'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseAnd', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-xor'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseXor', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-or'   => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseOr', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'or'     => array('precedence' => 10, 'class' => 'Twig_Node_Expression_Binary_Or', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'and'    => array('precedence' => 15, 'class' => 'Twig_Node_Expression_Binary_And', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '=='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_Equal', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
@@ -214,7 +222,7 @@ function twig_cycle($values, $i)
  */
 function twig_date_format_filter($date, $format = 'F j, Y H:i', $timezone = null)
 {
-    if (!$date instanceof DateTime) {
+    if (!$date instanceof DateTime && !$date instanceof DateInterval) {
         if (ctype_digit((string) $date)) {
             $date = new DateTime('@'.$date);
             $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
@@ -419,7 +427,7 @@ function twig_reverse_filter($array)
 
 /**
  * Sorts an array.
- * 
+ *
  * @param array $array An array
  */
 function twig_sort_filter($array)
@@ -463,14 +471,15 @@ function twig_strtr($pattern, $replacements)
 /**
  * Escapes a string.
  *
- * @param Twig_Environment $env     A Twig_Environment instance
- * @param string           $string  The value to be escaped
- * @param string           $type    The escaping strategy
- * @param string           $charset The charset
+ * @param Twig_Environment $env        A Twig_Environment instance
+ * @param string           $string     The value to be escaped
+ * @param string           $type       The escaping strategy
+ * @param string           $charset    The charset
+ * @param Boolean          $autoescape Whether the function is called by the auto-escaping feature (true) or by the developer (false)
  */
-function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $charset = null)
+function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $charset = null, $autoescape = false)
 {
-    if (is_object($string) && $string instanceof Twig_Markup) {
+    if ($autoescape && is_object($string) && $string instanceof Twig_Markup) {
         return $string;
     }
 
@@ -487,7 +496,7 @@ function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $cha
             // escape all non-alphanumeric characters
             // into their \xHH or \uHHHH representations
             if ('UTF-8' != $charset) {
-                $string = _twig_convert_encoding($string, 'UTF-8', $charset);
+                $string = twig_convert_encoding($string, 'UTF-8', $charset);
             }
 
             if (null === $string = preg_replace_callback('#[^\p{L}\p{N} ]#u', '_twig_escape_js_callback', $string)) {
@@ -495,13 +504,35 @@ function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $cha
             }
 
             if ('UTF-8' != $charset) {
-                $string = _twig_convert_encoding($string, $charset, 'UTF-8');
+                $string = twig_convert_encoding($string, $charset, 'UTF-8');
             }
 
             return $string;
 
         case 'html':
-            return htmlspecialchars($string, ENT_QUOTES, $charset);
+            // see http://php.net/htmlspecialchars
+            if (in_array(strtolower($charset), array(
+                'iso-8859-1', 'iso8859-1',
+                'iso-8859-15', 'iso8859-15',
+                'utf-8',
+                'cp866', 'ibm866', '866',
+                'cp1251', 'windows-1251', 'win-1251', '1251',
+                'cp1252', 'windows-1252', '1252',
+                'koi8-r', 'koi8-ru', 'koi8r',
+                'big5', '950',
+                'gb2312', '936',
+                'big5-hkscs',
+                'shift_jis', 'sjis', '932',
+                'euc-jp', 'eucjp',
+                'iso8859-5', 'iso-8859-5', 'macroman',
+            ))) {
+                return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
+            }
+
+            $string = twig_convert_encoding($string, 'UTF-8', $charset);
+            $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+            return twig_convert_encoding($string, $charset, 'UTF-8');
 
         default:
             throw new Twig_Error_Runtime(sprintf('Invalid escape type "%s".', $type));
@@ -525,17 +556,17 @@ function twig_escape_filter_is_safe(Twig_Node $filterArgs)
 }
 
 if (function_exists('iconv')) {
-    function _twig_convert_encoding($string, $to, $from)
+    function twig_convert_encoding($string, $to, $from)
     {
         return iconv($from, $to, $string);
     }
 } elseif (function_exists('mb_convert_encoding')) {
-    function _twig_convert_encoding($string, $to, $from)
+    function twig_convert_encoding($string, $to, $from)
     {
         return mb_convert_encoding($string, $to, $from);
     }
 } else {
-    function _twig_convert_encoding($string, $to, $from)
+    function twig_convert_encoding($string, $to, $from)
     {
         throw new Twig_Error_Runtime('No suitable convert encoding function (use UTF-8 as your encoding or install the iconv or mbstring extension).');
     }
@@ -699,7 +730,7 @@ function twig_ensure_traversable($seq)
  * <pre>
  * {% if foo.attribute is sameas(false) %}
  *    the foo attribute really is the ``false`` PHP value
- * {% endif %} 
+ * {% endif %}
  * </pre>
  *
  * @param mixed $value A PHP variable
@@ -832,5 +863,8 @@ function twig_test_defined($name, $context)
  */
 function twig_test_empty($value)
 {
+    if ($value instanceof Countable) {
+        return 0 == count($value);
+    }
     return false === $value || (empty($value) && '0' != $value);
 }

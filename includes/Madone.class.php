@@ -262,16 +262,7 @@ class Madone {
 		
 		// Если включен язык, отличный от default — переписываем все ссылки кроме static
 		if( self::$language ) {
-/*
-			// TODO: не удалять эту строку, пока не обкатаем на вялом VPS
-			$text = str_repeat( $text, 10 );
-*/
 			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text );
-/*
-			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text, -1, $cnt );
-			$end = microtime( 1 );
-			printf( '%.9f %d, %9f', $end - $start, $cnt, ($end-$start)/$cnt );
-*/
 		}
 		
 		return $text;

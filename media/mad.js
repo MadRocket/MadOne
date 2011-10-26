@@ -23,20 +23,7 @@ var Mad = function() {
 			if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
 
 			return OSName;
-        },
-        
-        markEven: function (selector) {
-			$(selector + ".even").removeClass("even");
-			$(selector + ":even").addClass("even");	
-		},
-		
-		findFirstLast: function ( selector ) {
-			$(selector + '.last').removeClass('last');
-			$(selector + '.first').removeClass('first');
-			$(selector + ':last').addClass('last');
-			$(selector + ':first').addClass('first');
-		}
-
+        }
     };
 
 	Date.madParse = function( str ) {
