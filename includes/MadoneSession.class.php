@@ -132,6 +132,10 @@ class MadoneSession
     public function __get( $name ) {
     	return array_key_exists( $name, $this->session ) ? $this->session[$name] : null;
     }
+
+    public function __isset( $name ) {
+    	return array_key_exists( $name, $this->session ) ? true : false;
+    }
 }
 
 ?>

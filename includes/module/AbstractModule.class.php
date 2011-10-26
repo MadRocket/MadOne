@@ -10,9 +10,9 @@ class AbstractModule {
     protected $uriPath;
 
     /**
-    *   Конструктор
-    *   $name - имя, под которым модуль будет работать
-    */
+     * @throws Exception
+     * @param $name - имя, под которым модуль будет работать
+     */
     function __construct( $name ) {
 
         // Проверим наличие имени
@@ -23,35 +23,45 @@ class AbstractModule {
         // Получим всякие uri от запроса CMS
         $request = new MadoneCmsRequest();
         
-        $this->cmsUri   = $request->cmsUri;
+        $this->cmsUri   = $request->getCmsUri();
         $this->uri      = "{$this->cmsUri}/{$name}";
         $this->ajaxUri  = "{$this->cmsUri}/ajax/{$name}";
-        $this->uriPath  = $this->cmsUri . $request->objectName == $name ? "/{$name}".( $request->uri != '/' ? $request->uri : '' ) : "/{$name}";
+        $this->uriPath  = $this->cmsUri . $request->getObjectName() == $name ? "/{$name}".( $request->getUri() != '/' ? $request->getUri() : '' ) : "/{$name}";
     }
     
     /**
-    *   Получение шаблона модуля с указанным именем.
-    *   Равноценно вызову new Template с теми же аргументами за исключением того, что путь к шаблону
-    *   будет автоматически модифицирован, а в массив переменых будет добавлен элемент module
-    *   Вызов $this->getTemplate( 'index' ) изнутри MadoneMahModule равносилен 
-    *   new Template( 'modules/MadoneMahModule/index', array( module = $this ) )
-    *   Возвращает объект Template
-    */
+     * @param $file
+     * @param array $vars
+     * @return string
+     */
     function getTemplate( $file, $vars = array() ) {
 
         foreach( get_object_vars( $this ) as $name => $value ) {
             $vars[ $name ] = $value;
         }
+
+        if(strpos($file, '.twig') === false) {
+            $file = "{$file}.twig";
+        }
+
+        $twig = Madone::twig(
+            array(
+                "{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin",
+                "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
+            )
+        );
         
-        return new Template( "modules/". get_class( $this ). "/{$file}", $vars );
+        return $twig->loadTemplate($file)->render($vars);
     }
-    
+
     /**
-    *   Получение ответа на HTML-запрос.
-    *   Может и чаще всего должен быть переопределен в потомках для реализации непростой функциональности.
-    */
+     * Получение ответа на HTML-запрос.
+     * Может и чаще всего должен быть переопределен в потомках для реализации непростой функциональности.
+     * @param $uri
+     * @return string
+     */
     function handleHtmlRequest( $uri ) {
-        return $this->getTemplate( 'index' );
+        return $this->getTemplate( 'index.twig' );
     }
 
     /**

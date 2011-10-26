@@ -57,7 +57,7 @@ Storm.Query.use = function () {
  * Возвращает json-кодированые параметры запроса.
  */
 Storm.Query.get = function () {
-	return { query: $.json.encode( this.query ) };
+    return { query: JSON.stringify(this.query) };
 };
 
 
@@ -280,7 +280,7 @@ Storm.update = function ( path, data, onSuccess, onFailure ) {
 	path = this.getPath( path );
 
 	if( path.pointsAtModel() || path.pointsAtObject() ) {
-		$.post( path.getUri() + '/update/', path.pointsAtObject() ? { json_data: $.json.encode( data ) } : { objects: $.json.encode( data ) }, function ( r ) {
+		$.post( path.getUri() + '/update/', path.pointsAtObject() ? { json_data: JSON.stringify( data ) } : { objects: JSON.stringify( data ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
@@ -300,7 +300,7 @@ Storm.update = function ( path, data, onSuccess, onFailure ) {
 Storm.create = function ( path, data, onSuccess, onFailure ) {
 	path = this.getPath( path );
 	if( path.pointsAtModel() ) {
-		$.post( path.getModelUri() + '/create/', { json_data: $.json.encode( data ) }, function ( r ) {
+		$.post( path.getModelUri() + '/create/', { json_data: JSON.stringify( data ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
@@ -320,7 +320,7 @@ Storm.create = function ( path, data, onSuccess, onFailure ) {
 Storm.reorder = function ( path, tree, onSuccess, onFailure ) {
 	path = this.getPath( path );
 	if( path.pointsAtModel() ) {
-		$.post( path.getModelUri() + '/reorder/', { objects: $.json.encode( tree ) }, function ( r ) {
+		$.post( path.getModelUri() + '/reorder/', { objects: JSON.stringify( tree ) }, function ( r ) {
 			Storm.processAjaxResult( r, onSuccess, onFailure );
 		}, 'json' );
 	} else {
@@ -849,6 +849,18 @@ Storm.Form.show = function () {
 			$( this.inputs[ name ] ).trigger( 'show' );
 		}
 	}
+
+    // Обработка табов
+    this.form.find('.tabs > li > a').click(function(){
+        var tab_name = this.hash.slice(1);
+
+        $(this).parents('.tabs').find('li').removeClass('active');
+        $(this).parent('li').addClass('active');
+        $(this).parents('.a-unit-form').find('.m-tab-active').removeClass('m-tab-active');
+        $(this).parents('.a-unit-form').find('.tab-'+ tab_name).addClass('m-tab-active');
+
+        return false;
+    });
 
 	// 	В этот момент форма отправляется в свободное плавание; ждем нажатия submit или cancel пользователем
 	return this;

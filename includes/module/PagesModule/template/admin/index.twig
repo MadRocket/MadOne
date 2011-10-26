@@ -1,0 +1,263 @@
+<h1>Страницы сайта</h1>
+<div class="module-buttons">
+    <button class="create-page btn primary">Создать страницу</button>
+</div>
+<div class="module-content">
+    <div class="createFormPlace"></div>
+
+    <div class="a-units" stormModel="MadonePage">
+        {{ _self.pageitem(root, false) }}
+
+        <ol id="pages">
+        {% for item in items %}
+            {{ _self.pageitem(item, true) }}
+        {% endfor %}
+        <ol>
+    </div>
+</div>
+
+{% macro pageitem(item, full) %}
+    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+           <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+               <div class="actions">
+                    <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                    <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ item.menu ? 'on' : 'off' }}.png"/>
+                    <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+               </div>
+               <h2 stormText="title">{{ item.title }}</h2>
+               <p stormText="name">{{ item.name }}</p>
+           </div>
+           {% if full %}
+           <ol>
+                {% for child in item.getChildren() %}
+                    {{ _self.pageitem(child, full) }}
+                {% endfor %}
+           </ol>
+           {% endif %}
+       </li>
+{% endmacro %}
+
+<form id="page-form" class="a-unit-form form-stacked" style="display:none;">
+    <ul class="tabs">
+        <li class="active"><a href="#primary">Основные поля</a></li>
+        <li><a href="#seo">SEO-поля</a></li>
+    </ul>
+
+    <div class="m-tab m-tab-active tab-primary">
+        <div class="clearfix">
+            <label>Название страницы</label>
+            <div class="input">
+                <input class="span11" size="30" type="text" name="title">
+            </div>
+        </div>
+        <div class="clearfix">
+            <label>Название по-английски</label>
+            <div class="input">
+                <input class="span11" size="30" type="text" name="name">
+                <span class="help-block">для адресной строки</span>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label>Тип страницы:</label>
+            <div class="input">
+                <select name="type">
+                {% for type in types %}
+                <option value="{{ type.id }}">{{ type.title }}</option>
+                {% endfor %}
+                </select>
+                <select name="app_settings"></select>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label>Текст страницы:</label>
+            <div class="input"><textarea name="text" rich="yes"></textarea></div>
+        </div>
+    </div>
+    <div class="m-tab tab-seo">
+        <div class="clearfix">
+            <label>Заголовок:</label>
+            <div class="input">
+                <input class="span11" size="30" type="text" name="meta_title">
+                <span class="help-block">Заголовок страницы</span>
+            </div>
+        </div>
+        <div class="clearfix">
+            <label>Ключевые слова:</label>
+            <div class="input">
+                <textarea class="span11" name="meta_keywords" wrap="wrap"></textarea>
+                <span class="help-block">Ключевые слова стрницы, meta-тэг keywords</span>
+            </div>
+        </div>
+        <div class="clearfix">
+            <label>Описание:</label>
+            <div class="input">
+                <textarea class="span11" name="meta_description" wrap="wrap"></textarea>
+                <span class="help-block">Описание стрницы, meta-тэг description</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="block actions">
+        <button class="submit btn primary">Сохранить</button>
+        <button class="cancel btn">Отмена</button>
+    </div>
+</form>
+
+<li class="a-unit" id="page-template" style="display:none;">
+    <div class="a-unit-body">
+        <div class="actions">
+            <img class="edit "width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+            <img class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
+            <img class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-on.png"/>
+            <img class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+        </div>
+        <h2 stormText="title"></h2>
+        <p stormText="name"></p>
+    </div>
+</li>
+
+<script type="text/javascript">
+$( function () {
+   	$('#pages').nestedSortable(
+   	    Object.create( Madone.nestedSortableOptions ).extend({
+            stop: function(event, ui){
+                Storm.reorder( 'MadonePage', { id: {{ root.id }}, children: $('#pages').nestedSortable('toHierarchy') } );
+            }
+        })
+    );
+
+   	var pageForm = Object.create( Storm.Form ).extend( {
+   		form: $( '#page-form' ),
+
+   		onCreate: function () {
+   			this.metaVisible = false;
+   		},
+
+   		onFill: function ( form, data ) {
+   			form.find( '.block > a' ).bind( 'click', { form: this }, function ( e ) {
+   				e.preventDefault();
+   				if( $( this ).attr( 'extra' ) ) {
+   					e.data.form[ $( this ).attr( 'extra' ) ] = true;
+   				}
+   				$( this ).next( 'div' ).show().end().remove();
+   			} );
+
+   			form.find( 'select[name=type]' ).bind( 'change', function ( e ) {
+   				// Если тип не указан выбираем 1 - обычная страница
+   				if(! $(this).val()) {
+   					$(this).val(1);
+   				}
+
+   				var types = {{ types_json|json_encode|raw }};
+
+   				// Заполним settings
+   				var settings = types[ $(this).val() ].settings;
+
+   				// Для данного типа страницы определены настройки
+   				if( settings ) {
+   					var settingsEl = form.find('select[name=app_settings]');
+   					settingsEl.show();
+   					settingsEl.attr('enabled', 'disabled');
+   					var This = this;
+
+   					// Получим данные модели указаной в настройках
+   					Storm.retrieve( settings.model,  Object.create( Storm.Query ).use( 'order', 'id' ), function ( settingsData ) {
+   						settingsEl.attr('enabled', 'enabled');
+   						settingsEl.find('option').remove();
+   						settingsEl.append($('<option>').attr('value', 'null').text( '---' ) );
+   						for(var item in settingsData) {
+   							var option = $('<option>').attr('value', settingsData[item].id).text( settingsData[item].title );
+   							if( settingsData[item].id == data.app_settings) {
+   								option.attr('selected', 'selected');
+   							}
+
+   							settingsEl.append(option);
+   						}
+   					});
+   				} else {
+   					form.find('select[name=app_settings]').hide();
+   				}
+   			} ).trigger( 'change' );
+   		},
+
+   		onFetchData: function ( form, data ) {
+   			if(data.app_settings == 'null') {
+   				data.app_settings = null;
+   			}
+   		},
+
+   		onFillItem: function ( item, data ) {
+   			item.find( 'img.enabled' ).attr( 'src', data.enabled ? '/static/i/admin/icons/16/lamp-on.png' : '/static/i/admin/icons/16/lamp-off.png' );
+   			if( ! data.enabled ) {
+   				item.find( '.a-unit-body' ).addClass( 'disabled' );
+   			}
+   			item.attr( 'stormObject', data.id );
+   			item.attr( 'id', 'a-unit-' + data.id );
+   		}
+   	});
+
+       // Новая страница
+    $(".create-page").click( function ( e ) {
+        e.preventDefault();
+        Object.create( pageForm ).extend( {
+            object:		'MadonePage',
+            formPlace:	$( '.createFormPlace' ),
+            item:		$( '#page-template' ),
+            itemPlace:	$( '#pages' )
+        } ).start();
+   	} );
+
+    // Редактирование страницы
+    $( '.a-units .edit' ).bind( 'click', function( event ) {
+        event.preventDefault();
+        Object.create( pageForm ).extend( {
+            object:	Storm.buildPath( this ),
+            item:	$( this ).parents( '.a-unit-body' )
+        } ).start();
+    } );
+
+   	$( '.a-units .enabled' ).click( function( e ) {
+   		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
+   			if(data.enabled) {
+   				$( this ).parents('.a-unit-body:first').removeClass('disabled');
+   				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
+   			}
+   			else {
+   				$( this ).parents('.a-unit-body:first').addClass('disabled');
+   				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
+   			}
+   		}));
+   	} );
+
+   	$( '.a-units .menu' ).click( function( e ) {
+   		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
+   			$( this ).attr( 'src', data.menu ?
+   			'/static/i/admin/icons/16/flag-on.png' :
+   			'/static/i/admin/icons/16/flag-off.png' )
+   		}));
+   	});
+
+   	$( '.a-units .delete' ).click( function( e ) {
+   		var title = $( this ).parents( '.a-unit:first' ).find( 'h2:first' ).text();
+
+           if( confirm( 'Вы действительно хотите удалить страницу «' + title  + '»?' ) ) {
+   			var nested = $( this ).parents( '.a-unit:first' ).find( '.a-unit' ).size();
+               if( nested ) {
+                   if( ! confirm( Mad.decline( nested, '',
+   					'«' + title +'» содержит еще %n вложеную страницу.',
+   					'«' + title +'» содержит еще %n вложеные страницы.',
+   					'«' + title +'» содержит еще %n вложеных страниц.' ) +
+   					' Вы действительно хотите удалить их все?' ) )
+                   return false;
+               }
+
+   			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
+   				$( this ).parents( '.a-unit:first' ).remove();
+   			}));
+   		}
+   	});
+});
+</script>

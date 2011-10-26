@@ -213,7 +213,17 @@ button, button:active, button:focus {
 }
 
 .madone-header {
-    background: url(/cms/static/i/head-bg.png) repeat-x;
+    background: #cdcdcd;
+    background: -moz-linear-gradient(top, #cdcdcd 0%, #b2b2b2 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cdcdcd), color-stop(100%,#b2b2b2));
+    background: -webkit-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -o-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    background: -ms-linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cdcdcd', endColorstr='#b2b2b2',GradientType=0 );
+    background: linear-gradient(top, #cdcdcd 0%,#b2b2b2 100%);
+
+    border-bottom: 1px solid #757575;
+
     color: #373737;                      
     height: 42px;
     margin-bottom: 32px;

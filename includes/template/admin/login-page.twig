@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD
+	HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+    <html lang="ru">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>{{ config.site_title }} &mdash; MadOne</title>
+
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.0.0.min.css">
+        <script type="text/javascript" src="/media/jquery-1.5.2.min.js"></script>
+    </head>
+    <body>
+        <div class="madone-content">
+            <div class="container" style="padding-top: 120px;">
+                <div class="row">
+                    <div class="span8 columns offset4">
+                        <h1>MadOne</h1>
+
+                        <form method="post" class="madone-login-form">
+                            <div class="clearfix">
+                                <label>Имя</label>
+                                <div class="input">
+                                    <input tabindex="1" type="text" name="_madone_login" value="{{ _madone_login }}"/></div>
+                                </div>
+                            <div class="clearfix">
+                                <label>Пароль</label>
+                                <div class="input">
+                                    <input tabindex="2" type="password" name="_madone_password"/>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button tabindex="3" type="submit" class="btn primary">Войти</button>
+                            </div>
+                        </form>
+                        {% if login_attempt %}
+                                <div class="alert-message error">
+                                    <p>Неправильное имя или пароль.</p>
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+    $( document ).ready( function() {
+        $( 'input[name=_madone_login]' ).focus();
+    });
+    </script>
+</html>

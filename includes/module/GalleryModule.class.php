@@ -14,8 +14,11 @@ class GalleryModule extends AbstractModule {
             }
         }
 
-        return $this->getTemplate( 'index', array(
+        return $this->getTemplate( 'index.twig', array(
             'items' => $sections,
+            'root' => $sections[0],
+            'items' => $sections[0]->getChildren(),
+            'sessid' => $_COOKIE['PHPSESSID']
         ) );
     }
 }

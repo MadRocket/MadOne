@@ -39,12 +39,24 @@ class Config {
     	}
     }
 
+    function get( $name ) {
+    	if( array_key_exists($name, self::$attributes) ) {
+    		return self::$attributes[$name];
+    	} else {
+    		throw new Exception("Параметр {$name} отсутствует в конфигурации сайта!");
+    	}
+    }
+
 	function __set( $name, $value ) {
     	if( array_key_exists($name, self::$attributes) ) {
     		self::$attributes[$name] = $value;
     	} else {
     		throw new Exception("Параметр {$name} отсутствует в конфигурации сайта!");
     	}
+    }
+
+    function __isset( $name ) {
+        return array_key_exists($name, self::$attributes);
     }
     
     static function writeToFile() {

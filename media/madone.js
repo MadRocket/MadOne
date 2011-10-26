@@ -47,18 +47,19 @@ Madone.RichTextEditorGetHTML = function( name ) {
 
 
 
-Madone.NestedSortableOptions = Object.create( Object.Extendable ).extend( {
-	accept:				'a-unit',
-	handle:				'.a-unit-body',
-	opacity:			0.7,
-	helperclass:		'a-unit-sortable-helper',
-	nestingPxSpace:		30,
-	fx:					80,
-	revert:				true,
-	autoScroll:			true,
-	scrollSensitivity:	50,
-	scrollSpeed:		40
-} );
+Madone.nestedSortableOptions = Object.create( Object.Extendable ).extend({
+    disableNesting: 'no-nest',
+    forcePlaceholderSize: true,
+    handle: 'div',
+    helper:	'clone',
+    items: 'li',
+    opacity: .6,
+    placeholder: 'placeholder',
+    revert: 100,
+    tabSize: 15,
+    tolerance: 'pointer',
+    toleranceElement: '> div'
+});
 
 Madone.addAjaxLoader = function( object, position ) {
 	object = $( object );
@@ -131,32 +132,17 @@ Madone.enableDatepickers = function( immediate ) {
 	return this;
 };
 
-Madone.uploadify = Object.create( Object.Extendable ).extend({
-	multi 		  : true,
-	uploader  	  : '/media/uploadify-2.1.0/scripts/uploadify.swf',
-	cancelImg 	  : '/media/uploadify-2.1.0/cancel.png',
-	buttonImg	  : '/static/i/admin/upload-button.png',
-	width		  : 147,
-	height		  : 24,
-	auto      	  : true,
-	onOpen		  : function(){$('.uploadifyQueue').css('display', 'block')},
-	onAllComplete : function(){$('.uploadifyQueue').css('display', 'none')},
-	scriptAccess  : 'always'
-});
-
-
-
 // Галерея
 Madone.ImageGallery = Object.create( Storm.Form ).extend({
 	stormModel: '',
-	form: $("<div>").addClass("a-unit-form").append(
+	form: $("<form>").addClass("a-unit-form").addClass("form-stacked").append(
 			'<h2 text="title">Заголовок:</h2>' +
 			'<div class="block"><div class="gallery"></div></div>' +
-			'<div class="block">' +
-				'<input type="file" name="image" class="uploadify" />' +
-			'</div>' +
-			'<div class="block">' +
-				'<button style="margin-left:0;" class="cancel small-styled-button"><b><b>Закрыть</b></b></button>' +
+			'<form class="form-stacked" style="margin-top: 1em;"><div class="clearfix"><label>Файлы:</label>' +
+				'<input type="file" name="image" class="uploadify" multiple/>' +
+			'<span class="help-block">Можно выбрать сразу несколько файлов</span></div></form>' +
+			'<div class="actions">' +
+				'<button class="cancel btn">Закрыть</button>' +
 			'</div>'
 	),
 	getItemFormTemplate: function(){
@@ -165,8 +151,8 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 						'<img class="image" src=""><div class="form">' +
 						'<div><label>Название:</label><textarea class="width-100" name="title"></textarea></div>' +
 							'<div class="block">' +
-								'<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>' +
-								'<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>' +
+								'<button class="submit btn primary">Сохранить</button>' +
+								'<button class="cancel btn">Отмена</button>' +
 							'</div>' +
 						'</div>'
 					)
@@ -198,10 +184,10 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 	},
 	getItemTemplate: function () {
 		var Obj = this;
-		var template = $("<a>").addClass('thumb').append( 
+		var template = $("<a>").addClass('thumb').append(
 			$("<span>").addClass('control').append(
 				$("<img>").attr('title', 'Редактировать')
-						.attr('src', '/static/i/admin/icons/16/pencil.png?ffffff')
+						.attr('src', '/static/i/admin/icons/16/pencil.png')
 						.attr('width', '16')
 						.attr('height', '16')
 						.addClass('edit-item')
@@ -211,14 +197,14 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 			).append(
 				$("<a>").addClass('zoom-item-a').append(
 					$("<img>").attr('title', 'Увеличить')
-						.attr('src', '/static/i/admin/icons/16/magnifier.png?ffffff')
+						.attr('src', '/static/i/admin/icons/16/magnifier.png')
 						.attr('width', '16')
 						.attr('height', '16')
 						.addClass('zoom-item')
 				)
 			).append(
 				$("<img>").attr('title', 'Удалить')
-						.attr('src', '/static/i/admin/icons/16/cross.png?ffffff')
+						.attr('src', '/static/i/admin/icons/16/cross.png')
 						.attr('width', '16')
 						.attr('height', '16')
 						.addClass('delete-item')
@@ -242,10 +228,10 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 		).append(
 			$("<img>").addClass("image")
 		);
-		
+
 		return template;
 	},
-	
+
 	onCreate: function( form ) {
 		var Obj = this;
 		// Сортировка картинок в форме
@@ -263,22 +249,24 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 	},
 	onShow: function(form) {
 		var Obj = this;
-		
-		form.find('.uploadify').attr('id', 'uploadify');
-		form.find('#uploadify').uploadify(Object.create(Madone.uploadify).extend({
-			scriptData : {section: Obj.loadedData.id, PHPSESSID: Obj.PHPSESSID},
-			fileDataName: 'image',	
-			script    : Storm.getPath( Obj.stormModel ).getUri() + '/create/',
-			onComplete  : function (event, queueID, fileObj, response, data) {
-				var r = $.evalJSON(response);
-				Obj.appendItem( r.data );
-			}
-		}));
+        form.find('.uploadify').fileupload({
+            formData : [{name:"section", value: Obj.loadedData.id}, {name: "PHPSESSID", value: Obj.PHPSESSID}],
+            sequentialUploads: true,
+            dropZone: form.find('.gallery'),
+            dataType: 'json',
+            url: Storm.getPath( Obj.stormModel ).getUri() + '/create/',
+            done: function (e, data) {
+                console.dir(data.result);
+                Obj.appendItem( data.result.data );
+            }
+        }).bind('fileuploaddragover', function (e) {
+            form.find('.gallery').css('background-color', '#fce7be');
+        });
 	},
 
 	onFill: function ( form, data ) {
 		var Obj = this;
-		
+
 		if( Madone.language !== 'ru' ) {
 			form.find( 'h2:first' ).append( $( '<i class="ru-hint">(' + data.RU.title + ')</i>' ) );
 		}
@@ -291,7 +279,7 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 				for(var i = 0; i < data.length; i++) {
 					this.appendItem( data[i] );
 				}
-				
+
 				/* Зумилка картинок галереи */
 				$('.zoom-item-a').fancybox();
 			} else {
@@ -299,7 +287,7 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 			}
 		} ) );
 	},
-	
+
 	// Уникальный метод формы — добавление изображения в список, используется при отображении списка изображений
 	// на сервере и добавлении загруженных изображений.
 	appendItem: function ( data ) {
@@ -316,7 +304,7 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 			.attr( 'title', data.title || '' )
 			.attr( 'width', data.image.cms ? data.image.cms.width : 50 )
 			.attr( 'height', data.image.cms ? data.image.cms.height : 50 );
-			
+
 			img.find('.zoom-item-a')
 			.attr('href', data.image.large.uri)
 			.attr('title', data.title || '' )

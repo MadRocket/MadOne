@@ -7,7 +7,7 @@ class Mad
 {
     static private $vars = array();
     static private $showExceptionsTrace = true;
-
+    
     /**
     * Инициализация класса
     */
@@ -60,6 +60,13 @@ class Mad
     	else {
     		return self::$vars;
     	}
+    }
+
+    static function server($name = null) {
+        if($name) {
+            return $_SERVER[$name];
+        }
+        return $_SERVER;
     }
 
     /**
@@ -219,7 +226,7 @@ class Mad
 	*	Форматированние трейса, полученного из Exception->getTrace() или debug_backtrace().
 	*	Возвращает трейс в виде HTML-таблицы.
 	*/
-	function formatDebugTrace( array $rawTrace ) {
+	static function formatDebugTrace( array $rawTrace ) {
 		$traces = array();
 		$num = count( $rawTrace );
 		
@@ -274,18 +281,18 @@ class Mad
 			$num--;
 		}
 		
-		$dump .= '<table class="trace"><tr><th>#</th><th>Call</th><th>Source file</th><th>Line</th></tr>' . join( $traces ) . "</table></body></html>";
+		$dump .= '<table class="trace"><tr><th>#</th><th>Call</th><th>Source file</th><th>Line</th></tr>' . join( "", $traces ) . "</table></body></html>";
 		
 		return $dump;
 	}
 	
-	function str_replace_once($needle , $replace , $haystack){
+	static function str_replace_once($needle , $replace , $haystack){
 		// Looks for the first occurence of $needle in $haystack
 		// and replaces it with $replace.
 		$pos = strpos($haystack, $needle);
 		if ($pos === false) {
 			// Nothing found
-		return $haystack;
+		    return $haystack;
 		}
 		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	} 			

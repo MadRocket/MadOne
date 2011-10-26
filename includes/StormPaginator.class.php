@@ -10,7 +10,6 @@ class StormPaginator
 {
     private $linkmax = 10; // Максимальное количество выводимых на страницу ссылок
     private $query; // StormQuerySet получения записей
-    private $template; // Шаблон вывода постраничной навигации
     private $uri; // uri страницы, %{page} заменяется на номер страницы
     private $size; // размер страницы (количество выводимых одновременно позиций)
     private $page; // текущая выбранная страница
@@ -20,19 +19,19 @@ class StormPaginator
     private $count; // Количество объектов всего
     private $objects; // Объекты
 
-    function __construct(StormQuerySet $query, $template, $size, $uri = null)
+    function __construct(StormQuerySet $query, $size, $uri = null)
     {
         $this->query = $query;
-        $this->template = $template;
         $this->size = $size;
         $this->uri = Mad::getUriPath();
 
         $this->detectPage();
+        $this->fetch();
     }
 
     public function fetch()
     {
-        // Собственно страницы
+                // Собственно страницы
         $this->pages = array();
 
         // Количество страниц вообще
@@ -119,7 +118,6 @@ class StormPaginator
             }
 
         }
-        return new Template($this->template, array('paginator' => $this));
     }
 
     /**
@@ -128,7 +126,7 @@ class StormPaginator
      */
     public function __toString()
     {
-        return (string)$this->fetch();
+        return "123";
     }
 
     public function getPageCount()
@@ -217,6 +215,10 @@ class StormPaginator
         return $this->pages;
     }
 
+    public function hasPages() {
+        return count($this->pages) > 0 ? true : false;
+    }
+
     public function setQuery($query)
     {
         $this->query = $query;
@@ -235,16 +237,6 @@ class StormPaginator
     public function getSize()
     {
         return $this->size;
-    }
-
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    public function getTemplate()
-    {
-        return $this->template;
     }
 
     public function setUri($uri)

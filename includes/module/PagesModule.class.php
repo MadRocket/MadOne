@@ -13,10 +13,19 @@ class PagesModule extends AbstractModule {
                 $pages = MadonePages()->kiOrder()->tree();
             }
         }
-        
-        return $this->getTemplate( 'index', array(
-            'items' => $pages,
-            'types' => MadonePageTypes( array( 'enabled' => true ) )->order( 'position' )->all(),
+
+        $types = MadonePageTypes( array( 'enabled' => true ) )->order( 'position' )->all();
+        $types_array = array();
+		foreach( $types as $type ) {
+			$types_array[ "{$type->id}" ] = $type->asArray( true );
+			$types_array[ "{$type->id}" ]['settings'] = json_decode($type->settings);
+		}
+
+        return $this->getTemplate( 'index.twig', array(
+            'root' => $pages[0],
+            'items' => $pages[0]->getChildren(),
+            'types' => $types,
+            'types_json' => $types_array
         ) );
     }
 }

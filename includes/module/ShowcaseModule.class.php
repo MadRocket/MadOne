@@ -23,15 +23,19 @@ class ShowcaseModule extends AbstractModule
 		$names = Mad::getUriPathNames();
 		if( $names && array_key_exists( 2, $names ) && is_numeric( $id = $names[2] ) ) {
 			if( $section = MadoneShowcaseSections()->get( $id ) ) {
-				return $this->getTemplate( 'items', array(
-					'paginator' => new StormPaginator( $section->items->order( 'title' )->order( 'id' ), 'core/paginator', 20 ),
+                $pagination = new StormPaginator( $section->items->order( 'title' )->order( 'id' ), 20 );
+				return $this->getTemplate( 'items.twig', array(
+					'paginator' => $pagination,
+					'items' => $pagination->getObjects(),
 					'section'	=> $section,
+                    'sessid' => $_COOKIE['PHPSESSID']
 				) );
 			}
 		}
 		
-        return $this->getTemplate( 'index', array (
-            'items' => $sections,
+        return $this->getTemplate( 'index.twig', array (
+            'root' => $sections[0],
+            'items' => $sections[0]->getChildren(),
         ) );
     }
 

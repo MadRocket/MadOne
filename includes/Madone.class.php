@@ -261,6 +261,14 @@ class Madone {
 	static function isCurrentLanguage( $name ) {
 		return StormCore::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
+
+    static function twig($path) {
+        $twig = Outer_Twig::get($path);
+        $twig->addGlobal('config', Config::$i);
+        $twig->addGlobal('server', Mad::server());
+
+        return $twig;
+    }
 }
 
 ?>

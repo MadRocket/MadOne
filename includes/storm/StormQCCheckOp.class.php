@@ -108,7 +108,7 @@ class StormQCCheckOp extends StormQCOp
 			$meta = StormCore::getInstance()->getStormModelMetadata( $model );
 
             // Первая проверка - замена primary key
-            if( $field == 'pk' ) $field = $meta->pkname;
+            if( $field == 'pk' ) $field = $meta->getPkname();
 
             // Проверим наличие поля в модели
             if( ! $meta->fieldExists( $field ) ) throw new StormException( "Field '{$field}' not found in model {$model}" );
