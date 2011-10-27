@@ -12,7 +12,7 @@ class NewsApplication extends AbstractApplication {
      */
     function run( MadonePage $page, $uri = '' ) {
         respond('/?', function($request, $response) use ($page, $uri) {
-            $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 'paginator', 10 );
+            $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 3 );
 
             // Выбрана левая страница - не обрабатываем
             if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {

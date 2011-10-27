@@ -31,7 +31,7 @@ class StormPaginator
 
     public function fetch()
     {
-                // Собственно страницы
+        // Собственно страницы
         $this->pages = array();
 
         // Количество страниц вообще
@@ -118,6 +118,8 @@ class StormPaginator
             }
 
         }
+
+        return new Template('paginator', array('paginator' => $this));
     }
 
     /**
@@ -126,7 +128,7 @@ class StormPaginator
      */
     public function __toString()
     {
-        return "123";
+        return (string)$this->fetch();
     }
 
     public function getPageCount()
