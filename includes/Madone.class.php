@@ -153,7 +153,7 @@ class Madone {
 			// Запускаем приложение, соответствующее типу страницы, если оно отработало — завершаем работу
             $response = $p->type->getApplicationInstance()->run($p, $app_uri);
             if($response) {
-                print $response;
+//                print $response;
 
 				print( self::postprocess( ob_get_clean() ) );
                 

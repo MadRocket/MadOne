@@ -4,40 +4,35 @@
  * Вывод страницы новостей
  */
 class NewsApplication extends AbstractApplication {
-    /**
-     * Запуск приложения!
-     * @param MadonePage $page - соответствующий объект структуры сайта
-     * @param string $uri - путь к искомой странице _внутри_ приложения.
-     * @return bool Возвращает true, если страница обработана этим приложением, false, если страница приложением не обработана.
-     */
-    function run( MadonePage $page, $uri = '' ) {
-        respond('/?', function($request, $response) use ($page, $uri) {
-            $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 3 );
+    protected $routes = array(
+        '/?' => 'index',
+        '/news[i:id]' => 'view',
+        '/rss' => 'rss'
+    );
 
-            // Выбрана левая страница - не обрабатываем
-            if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
-                return false;
-            }
+    function index() {
+        $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 3 );
 
-            print new Template( 'news-page', array( 'page' => $page, 'paginator' => $paginator, 'type' => 'companynews' ) );
-        });
+        // Выбрана левая страница - не обрабатываем
+        if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
+            return false;
+        }
 
-        respond('/news[i:id]', function($request, $response) use ($page) {
-        	$item = MadoneNewsList(array('id' => $request->id))->first();
+        print new Template( 'news-page', array( 'page' => $this->page, 'paginator' => $paginator, 'type' => 'companynews' ) );
+    }
 
-        	if($item) {
-				print new Template( 'news-item-page', array( 'page' => $page, 'item' => $item ) );
-        	}
-        });
+    function view($id) {
+        $item = MadoneNewsList(array('id' => $id))->first();
+        if($item) {
+            print new Template( 'news-item-page', array( 'page' => $this->page, 'item' => $item ) );
+        }
+    }
 
-        respond('/rss', function($request, $response) use($page) {
-            if( ! headers_sent() ) {
-        		header("Content-type: application/rss+xml");
-        	}
+    function rss() {
+        if( ! headers_sent() ) {
+            header("Content-type: application/rss+xml");
+        }
 
-			print new Template( 'news-rss', array( 'page' => $page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
-        });
-
-        return dispatch($uri, null, null, true);
+        print new Template( 'news-rss', array( 'page' => $this->page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
     }
 }

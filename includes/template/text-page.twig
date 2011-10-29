@@ -24,8 +24,8 @@
     </div>
 
     {% block content %}
-    {{ page.text }}
-        {% endblock %}
+        {{ page.text|raw }}
+    {% endblock %}
 
     {% include "footer.twig" %}
 </div>

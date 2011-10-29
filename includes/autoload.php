@@ -21,10 +21,10 @@ class AutoloadClass {
             array_pop($classparts);
             $path = join(DIRECTORY_SEPARATOR, $classparts) . DIRECTORY_SEPARATOR . $classname . ".php";
 
-            include_once($path);
+            @include_once($path);
         }
         else {
-            include_once( $classname . '.class.php' );
+            @include_once( $classname . '.class.php' );
         }
 
         if( class_exists( $classname ) || interface_exists( $classname ) ) {
@@ -41,25 +41,6 @@ class AutoloadClass {
             # Все в порядке
             return;
         }
-
-        # Класса нет — генерим класс, выдающий на создание исключение
-        // TODO: Заккоментировано потому, что иначе class_exists всегда выдает true, и проверить существует ли класс с его помощью уже не получится
-        // TODO: Проверить будет ли это правильно работать если здесь тупо выдавать исключение
-/*
-        eval("
-            class {$classname}
-            {
-                function __construct()
-                {
-                    throw new AutoloadException( 'Class {$classname} not found' );
-                }
-
-                static function __callstatic( \$m, \$args )
-                {
-                    throw new AutoloadException( 'Class {$classname} not found' );
-                }
-            }");
-*/
     }
 }
 

@@ -60,7 +60,7 @@ class StormAutoloadClass
     public static function autoload( $classname )
     {
         // Подключаем файл, в котором должен лежать наш класс
-        include_once( "{$classname}.class.php" );
+        @include_once( "{$classname}.class.php" );
 
         //  Удалось ли загрузить класс?
         if( class_exists( $classname ) )
