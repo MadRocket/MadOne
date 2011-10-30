@@ -22,6 +22,9 @@ class Outer_Twig {
             $twig = new Twig_Environment();
         }
 
+        $twig->addExtension(new Twig_Extensions_Extension_Text());
+        $twig->addExtension(new Twig_Extensions_Extension_Debug());
+
         return $twig;
     }
 }
