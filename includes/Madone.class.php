@@ -3,20 +3,14 @@
 /**
 *	Ядро системы управления, отображающее сайт.
 */
-
 class Madone {
-	public static $version = '2.0 &alpha;';
-    public static $release = 'Eureka';
-    
     protected static $languages = array();
     protected static $language = null;
     protected static $langRegExp = null;
-    
-	protected static $developmentMode = true;
-    
+    protected static $developmentMode = null;
     /**
-    *	Инициализация класса
-    */
+     *	Инициализация класса
+     */
 	static function init() {
 		// Определим нужно ли влючать режим разработки
 		self::detectDevelompentMode();
@@ -39,8 +33,8 @@ class Madone {
 	}
 	
 	/**
-	*	Определение режима разработки
-	*/
+	 *	Определение режима разработки
+	 */
 	static function detectDevelompentMode() {
 		if( ! is_bool( self::$developmentMode ) ) {
 			self::$developmentMode = $_SERVER['SERVER_ADDR'] === '127.0.0.1' ? true : false;
@@ -52,16 +46,16 @@ class Madone {
 	}
 	
 	/**
-	*	Установка обработчиков ошибок и исключений.
-	*/
+	 *	Установка обработчиков ошибок и исключений.
+	 */
 	static function setErrorHandlers() {
 		set_error_handler( array( "Madone", "fatal_error_handler" ), E_RECOVERABLE_ERROR | E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE );
 		set_exception_handler( array( "Madone", "uncaught_exception_handler" ) );
 	}
 	
 	/**
-	*	Включение правильной локали Storm.
-	*/
+	 *	Включение правильной локали Storm.
+	 */
 	static function setLanguage() {
 		// Наполним массив языков сайта
 		self::$languages = array();
@@ -101,12 +95,12 @@ class Madone {
 	}
 	
     /**
-    *	Обработка HTTP запроса к сайту.
-    *	Основное метод, через который работают все страницы.
-    *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
-    */
+     *	Обработка HTTP запроса к сайту.
+     *	Основное метод, через который работают все страницы.
+     *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
+     */
     static function run() {
-		ob_start( );
+		ob_start();
 		// Тут будут условия фильтрации страниц
 		$filter = null;
 		
@@ -184,8 +178,8 @@ class Madone {
     }
 
 	/**
-	*	Обработчик фатальных ошибок.
-	*/
+	 *	Обработчик фатальных ошибок.
+	 */
 	static function fatal_error_handler( $errno, $errstr, $errfile, $errline ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
@@ -214,8 +208,8 @@ class Madone {
 	}
 
 	/**
-	*	Обработчик неперехваченных исключений.
-	*/
+	 *	Обработчик неперехваченных исключений.
+	 */
 	static function uncaught_exception_handler( $exception ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
@@ -236,8 +230,8 @@ class Madone {
 	}
 	
 	/**
-	*	Постобработка кода страницы
-	*/
+	 *	Постобработка кода страницы
+	 */
 	static function postprocess( $text ) {
 		// Добавляем lang-атрибут для текущего языка
 		$text = str_replace( '<html', '<html lang="'. StormCore::getLanguage()->getName() .'"', $text );
@@ -267,7 +261,20 @@ class Madone {
         $twig->addGlobal('config', Config::$i);
         $twig->addGlobal('server', Mad::server());
 
+        $twig->addGlobal('madone_image_helper', new MadoneImageHelper());
+        $twig->addGlobal( 'madone', new Madone() );
+
         return $twig;
+    }
+
+    function getBlock($name) {
+        return MadoneTextBlocks()->getOrCreate(array('name' => $name));
+    }
+
+    function getApp($classname) {
+        if(class_exists($classname)) {
+            return new $classname();
+        }
     }
 }
 

@@ -12,7 +12,8 @@ class StormImageVariant {
 	public $width;
 	public $height;
 	public $size;
-	
+	public $name;
+
 	function __construct( $src = null ) {
 		if( is_object( $src ) ) {
 			foreach( get_object_vars( $src ) as $propname => $propvalue ) {
@@ -25,6 +26,8 @@ class StormImageVariant {
 	
 	function selfCheck() {
 		if( $this->uri && ( ! $this->size || ! $this->width || ! $this->height ) ) {
+            $name = explode('/', $this->uri);
+            $this->name = array_pop($name);
 			$file = "{$_SERVER['DOCUMENT_ROOT']}/{$this->uri}";
 			if( ! $this->size ) {
 				$this->size = @filesize( $file );
