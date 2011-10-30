@@ -3,7 +3,7 @@
 /**
  * Вывод страницы новостей
  */
-class NewsApplication extends Madone_Application {
+class Module_News_Application extends Madone_Application {
     protected $routes = array(
         '/?' => 'index',
         '/news[i:id]' => 'view',

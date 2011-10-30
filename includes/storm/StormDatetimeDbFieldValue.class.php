@@ -16,7 +16,7 @@ class StormDatetimeDbFieldValue extends StormDbFieldValue {
 	}
 
 	// Нормальная работа в качестве поля таблицы
-	function &get() {
+	function get() {
 		return is_null( $this->value ) ? null : $this;
 	}
 	

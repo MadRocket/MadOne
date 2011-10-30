@@ -8,6 +8,7 @@ class AbstractModule {
     protected $cmsUri;
     protected $ajaxUri;
     protected $uriPath;
+    protected $templatePath;
 
     /**
      * @throws Exception
@@ -27,6 +28,14 @@ class AbstractModule {
         $this->uri      = "{$this->cmsUri}/{$name}";
         $this->ajaxUri  = "{$this->cmsUri}/ajax/{$name}";
         $this->uriPath  = $this->cmsUri . $request->getObjectName() == $name ? "/{$name}".( $request->getUri() != '/' ? $request->getUri() : '' ) : "/{$name}";
+
+        $this->templatePath = array();
+        if(is_dir("{$_SERVER['DOCUMENT_ROOT']}/includes/module/{$name}/template/admin")) {
+            $this->templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/includes/module/{$name}/template/admin";
+        }
+        if(is_dir("{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin")) {
+            $this->templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin";
+        }
     }
     
     /**
@@ -44,12 +53,7 @@ class AbstractModule {
             $file = "{$file}.twig";
         }
 
-        $twig = Madone::twig(
-            array(
-                "{$_SERVER['DOCUMENT_ROOT']}/includes/module/".get_class( $this )."/template/admin",
-                "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
-            )
-        );
+        $twig = Madone::twig( array_merge($this->templatePath, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")) );
         
         return $twig->loadTemplate($file)->render($vars);
     }

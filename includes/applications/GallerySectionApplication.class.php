@@ -2,7 +2,7 @@
 /**
  * GallerySectionApplication class - Вывод раздела фотогалереи
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Фотогалерея
@@ -12,7 +12,7 @@
  * priority = 2
  */
  
-class GallerySectionApplication extends AbstractApplication {
+class GallerySectionApplication extends Madone_Application {
     /**
         Запуск приложения!
             $page - соответствующий объект структуры сайта

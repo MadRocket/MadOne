@@ -1,6 +1,6 @@
 <?
 
-class SearchApplication extends AbstractApplication {
+class SearchApplication extends Madone_Application {
 
     function run( MadonePage $page, $uri = '' ) {
     	$vars = & Mad::vars();

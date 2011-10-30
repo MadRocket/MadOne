@@ -111,7 +111,8 @@ abstract class StormDbField
     		return null;
     	}
     	else {
-    		return $value->get();
+            $val = $value->get();
+    		return $val;
     	}
     }
 

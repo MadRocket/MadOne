@@ -2,7 +2,7 @@
 /**
  * SubscriptionApplication class.
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Подписка
@@ -11,7 +11,7 @@
  * has_subpages = 1
  * priority = 2
  */
-class SubscriptionApplication extends AbstractApplication {
+class SubscriptionApplication extends Madone_Application {
 	function run( MadonePage $page, $uri = '' ) {
 		$vars = Mad::vars();
 		$mode = null;

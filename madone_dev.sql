@@ -139,7 +139,7 @@ INSERT INTO `madonepagetype` (`id`, `title`, `app_classname`, `settings`, `enabl
 VALUES
 	(1,'Обычная страница (текст с изображениями)','TextPageApplication',NULL,1,1,1,1,0,1),
 	(2,'Новости','NewsApplication',NULL,1,3,0,0,1,2),
-	(3,'Карта сайта','AbstractApplication',NULL,1,9,0,1,0,3),
+	(3,'Карта сайта','Madone_Application',NULL,1,9,0,1,0,3),
 	(4,'Главная страница','IndexPageApplication',NULL,1,11,1,1,0,1),
 	(5,'Фотогалерея','GalleryApplication',NULL,1,4,0,1,1,2),
 	(9,'Содержание раздела','TableofcontentsApplication',NULL,1,2,1,1,0,2),

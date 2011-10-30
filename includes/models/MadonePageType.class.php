@@ -9,7 +9,7 @@ class MadonePageType extends StormModel {
     static function definition() {
         return array (
             'title'			=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100 ) ),
-            'app_classname'	=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100, 'default' => 'MadoneAbstractApplication', 'index' => true ) ),
+            'app_classname'	=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100, 'default' => 'MadoneMadone_Application', 'index' => true ) ),
             'settings'		=> new StormTextDbField( array( 'localized' => false ) ),
             'enabled'		=> new StormBoolDbField( array( 'default' => true ) ),
             'has_text'		=> new StormBoolDbField( array( 'default' => true ) ),

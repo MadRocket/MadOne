@@ -1,4 +1,4 @@
-<?
+<?php
 
 class MadoneCmsApplication
 {
@@ -56,8 +56,8 @@ class MadoneCmsApplication
                 $twig = Madone::twig("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin");
                 $twig->loadTemplate('login-page.twig')->display(
                     array(
-                        'login_attempt' => MadoneSession::getInstance()->getLoginAttempt(),
-                        '_madone_login' => Mad::vars('_madone_login')
+                         'login_attempt' => MadoneSession::getInstance()->getLoginAttempt(),
+                         '_madone_login' => Mad::vars('_madone_login')
                     )
                 );
             }
@@ -77,7 +77,7 @@ class MadoneCmsApplication
             exit;
         }
 
-        // Обрабатываем MODEL
+            // Обрабатываем MODEL
         else {
             if ($request->getType() == MadoneCmsRequest::MODEL) {
                 $processor = new StormRestProcessor();
@@ -87,7 +87,8 @@ class MadoneCmsApplication
         }
 
         // Остались MODULE запросы. Получим активный модуль
-        $module = $this->getModuleByName($request->getObjectName());
+        $module_name = $request->getObjectName() ? $request->getObjectName() : 'dashboard';
+        $module = $this->getModuleByName($module_name);
 
         // Имя есть, а модуль не нашелся? Непорядок, выдаем 404!
         if ($request->getObjectName() && !$module) {
@@ -127,7 +128,7 @@ class MadoneCmsApplication
             }
 
             // Проверим наличие title, если нет — выбран встроенный модуль, и тайтл тоже нужно приготовить самостоятельно
-            if (! array_key_exists('title', $vars)) {
+            if (!array_key_exists('title', $vars)) {
                 switch ($request->getObjectName()) {
                     case 'settings':
                         $vars['title'] = 'Настройка';
@@ -145,11 +146,9 @@ class MadoneCmsApplication
             }
 
             // Позволим модулю обработать запрос и вернуть контент
-            $vars['content'] =  $module->handleHtmlRequest( $request->getUri() );
+            $vars['content'] = $module->handleHtmlRequest($request->getUri());
 
-            $twig = Madone::twig(array(
-                "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"
-            ));
+            $twig = Madone::twig(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin"));
             print $twig->render('default.twig', $vars);
         }
 
@@ -164,8 +163,7 @@ class MadoneCmsApplication
     protected function getModuleByName($name)
     {
         // Сначала проверяем встроенные модули административного интерфейса
-        switch ($name)
-        {
+        switch ($name) {
             case 'logout':
                 return new LogoutModule($name);
 
@@ -179,8 +177,13 @@ class MadoneCmsApplication
                 return new HelpModule($name);
         }
 
-        return MadoneModules(array('name' => $name, 'enabled' => true))->first();
+        $classname = "Module_" . (ucfirst($name)) . "_Admin";
+        if (class_exists($classname)) {
+            return new $classname($name);
+        }
+        else {
+            // Fallback to old school modules
+            return MadoneModules(array('name' => $name, 'enabled' => true))->first();
+        }
     }
 }
-
-?>

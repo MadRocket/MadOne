@@ -2,7 +2,7 @@
 /**
  * ShowcaseSearchApplication class.
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Поиск по каталогу
@@ -11,7 +11,7 @@
  * has_subpages = 1
  * priority = 2
  */
-class ShowcaseSearchApplication extends AbstractApplication
+class ShowcaseSearchApplication extends Madone_Application
 {
     function run( MadonePage $page, $uri = '' )
     {

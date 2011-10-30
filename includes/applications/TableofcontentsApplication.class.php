@@ -3,7 +3,7 @@
 /**
  * TableofcontentsApplication class - Вывод содержания раздела
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Содержание раздела
@@ -12,7 +12,7 @@
  * has_subpages = 0
  * priority = 2
  */
-class TableofcontentsApplication extends AbstractApplication
+class TableofcontentsApplication extends Madone_Application
 {
     function run( MadonePage $page, $uri = '' )
     {

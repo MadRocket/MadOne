@@ -30,7 +30,7 @@ class ApplicationsModule extends AbstractModule {
 				$apps_classnames[] = $m->app_classname;
 			}
 			
-			$system_apps = array("AbstractApplication");
+			$system_apps = array("Madone_Application");
 			
 			foreach (scandir("{$_SERVER['DOCUMENT_ROOT']}/includes/applications/") as $item) { 
 	            if ($item == '.' || $item == '..') {
@@ -328,7 +328,7 @@ class ApplicationsModule extends AbstractModule {
 /**
  * $instance->app_classname class - $instance->title
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = $instance->title
@@ -338,7 +338,7 @@ class ApplicationsModule extends AbstractModule {
  * priority = $instance->priority
  */
  
-class $instance->app_classname extends AbstractApplication {
+class $instance->app_classname extends Madone_Application {
     function run( MadonePage \$page, \$uri = '' ) {
         return true;
     }

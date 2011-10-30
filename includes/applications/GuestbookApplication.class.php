@@ -2,7 +2,7 @@
 /**
  * GuestbookApplication class.
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Гостевая книга
@@ -11,7 +11,7 @@
  * has_subpages = 1
  * priority = 2
  */
-class GuestbookApplication extends AbstractApplication {
+class GuestbookApplication extends Madone_Application {
 	function run( MadonePage $page, $uri = '' ) {
 		$vars = Mad::vars();
 		$mode = null;

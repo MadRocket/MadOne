@@ -2,7 +2,7 @@
 /**
  * ShowcaseApplication class.
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  *
  * Default settings:
  * title = Каталог
@@ -11,7 +11,7 @@
  * has_subpages = 1
  * priority = 2
  */
-class ShowcaseApplication extends AbstractApplication {
+class ShowcaseApplication extends Madone_Application {
     function run( MadonePage $page, $uri = '' ) {
 		$names = Mad::getUriPathNames( $uri );
 		

@@ -2,7 +2,7 @@
 /**
  * Прародитель приложений
  */
-class AbstractApplication {
+class Madone_Application {
 
     protected $routes;
     protected $page;

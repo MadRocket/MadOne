@@ -2,7 +2,7 @@
 /**
  * FeedbackApplication class.
  * 
- * @extends AbstractApplication
+ * @extends Madone_Application
  * Default settings:
  * title = Обратная связь
  * has_text = 1
@@ -10,7 +10,7 @@
  * has_subpages = 1
  * priority = 2
  */
-class FeedbackApplication extends AbstractApplication {
+class FeedbackApplication extends Madone_Application {
 	function run( MadonePage $page, $uri = '' ) {
 		$vars = Mad::vars();
 		$mode = null;
