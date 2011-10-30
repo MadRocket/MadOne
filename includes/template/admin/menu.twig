@@ -3,7 +3,7 @@
         {% for i in menuItems %}
         <li>
             {% if i.selected %}
-            <span class="active">{{ i.title }}</span>
+            <span class="label">{{ i.title }}</span>
             {% else %}
             <a href="{{ i.uri }}">{{ i.title }}</a>
             {% endif %}
