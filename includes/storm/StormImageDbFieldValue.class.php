@@ -5,7 +5,7 @@ class StormImageDbFieldValue extends StormFileDbFieldValue {
 	
 	function __construct( array $params = array() ) {
 		parent::__construct( $params );
-		if( is_array( $params['variants'] ) ) {
+		if( array_key_exists('variants', $params) && is_array( $params['variants'] ) ) {
 			// Проверим, чтобы в массиве variants не было поля original, оно зарезервировано для исходной картинки
 			if( array_key_exists( 'original', $params['variants'] ) ) {
 				throw new StormException( "Использование варианта изображения 'original' запрещено, это название зарезервировано для исходного изображения." );

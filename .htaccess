@@ -1,9 +1,6 @@
-RewriteEngine on
+AddDefaultCharset utf-8
 
-# Система управления
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteRule ^(cms/.*) /cms/? [QSA,L]
+RewriteEngine on
 
 # Отображение страниц сайта
 RewriteCond %{REQUEST_FILENAME} !-f
