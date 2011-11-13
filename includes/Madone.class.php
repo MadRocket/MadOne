@@ -276,6 +276,19 @@ class Madone {
             return new $classname();
         }
     }
+
+    function getTree($qs_name, $params = array()) {
+        $qs = new StormKiQuerySet( $qs_name );
+        foreach($params as $k => $v) {
+            if($k == 'filter') {
+                $qs = $qs->filter($v);
+            }
+            elseif($k == 'filterLevel') {
+                $qs = $qs->filterLevel($v[0], $v[1]);
+            }
+        }
+        return $qs->kiOrder()->tree();
+    }
 }
 
 ?>
