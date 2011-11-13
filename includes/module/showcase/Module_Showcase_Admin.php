@@ -2,7 +2,7 @@
 /**
  * Управление интернет-витриной
  */
-class ShowcaseModule extends AbstractModule
+class Module_Showcase_Admin extends AbstractModule
 {
     /**
      * Получение содержимого административного интерфейса

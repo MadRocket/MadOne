@@ -42,13 +42,13 @@
 	<div class="clearfix">
 	    <label>Название:</label>
 	    <div class="input">
-	        <input class="width-100" type="text" name="title"/>
+	        <input class="span11" type="text" name="title"/>
 	    </div>
     </div>
 	<div class="clearfix">
 	    <label>Название по-английски:</label>
 	    <div class="input">
-	        <input class="width-100" type="text" name="name"/>
+	        <input class="span11" type="text" name="name"/>
         </div>
     </div>
 	<div class="actions">
@@ -121,9 +121,6 @@ $( function () {
 			item.attr( 'stormObject', data.id );
 			item.attr( 'id', 'a-unit-' + data.id );
 			item.find( 'h2:first' ).html( data.title );
-			if( Madone.language !== 'ru' ) {
-				item.find( 'h2:first' ).append( $( '<i class="ru-hint">(' + data.RU.title + ')</i>' ) );
-			}
 			item.find( 'p:first' ).html( data.name );
 			item.find( 'a.items:first' ).attr( 'href', './' + data.id + '/' );
 		}

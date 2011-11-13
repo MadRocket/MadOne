@@ -11,20 +11,21 @@ class Module_News_Application extends Madone_Application {
     );
 
     function index() {
-        $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 3 );
+        $paginator = new StormPaginator( MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' ), 5 );
 
         // Выбрана левая страница - не обрабатываем
         if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
             return false;
         }
 
-        print new Template( 'news-page', array( 'page' => $this->page, 'paginator' => $paginator, 'type' => 'companynews' ) );
+        print $this->render('news/index.twig', array('items' => $paginator->getObjects(), 'paginator' => $paginator, 'page' => $this->page));
+        return true;
     }
 
     function view($id) {
         $item = MadoneNewsList(array('id' => $id))->first();
         if($item) {
-            print new Template( 'news-item-page', array( 'page' => $this->page, 'item' => $item ) );
+            print $this->render( 'news/view.twig', array( 'page' => $this->page, 'item' => $item ) );
         }
     }
 
@@ -34,5 +35,10 @@ class Module_News_Application extends Madone_Application {
         }
 
         print new Template( 'news-rss', array( 'page' => $this->page, 'items' => MadoneNewsList(array('enabled' => true))->all() ) );
+    }
+
+    function last($number = 5) {
+        $news = MadoneNewsList( array( 'enabled' => true ) )->orderDesc( 'date' )->limit($number);
+        return $this->render('news/last.twig', array('items' => $news, 'page' => $this->page));
     }
 }

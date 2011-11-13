@@ -20,15 +20,14 @@
             </div>
         </div>
         <div class="actions">
-            <button id="change-password" disabled="disabled" class="btn primary">Изменить пароль</button>
+            <button type="button" id="change-password" disabled="disabled" class="btn primary">Изменить пароль</button>
         </div>
     </form>
 </div>
 
 <script type="text/javascript">
 
-$(document).ready( function()
-{
+$(function() {
     $( '.password-block input' ).keypress( function ( event ) {
         if( event.keyCode == 13 && ! $( '#change-password' ).attr( 'disabled' ) ) {
             $( this ).trigger( 'change' );
@@ -59,7 +58,7 @@ $(document).ready( function()
         }
 
         // Все проверено, можно отправить запрос
-        $.post( "<?=$this->ajaxUri?>", { old_password: $( '#old-password' ).val(), new_password: $( '#new-password' ).val() },
+        $.post( "/admin/ajax/password/", { old_password: $( '#old-password' ).val(), new_password: $( '#new-password' ).val() },
         function( r )
         {
             if( r.success )

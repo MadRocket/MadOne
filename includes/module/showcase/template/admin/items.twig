@@ -1,7 +1,7 @@
 {% import 'macros.twig' as common %}
 
 <h1>{{section.title}}</h1>
-<div class="module-header"><a href="../../../">вернуться к списку разделов</a></div>
+<div class="module-header"><a href="../">вернуться к списку разделов</a></div>
 
 <div class="module-buttons">
 	<button class="create-unit btn primary">Добавить позицию</button>
@@ -37,27 +37,41 @@
 	<div class="clearfix">
 	    <label>Название:</label>
 	    <div class="input">
-	        <input class="width-100" type="text" name="title"/>
+	        <input class="span11" type="text" name="title"/>
         </div>
     </div>
 	<div class="clearfix">
 	    <label>Цена:</label>
 	    <div class="input">
-	        <input class="width-100" type="text" name="price"/>
+	        <input class="span11" type="text" name="price"/>
+        </div>
+    </div>
+    <div class="clearfix">
+        <label></label>
+        <div class="input">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        <input type="checkbox" name="special" value="1" />
+                        <span>Хит продаж / спецпредложение</span>
+                    </label>
+                </li>
+            </ul>
         </div>
     </div>
 	<div class="clearfix">
 	    <label>Краткое описание:</label>
         <div class="input">
-            <textarea class="width-100 height-100" name="short_description"></textarea>
+            <textarea class="span11" name="short_description"></textarea>
         </div>
     </div>
 	<div class="clearfix">
 	    <label>Полное описание:</label>
 	    <div class="input">
-	        <textarea rich="yes" class="width-100 height-300" name="description"></textarea>
+	        <textarea rich="yes" class="span11" name="description"></textarea>
         </div>
     </div>
+
 	<div class="actions">
 		<button class="submit btn primary">Сохранить</button>
 		<button class="cancel btn">Отмена</button>
@@ -67,7 +81,6 @@
 <div class="a-unit" id="item-template" style="display:none;">
 	<div class="a-unit-body">
         <div class="actions">
-			<img title="Открыть список видео-файлов" class="movie-list" width="16" height="16" src="/static/i/admin/icons/16/tv.png"/>
 			<img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
 			<img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
 			<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
@@ -76,45 +89,6 @@
         <h2 stormText="title">Название позиции</h2>
         <p stormText="price">Цена, руб</p>
     </div>
-</div>
-
-<div id="images-form" class="a-unit-form" style="display:none;">
-	<h2 text="title">Заголовок</h2>
-	<div class="block"><div class="images" stormModel="MadoneShowcaseImage"></div></div>
-	<div class="block"><button class="upload small-styled-button"><b><b>Загрузить изображение</b></b></button></div>
-	<div class="block"><button style="margin-left:0;" class="cancel small-styled-button"><b><b>Закрыть</b></b></button></div>
-</div>
-
-<span id="image-template" class="img" style="display:none;"><div class="control"><img title="Редактировать" class="edit-image" src="icons/16/pencil.png" width="16" height="16" /><img class="delete-image" title="Удалить" src="/static/i/admin/icons/16/cross.png" width="16" height="16" /></div><img class="image" src="" /></span>
-<span id="movie-template" class="img" style="display:none;"><div class="control"><img title="Редактировать" class="edit-movie" src="/static/i/admin/icons/16/pencil.png" width="16" height="16" /><img class="delete-movie" title="Удалить" src="/static/i/admin/icons/16/cross.png" width="16" height="16" /></div><img class="image" src="" /></span>
-
-<span id="image-form" class="img-form" style="display:none;">
-<img class="image" src="" />
-<div class="form">
-<div><label>Название изображения:</label><textarea class="width-100" name="title"></textarea></div>
-<div class="block">
-	<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-	<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
-</div>
-</div>
-</span>
-
-<span id="movie-form" class="img-form" style="display:none;">
-<img class="image" src="" />
-<div class="form">
-<div><label>Название видео-файла:</label><textarea class="width-100" name="title"></textarea></div>
-<div class="block">
-	<button class="submit small-styled-button"><b><b>Сохранить</b></b></button>
-	<button class="cancel small-styled-button"><b><b>Отмена</b></b></button>
-</div>
-</div>
-</span>
-
-<div id="movies-form" class="a-unit-form" style="display:none;">
-	<h2 text="title">Заголовок</h2>
-	<div class="block"><div class="movies" stormModel="MadoneShowcaseMovie"></div></div>
-	<div class="block"><button class="upload small-styled-button"><b><b>Загрузить видео-файл</b></b></button></div>
-	<div class="block"><button style="margin-left:0;" class="cancel small-styled-button"><b><b>Закрыть</b></b></button></div>
 </div>
 
 <script type="text/javascript">
@@ -182,7 +156,7 @@ $( function() {
     $( '.image-list' ).bind( 'click', function( event ) {
 		Object.create( Madone.ImageGallery ).extend({
 			stormModel: 'MadoneShowcaseImage',
-			PHPSESSID: {{ sessid }},
+			PHPSESSID: '{{ sessid }}',
 			object:	Storm.buildPath( this ),
 			item:	$( this ).parents( '.a-unit-body' )
 		}).start();
