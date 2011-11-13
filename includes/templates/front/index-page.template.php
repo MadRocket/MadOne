@@ -1,1 +1,0 @@
-<? $this->replaceWith('text-page'); ?>
