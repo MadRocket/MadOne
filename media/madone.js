@@ -158,7 +158,6 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 					)
 	},
 	onEditClick: function(event, Form, button) {
-		console.dir(button);
 		var item = $( button ).parents( '.thumb' );
 		var obj = Object.create( Storm.Form ).extend( {
 			object: Storm.buildPath( button ),
@@ -174,10 +173,8 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 				item.find( '.image' ).attr( 'title', data.title || '' );
 			},
 			onStart: function() {
-				console.dir(this.object);
 			},
 			onCreate: function(form) {
-				console.log(2);
 			}
 		});
 		obj.start();
@@ -256,7 +253,6 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
             dataType: 'json',
             url: Storm.getPath( Obj.stormModel ).getUri() + '/create/',
             done: function (e, data) {
-                console.dir(data.result);
                 Obj.appendItem( data.result.data );
             }
         }).bind('fileuploaddragover', function (e) {
@@ -300,52 +296,16 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 			img.attr( 'stormObject', data.id );
 			img.find( '.image' )
 			.attr( 'src', data.image.cms ? data.image.cms.uri : '/static/i/admin/1x1.gif' )
-			.attr('largeSrc', data.image.large.uri)
+			.attr('largeSrc', data.image.original.uri)
 			.attr( 'title', data.title || '' )
 			.attr( 'width', data.image.cms ? data.image.cms.width : 50 )
 			.attr( 'height', data.image.cms ? data.image.cms.height : 50 );
 
 			img.find('.zoom-item-a')
-			.attr('href', data.image.large.uri)
+			.attr('href', data.image.original.uri)
 			.attr('title', data.title || '' )
 			.attr('rel', 'section_' + data.section);
 
 			img.show();
-	}
-});
-
-// Видеогалерея
-Madone.VideoGallery = Object.create( Madone.ImageGallery ).extend({
-onEditClick: function(event, Form, button) {
-		Object.create( Storm.Form ).extend( {
-			object: Storm.buildPath( button ),
-			form: Form.getItemFormTemplate(),
-			item: $( button ).parents( '.thumb' ),
-			onFill: function ( form, data ) {
-				var desiredWidth = 120;
-				form.find( '.image' )
-				.attr( 'src', data.movie ? data.movie.preview_uri : '/static/i/admin/1x1.gif' )
-				.attr( 'width', data.movie ? desiredWidth : 120 )
-				.attr( 'height', data.movie ? data.movie.height * desiredWidth / data.movie.width : 120 );
-			},
-			onFillItem: function( item, data ) {
-				item.find( '.image' ).attr( 'title', data.title || '' );
-			}
-		}).start();
-	},
-	appendItem: function ( data ) {
-		if( ! this.form.find( '.gallery .thumb, .gallery .gallery-form' ).size() ) {
-			this.form.find( '.gallery' ).html('').removeClass( 'empty' );
-		}
-		var img = this.getItemTemplate();
-		this.form.find( '.gallery' ).append( img );
-		img.attr( 'stormObject', data.id );
-		var desiredWidth = 120;
-		img.find( '.image' )
-		.attr( 'src', data.movie ? data.movie.preview_uri : '/static/i/admin/1x1.gif' )
-		.attr( 'title', data.title || '' )
-		.attr( 'width', data.movie ? desiredWidth : 120 )
-		.attr( 'height', data.movie ? data.movie.height * desiredWidth / data.movie.width : 120 );
-		img.show();
 	}
 });
