@@ -20,6 +20,10 @@ class MadoneGallerySection extends StormKiModel
         );
     }
 
+    public function getFirstImage() {
+        return $this->images->order('position')->first();
+    }
+
     function beforeSave()
     {
     	if( ! $this->title ) {

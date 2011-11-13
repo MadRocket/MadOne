@@ -9,18 +9,12 @@ class MadoneShowcaseImage extends StormModel
     {
         return array
         (
-
 			'section'  => new StormFkDbField( array( 'model' => 'MadoneShowcaseItem', 'related' => 'images' ) ),
             'title'    => new StormCharDbField( array( 'maxlength' => 255 ) ),
 			'image' 	 => new StormImageDbField( array(	'path' => "/upload/images/showcase",
-													'variants' => array(
-														'large' => array( 'width' => 500, 'format'=> 'jpeg' ),
-														'small' => array( 'width' => 120, 'format'=> 'jpeg' ),
-														'cms'   => array( 'width' => 120, 'height' => 120, 'spacefill'=> true ),
-													),
-												 )
-			),
-			
+                                                    'variants' => array(
+														'cms'   => array( 'width' => 120, 'height' => 120, 'spacefill' => true ),
+													))),
 			'position' => new StormIntegerDbField(),
         );
     }
