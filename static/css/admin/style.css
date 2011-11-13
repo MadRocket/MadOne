@@ -63,6 +63,8 @@
 	margin: 0;
     padding: 7px 9px;
     margin-top: -1px;
+    min-height: 34px;
+    overflow: hidden;
 }
 .a-unit > div.a-unit-body:hover {
     background: #fce7be !important;
