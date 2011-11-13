@@ -119,7 +119,7 @@ class StormPaginator
 
         }
 
-        return new Template('paginator', array('paginator' => $this));
+        return Madone::twig(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default") )->loadTemplate('pager.twig')->render(array('pager' => $this));
     }
 
     /**

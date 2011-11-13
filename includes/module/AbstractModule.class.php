@@ -53,7 +53,7 @@ class AbstractModule {
             $file = "{$file}.twig";
         }
 
-        $twig = Madone::twig( array_merge($this->templatePath, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")) );
+        $twig = Madone::twig( array_merge($this->templatePath, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")) );
         
         return $twig->loadTemplate($file)->render($vars);
     }

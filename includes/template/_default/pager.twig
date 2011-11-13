@@ -1,0 +1,19 @@
+{% if pager.hasPages() %}
+    <div class="pagination">
+    <ul>
+    {% for i in pager.getPages() %}
+        {% if i.left is defined %}
+            <li class="p-prev"><a href="{{i.uri}}">&larr;</a></li>
+        {% elseif i.right is defined %}
+            <li class="p-next"><a href="{{i.uri}}">&rarr;</a></li>
+        {% elseif i.ellipsis is defined %}
+            <li><a class="disabled">...</a></li>
+        {% elseif i.uri is defined %}
+            <li><a href="{{i.uri}}">{{ i.title }}</a></li>
+        {% else %}
+            <li class="active"><a>{{ i.title }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    </div>
+{% endif %}
