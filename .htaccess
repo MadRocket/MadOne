@@ -1,8 +1,9 @@
 AddDefaultCharset utf-8
 
+AddType application/octet-stream .doc .docx .xls .xlsx .pdf
+
 RewriteEngine on
 
-# Отображение страниц сайта
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* ? [QSA,L]
