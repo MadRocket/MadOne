@@ -275,6 +275,9 @@ class Madone {
         if(class_exists($classname)) {
             return new $classname();
         }
+        else {
+            throw new Exception("Class {$classname} doesn't exists!");
+        }
     }
 
     function getTree($qs_name) {
