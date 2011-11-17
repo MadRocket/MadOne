@@ -77,14 +77,7 @@ img[align=right] {float:right; margin:0 0 .65em 1em}
 }
 .thumbnail img {
 	border: none !important;
-	background: url(/static/i/gallery-thmb.png) no-repeat;
 	padding: 6px 12px 12px 6px;
-}
-.thumbnail img.photo {
-	border: none !important;
-	background: url(/static/i/gallery-thmb.png) no-repeat;
-	padding: 6px;
-
 }
 .thumbnail .r {
 	float: left;
