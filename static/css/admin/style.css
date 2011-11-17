@@ -286,6 +286,10 @@ form.form-stacked div.actions {
     padding-left: 10px;
 }
 
+.topbar {
+    z-index: 9000;
+}
+
 .cke_skin_kama *, .cke_skin_kama a:hover, .cke_skin_kama a:link, .cke_skin_kama a:visited, .cke_skin_kama a:active {
     float: none;
 }
