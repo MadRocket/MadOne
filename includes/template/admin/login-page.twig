@@ -1,10 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD
 	HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
     <html lang="ru">
+    <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>{{ config.site_title }} &mdash; MadOne</title>
 
-        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.0.0.min.css">
+        <link rel="stylesheet" href="/media/bootstrap-1.4.0.css">
         <script type="text/javascript" src="/media/jquery-1.5.2.min.js"></script>
     </head>
     <body>
@@ -31,18 +32,18 @@
                             </div>
                         </form>
                         {% if login_attempt %}
-                                <div class="alert-message error">
-                                    <p>Неправильное имя или пароль.</p>
-                                </div>
-                            {% endif %}
+                            <div class="alert-message error">
+                                <p>Неправильное имя или пароль.</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+        $( document ).ready( function() {
+            $( 'input[name=_madone_login]' ).focus();
+        });
+        </script>
     </body>
-    <script type="text/javascript">
-    $( document ).ready( function() {
-        $( 'input[name=_madone_login]' ).focus();
-    });
-    </script>
 </html>
