@@ -2,7 +2,7 @@
 /**
  * Управление интернет-витриной
  */
-class Module_Showcase_Admin extends AbstractModule
+class Module_Showcase_Admin extends Madone_Module
 {
     /**
      * Получение содержимого административного интерфейса

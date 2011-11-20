@@ -4,7 +4,7 @@
  * @author \$Author$
  */
  
-class Module_Promo_Admin extends AbstractModule {
+class Module_Promo_Admin extends Madone_Module {
     function handleHtmlRequest($uri) {
         if(!empty($_POST['submit'])) {
             $promo = PromoImages()->create($_POST);

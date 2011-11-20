@@ -1,5 +1,5 @@
 <?
-class GuestbookModule extends AbstractModule {
+class GuestbookModule extends Madone_Module {
 	function handleHtmlRequest( $uri ) {
 		$paginator = new StormPaginator( MadoneGuestbookRecords()->orderDesc( 'date' ), 'core/paginator', 20 );
 		if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {

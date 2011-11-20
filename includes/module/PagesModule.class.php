@@ -1,6 +1,6 @@
 <?
 
-class PagesModule extends AbstractModule {
+class PagesModule extends Madone_Module {
 
     function handleHtmlRequest( $uri ) {
         // Получаем дерево страниц

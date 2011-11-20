@@ -1,6 +1,6 @@
 <?
 
-class Module_Gallery_Admin extends AbstractModule {
+class Module_Gallery_Admin extends Madone_Module {
 
     function handleHtmlRequest( $uri ) {
         // Получим дерево разделов

@@ -1,6 +1,6 @@
 <?
 
-class PasswordModule extends AbstractModule {
+class PasswordModule extends Madone_Module {
 
     function handleAjaxRequest( $uri ) {
 

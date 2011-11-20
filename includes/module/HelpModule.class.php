@@ -1,6 +1,6 @@
 <?
 
-class HelpModule extends AbstractModule {
+class HelpModule extends Madone_Module {
 
 }
 

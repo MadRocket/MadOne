@@ -2,7 +2,7 @@
 /**
     Прародитель модулей административного интерфейса
 */
-class AbstractModule {    
+class Madone_Module {
     
     protected $uri;
     protected $cmsUri;
@@ -18,7 +18,7 @@ class AbstractModule {
 
         // Проверим наличие имени
         if( ! $name ) {
-            throw new Exception( "MadoneModule cannot be constructed without a name" );
+            throw new Exception( "Madone_Module cannot be constructed without a name" );
         }
 
         // Получим всякие uri от запроса CMS

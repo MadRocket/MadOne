@@ -1,5 +1,5 @@
 <?php
-class Module_Feedback_Admin extends AbstractModule {
+class Module_Feedback_Admin extends Madone_Module {
 	function handleHtmlRequest( $uri ) {
 		$paginator = new StormPaginator( MadoneFeedbackMessages()->orderDesc( 'date' ), 20 );
 		if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {

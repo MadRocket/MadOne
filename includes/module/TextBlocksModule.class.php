@@ -1,6 +1,6 @@
 <?
 
-class TextBlocksModule extends AbstractModule {
+class TextBlocksModule extends Madone_Module {
 
     function handleHtmlRequest( $uri ) {
 

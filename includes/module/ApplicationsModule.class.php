@@ -4,9 +4,9 @@
  *
  * Модуль управления модулями
  *
- * @extends AbstractModule
+ * @extends Madone_Module
  */
-class ApplicationsModule extends AbstractModule {
+class ApplicationsModule extends Madone_Module {
 
     function handleHtmlRequest( $uri ) {
 		$apps = array();

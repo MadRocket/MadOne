@@ -4,9 +4,9 @@
  *
  * Модуль управления модулями
  *
- * @extends AbstractModule
+ * @extends Madone_Module
  */
-class ModulesModule extends AbstractModule {
+class ModulesModule extends Madone_Module {
 
     function handleHtmlRequest( $uri ) {
 		$modules = array();
@@ -29,7 +29,7 @@ class ModulesModule extends AbstractModule {
 			$modules = MadoneModules()->order('position')->all();    	
 
 			// Системые папки
-			$system_modules = array("AbstractModule", "WelcomeModule", "SettingsModule", "PasswordModule", "LogoutModule", "HelpModule" );
+			$system_modules = array("Madone_Module", "WelcomeModule", "SettingsModule", "PasswordModule", "LogoutModule", "HelpModule" );
 			
 			// Найдем неустановленные модули в системе
 			$modules_classnames = array();
@@ -333,10 +333,10 @@ class ModulesModule extends AbstractModule {
 /**
 * $instance->classname class.
 * 
-* @extends AbstractModule
+* @extends Madone_Module
 */
 
-class $instance->classname extends AbstractModule {
+class $instance->classname extends Madone_Module {
 
 }
 

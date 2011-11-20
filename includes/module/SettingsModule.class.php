@@ -1,6 +1,6 @@
 <?
 
-class SettingsModule extends AbstractModule {
+class SettingsModule extends Madone_Module {
 
     function handleAjaxRequest( $uri ) {
         try {
