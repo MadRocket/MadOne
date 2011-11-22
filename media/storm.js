@@ -841,7 +841,7 @@ Storm.Form.show = function () {
 	this.onShow( this.form );
 	
 	// Показываем саму форму
-	this.form.show();
+	this.form.slideDown();
 	
 	// Триггерим показ полей ввода
 	for( var name in this.inputs ) {
@@ -1027,16 +1027,17 @@ Storm.Form.cancel = function () {
  * Возвращает this
  */
 Storm.Form.hide = function ( showItem ) {
-	this.form.hide();
-	this.onHide( this.form );
-	
-	if( this.item && showItem ) {
-		this.item.show();
-	}
-	
-	this.onShowItem( this.item );
+	this.form.slideUp(Function.delegate(this,function(){
+        this.onHide( this.form );
 
-	this.destroy();
+        if( this.item && showItem ) {
+            this.item.show();
+        }
+
+        this.onShowItem( this.item );
+
+        this.destroy();
+    }));
 
 	return this;
 };
