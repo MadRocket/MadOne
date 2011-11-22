@@ -23,7 +23,7 @@ class Module_Showcase_Admin extends Madone_Module
 		$names = Mad::getUriPathNames();
 		if( $names && array_key_exists( 2, $names ) && is_numeric( $id = $names[2] ) ) {
 			if( $section = MadoneShowcaseSections()->get( $id ) ) {
-                $pagination = new StormPaginator( $section->items->order( 'title' )->order( 'id' ), 20 );
+                $pagination = new StormPaginator( $section->items->order( 'position' )->order( 'id' ), 20 );
 				return $this->getTemplate( 'items.twig', array(
 					'paginator' => $pagination,
 					'items' => $pagination->getObjects(),

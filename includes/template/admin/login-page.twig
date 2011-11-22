@@ -4,8 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>{{ config.site_title }} &mdash; MadOne</title>
-
-        <script type="text/javascript" src="http://yandex.st/jquery/1.6.4/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/admin/style.css"/>
     </head>
     <body>
         <div class="madone-content">
@@ -39,8 +38,9 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="http://yandex.st/jquery/1.6.4/jquery.js"></script>
         <script type="text/javascript">
-        $( document ).ready( function() {
+        $(function() {
             $( 'input[name=_madone_login]' ).focus();
         });
         </script>

@@ -50,7 +50,15 @@
 .a-units > ol {
     margin: 0;
 }
-
+.a-units.sortable .a-unit {
+    cursor: move;
+    background-image: url(/static/i/admin/a-unit-sortable-bg.png);
+    background-position: 5px 11px;
+    background-repeat: no-repeat;
+}
+.a-units.sortable .a-unit-body {
+    padding-left: 17px;
+}
 .placeholder {
     list-style: none;
 }
@@ -58,9 +66,9 @@
 .a-unit {
 	display: inline-block;
 	width: 100%;
+    background-color: #fff;
 }
 .a-unit-body {
-	background: #fff; 
 	border: 1px solid #ddd;	
 	margin: 0;
     padding: 7px 9px;
