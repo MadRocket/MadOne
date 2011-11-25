@@ -9,9 +9,8 @@
 	<div class="createFormPlace"></div>
 
 	<div class="a-units" stormModel="PromoImage">
-        <ol id="sections">
         {% for item in items %}
-        <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+        <div class="a-unit" stormObject="{{ item.id }}" id="id-{{ item.id }}">
             <div class="a-unit-body{{ item.enabled ? '' : ' disabled'}}">
                 <div class="actions">
                     <img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
@@ -26,9 +25,8 @@
                 <h2 stromText="title">{{ item.title }}</h2>
                 <p stromText="title">{{ item.text|striptags|truncate(200) }}</p>
             </div>
-        </li>
+        </div>
         {% endfor %}
-        </ol>
 	</div>
 </div>
 
@@ -62,7 +60,7 @@
 	</div>
 </form>
 
-<li class="a-unit" id="section-template" style="display:none;">
+<div class="a-unit" id="section-template" style="display:none;">
     <div class="a-unit-body">
         <div class="actions">
 			<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
@@ -73,17 +71,31 @@
         <h2 stormText="title">Название раздела</h2>
         <p stormText="name">&nbsp;</p>
     </div>
-</li>
+</div>
 
 <script>
 $( function () {
-    $('#sections').nestedSortable(
-   	    Object.create( Madone.nestedSortableOptions ).extend({
-            stop: function(event, ui){
-                {#Storm.reorder( 'PromoImage', { id: {{ root.id }}, children: $('#sections').nestedSortable('toHierarchy') } );#}
-            }
-        })
-    );
+    $(".a-units").sortable({
+    		helper: 'clone',
+    		placeholder: 'ui-sortable-placeholder',
+    		forcePlaceholderSize: true,
+    		stop: function(event, ui) {
+    			var objects = {};
+
+                $.each( $(".a-units").sortable( 'toArray' ), function( i, n ) {
+                    var id = n.split( '-' );
+                    try {
+    		              objects[ parseInt( id[1] ) ] = { position: i + 1 };
+                    } catch( e ) { };
+                });
+
+    			$.post( "/admin/PromoImage/update/", { objects: JSON.stringify( objects ) }, function( r ) {
+    		        if( ! r.success ) {
+    		            alert( r.message );
+    		        }
+    	    	}, 'json' );
+    		}
+    	});
 
 	// Вкл/выкл раздела
 	$( '.enabled' ).click( function( e ) {
@@ -139,6 +151,7 @@ $( function () {
 			object:	Storm.buildPath( this ),
 			item:	$( this ).parents( '.a-unit-body' ),
 			onFill: function(form, data) {
+                form.append('<input type="hidden" name="id" value="' + data.id + '">');
 			    if(data.image) {
 			        form.find('.media-grid a').attr('href', data.image.original.uri);
 			        form.find('.media-grid .thumbnail').attr('src', "/temp/promo/image/thumbnail/" + data.image.original.name );
