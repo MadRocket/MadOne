@@ -36,7 +36,7 @@ class GallerySectionApplication extends Madone_Application {
 				if( $image ) {
 					$uri = $path ? '/' . join( '/', $path ) : '';
 				}
-			} catch( StormException $e ) {
+			} catch( Storm_Exception $e ) {
 			}
 		}
 

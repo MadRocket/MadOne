@@ -3,20 +3,20 @@
  *  Галерея
  */
 
-class MadoneGallerySection extends StormKiModel
+class MadoneGallerySection extends Storm_Model_Tree
 {
     static function definition()
     {
         return array
         (
-			'title'    => new StormCharDbField( array( 'maxlength' => 255, 'defaults' => array(
+			'title'    => new Storm_Db_Field_Char( array( 'maxlength' => 255, 'defaults' => array(
             	'ru' => 'Новый раздел',
             	'en' => 'New section',
             	) ) ),
-			'name'     => new StormCharDbField( array( 'localized' => false, 'maxlength' => 100, 'index' => true ) ),
-			'uri'      => new StormCharDbField( array( 'localized' => false, 'maxlength' => 600, 'index' => true ) ),
-			'text'	   => new StormTextDbField(),
-			'enabled'  => new StormBoolDbField( array( 'localized' => false, 'default' => 0, 'index' => 'nav' ) ),
+			'name'     => new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 100, 'index' => true ) ),
+			'uri'      => new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 600, 'index' => true ) ),
+			'text'	   => new Storm_Db_Field_Text(),
+			'enabled'  => new Storm_Db_Field_Bool( array( 'localized' => false, 'default' => 0, 'index' => 'nav' ) ),
         );
     }
 

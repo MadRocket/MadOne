@@ -30,11 +30,11 @@ class MadoneCmsApplication
         // Включаем нужный язык Storm
         if (MadoneSession::getInstance()->language) {
             try {
-                StormCore::setLanguage(MadoneSession::getInstance()->language);
+                Storm_Core::setLanguage(MadoneSession::getInstance()->language);
             }
-            catch (StormException $e) {
+            catch (Storm_Exception $e) {
                 // При установке языка произошла ошибка, следовательно язык плохой, инициализируем его языком по умолчанию
-                MadoneSession::getInstance()->language = StormCore::getLanguage();
+                MadoneSession::getInstance()->language = Storm_Core::getLanguage();
             }
         }
     }
@@ -67,10 +67,10 @@ class MadoneCmsApplication
         // Обрабатываем переключение языка
         if ($request->getType() == MadoneCmsRequest::LANG_SWITCH) {
             try {
-                StormCore::setLanguage($request->getObjectName());
-                MadoneSession::getInstance()->language = StormCore::getLanguage()->getName();
+                Storm_Core::setLanguage($request->getObjectName());
+                MadoneSession::getInstance()->language = Storm_Core::getLanguage()->getName();
             }
-            catch (StormException $e) {
+            catch (Storm_Exception $e) {
             }
             $location = array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $request->getCmsUri();
             header("Location: {$location}", true);

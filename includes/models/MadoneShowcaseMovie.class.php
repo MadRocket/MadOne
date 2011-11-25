@@ -3,22 +3,22 @@
  *  Галерея
  */
 
-class MadoneShowcaseMovie extends StormModel
+class MadoneShowcaseMovie extends Storm_Model
 {
     static function definition()
     {
         return array
         (
 
-			'section'	=> new StormFkDbField( array( 'model' => 'MadoneShowcaseItem', 'related' => 'movies' ) ),
-            'title'		=> new StormCharDbField( array( 'maxlength' => 255 ) ),
-			'movie'		=> new StormFlvDbField( array(
+			'section'	=> new Storm_Db_Field_Fk( array( 'model' => 'MadoneShowcaseItem', 'related' => 'movies' ) ),
+            'title'		=> new Storm_Db_Field_Char( array( 'maxlength' => 255 ) ),
+			'movie'		=> new Storm_Db_Field_File_Flv( array(
 				'path'		=> '/upload/files/showcase',
 				'ffmpeg'	=> '/opt/local/bin/ffmpeg',
 				'width'		=> 320,
 				'height'	=> 240,
 			) ),
-			'position'	=> new StormIntegerDbField(),
+			'position'	=> new Storm_Db_Field_Integer(),
         );
     }
     

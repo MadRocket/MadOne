@@ -1,14 +1,14 @@
 <?
-class MadoneFeedbackMessage extends StormModel {
+class MadoneFeedbackMessage extends Storm_Model {
     static function definition() {
 		return array(
-			'name'		=> new StormCharDbField( array( 'localized' => false, 'maxlength' => 255 ) ),
-			'email'		=> new StormCharDbField( array( 'localized' => false, 'maxlength' => 255 ) ),
-			'text'		=> new StormTextDbField( array( 'localized' => false ) ),
-			'answermd5'	=> new StormCharDbField( array( 'localized' => false, 'maxlength' => 32 ) ),
-			'answer'	=> new StormTextDbField( array( 'localized' => false, 'default' => '' ) ),
-			'date'		=> new StormDatetimeDbField( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
-			'enabled'	=> new StormBoolDbField( array( 'default' => 1 ) ),
+			'name'		=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 255 ) ),
+			'email'		=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 255 ) ),
+			'text'		=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
+			'answermd5'	=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 32 ) ),
+			'answer'	=> new Storm_Db_Field_Text( array( 'localized' => false, 'default' => '' ) ),
+			'date'		=> new Storm_Db_Field_Datetime( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
+			'enabled'	=> new Storm_Db_Field_Bool( array( 'default' => 1 ) ),
 		);
     }
     

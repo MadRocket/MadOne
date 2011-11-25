@@ -98,28 +98,28 @@ function loadStorm( $options )
     @set_include_path( join( PATH_SEPARATOR,  array_merge( $options['model_paths'], array( $options['storm_path'] ), array( get_include_path() ) ) ) );
 
     // Активируем автолоад
-    spl_autoload_register( array('StormAutoloadClass', 'autoload') );
+//    spl_autoload_register( array('StormAutoloadClass', 'autoload') );
 
     // Настраиваем конфигурацию
-    StormConfig::$db_backend   = "Storm".Config::$Db['db_backend']."DbConnection";
-    StormConfig::$db_mapper    = "Storm".Config::$Db['db_backend']."DbMapper";
-    StormConfig::$db_host      = Config::$Db['db_host'];
-    StormConfig::$db_port      = Config::$Db['db_port'];
-    StormConfig::$db_name      = Config::$Db['db_name'];
-    StormConfig::$db_user      = Config::$Db['db_user'];
-    StormConfig::$db_password  = Config::$Db['db_password'];
-    StormConfig::$db_charset   = Config::$Db['db_charset'];
-    StormConfig::$db_prefix    = Config::$Db['db_prefix'];
-    StormConfig::$db_debug     = Config::$Db['db_debug'];
+    Storm_Config::$db_backend   = "Storm_Db_Connection_".Config::$Db['db_backend'];
+    Storm_Config::$db_mapper    = "Storm_Db_Mapper_".Config::$Db['db_backend'];
+    Storm_Config::$db_host      = Config::$Db['db_host'];
+    Storm_Config::$db_port      = Config::$Db['db_port'];
+    Storm_Config::$db_name      = Config::$Db['db_name'];
+    Storm_Config::$db_user      = Config::$Db['db_user'];
+    Storm_Config::$db_password  = Config::$Db['db_password'];
+    Storm_Config::$db_charset   = Config::$Db['db_charset'];
+    Storm_Config::$db_prefix    = Config::$Db['db_prefix'];
+    Storm_Config::$db_debug     = Config::$Db['db_debug'];
 	
 	// Доступные локали
-    StormConfig::$locales = $options['locales'];
+    Storm_Config::$locales = $options['locales'];
 
     // Модели
-    StormConfig::$models = $options['models'];
+    Storm_Config::$models = $options['models'];
 
     // Регистрируем утилиты, и собственно этим и запускаем Storm в работу
-    StormCore::getInstance()->registerUtilities();
+    Storm_Core::getInstance()->registerUtilities();
 
     $_storm_loaded = true;
 }

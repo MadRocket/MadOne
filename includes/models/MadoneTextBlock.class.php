@@ -3,7 +3,7 @@
     Текстовый блок сайта
 */
 
-class MadoneTextBlock extends StormModel
+class MadoneTextBlock extends Storm_Model
 {
     static private $preview_length = 100;
 
@@ -11,10 +11,10 @@ class MadoneTextBlock extends StormModel
     {
         return array
         (
-            'name'         => new StormCharDbField( array( 'localized'=> false, 'maxlength' => 255, 'null' => false, 'index' => true ) ),
-        	'text'         => new StormTextDbField(),
-        	'preview'      => new StormCharDbField( array( 'maxlength' => self::$preview_length ) ),
-            'enabled'      => new StormBoolDbField( array( 'default' => 1, 'index' => true ) ),
+            'name'         => new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 255, 'null' => false, 'index' => true ) ),
+        	'text'         => new Storm_Db_Field_Text(),
+        	'preview'      => new Storm_Db_Field_Char( array( 'maxlength' => self::$preview_length ) ),
+            'enabled'      => new Storm_Db_Field_Bool( array( 'default' => 1, 'index' => true ) ),
         );
     }
     
@@ -22,7 +22,7 @@ class MadoneTextBlock extends StormModel
     {
         if( MadoneTextBlocks( array( 'name' => $this->name, 'id__ne' => $this->id ) )->count() )
         {
-            throw new StormValidationException( "Name '{$this->name}' is already in use", $this->meta->getField( 'name' ) );
+            throw new Storm_Exception_Validation( "Name '{$this->name}' is already in use", $this->meta->getField( 'name' ) );
         }
         $this->preview = Mad::getTextPreview( strip_tags( $this->text ), self::$preview_length );
     }

@@ -3,30 +3,30 @@
     Страница сайта
 */
 
-class MadonePage extends StormKiModel {
+class MadonePage extends Storm_Model_Tree {
     static function definition() {
         return array (
-            'title'		=> new StormCharDbField( array( 'maxlength' => 255, 'default' => 'Новая страница' )),
-			'name'		=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100, 'index' => true ) ),
-            'uri'		=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 700, 'index' => true ) ),
-        	'text'		=> new StormTextDbField( array( 'default' => '' ) ),
-        	'type'		=> new StormFkDbField( array( 
+            'title'		=> new Storm_Db_Field_Char( array( 'maxlength' => 255, 'default' => 'Новая страница' )),
+			'name'		=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 100, 'index' => true ) ),
+            'uri'		=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 700, 'index' => true ) ),
+        	'text'		=> new Storm_Db_Field_Text( array( 'default' => '' ) ),
+        	'type'		=> new Storm_Db_Field_Fk( array(
         									'model' => 'MadonePageType', 
         									'related' => 'pages', 
         									'null' => false, 
         									'index' => true, 
         									'default_callback' => "return MadonePageTypes()->order( 'position' )->first();" ) ),
 
-            'template' => new StormCharDbField( array('maxlength' => 255, 'localized' => false, 'default' => 'default') ),
+            'template' => new Storm_Db_Field_Char( array('maxlength' => 255, 'localized' => false, 'default' => 'default') ),
 
-        	'app_settings'	=> new StormTextDbField( array( 'localized' => false ) ),
+        	'app_settings'	=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
 
-            'menu'			=> new StormBoolDbField( array( 'default' => 1, 'index' => 'nav' ) ),
-            'enabled'		=> new StormBoolDbField( array( 'localized'=> true, 'default' => 0, 'index' => 'nav' ) ),
+            'menu'			=> new Storm_Db_Field_Bool( array( 'default' => 1, 'index' => 'nav' ) ),
+            'enabled'		=> new Storm_Db_Field_Bool( array( 'localized'=> true, 'default' => 0, 'index' => 'nav' ) ),
 
-            'meta_title'          => new StormTextDbField(),
-            'meta_keywords'       => new StormTextDbField(),
-            'meta_description'    => new StormTextDbField(),
+            'meta_title'          => new Storm_Db_Field_Text(),
+            'meta_keywords'       => new Storm_Db_Field_Text(),
+            'meta_description'    => new Storm_Db_Field_Text(),
         );
     }
     

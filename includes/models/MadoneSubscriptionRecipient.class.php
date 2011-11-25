@@ -2,12 +2,12 @@
 /**
  * Подписчик рассылки
  */
-class MadoneSubscriptionRecipient extends StormModel {
+class MadoneSubscriptionRecipient extends Storm_Model {
 	static function definition() {
 		return array(
-			'email'		=> new StormCharDbField( array( 'localized' => false, 'maxlength' => 255 ) ),
-			'date'		=> new StormDatetimeDbField( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
-			'enabled'	=> new StormBoolDbField( array( 'default' => 1 ) ),
+			'email'		=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 255 ) ),
+			'date'		=> new Storm_Db_Field_Datetime( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
+			'enabled'	=> new Storm_Db_Field_Bool( array( 'default' => 1 ) ),
 		);
 	}
 }

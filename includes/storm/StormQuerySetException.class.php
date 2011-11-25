@@ -1,8 +1,0 @@
-<?
-
-class StormQuerySetException extends StormException
-{
-
-}
-
-?>

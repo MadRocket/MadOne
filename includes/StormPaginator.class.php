@@ -1,6 +1,6 @@
 <?php
 /**
- * Постраничный навигатор по StormQuerySet-ам.
+ * Постраничный навигатор по Storm_Queryset-ам.
  * Использует шаблон, переданный в конструкторе.
  * Имеет магию приведения к строке для вывода HTML-кода.
  *
@@ -9,7 +9,7 @@
 class StormPaginator
 {
     private $linkmax = 10; // Максимальное количество выводимых на страницу ссылок
-    private $query; // StormQuerySet получения записей
+    private $query; // Storm_Queryset получения записей
     private $uri; // uri страницы, %{page} заменяется на номер страницы
     private $size; // размер страницы (количество выводимых одновременно позиций)
     private $page; // текущая выбранная страница
@@ -19,7 +19,7 @@ class StormPaginator
     private $count; // Количество объектов всего
     private $objects; // Объекты
 
-    function __construct(StormQuerySet $query, $size, $uri = null)
+    function __construct(Storm_Queryset $query, $size, $uri = null)
     {
         $this->query = $query;
         $this->size = $size;

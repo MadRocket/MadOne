@@ -162,7 +162,7 @@ class MadoneImageHelper {
         if( ! $isrc ) {
         	preg_match( '/([^\/]+)$/', $src, $m );
             return "";
-        	//throw new StormException( "Файл {$m[1]} не является изображением в формате png, jpg или gif." );
+        	//throw new Storm_Exception( "Файл {$m[1]} не является изображением в формате png, jpg или gif." );
         }
 
         # Получим размеры исходного изображения
@@ -287,7 +287,7 @@ class MadoneImageHelper {
 
         if( ! $success ) {
         	preg_match( '/([^\/]+)$/', $src, $m );
-			throw new StormException( "Ошибка при сохранении изображения {$m[1]}." );
+			throw new Storm_Exception( "Ошибка при сохранении изображения {$m[1]}." );
         }
 
         return array( $rW, $rH );

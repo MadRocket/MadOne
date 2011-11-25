@@ -17,11 +17,17 @@ class AutoloadException extends Exception { }
 class AutoloadClass {
     public static function autoload( $classname ) {
         if(mb_strpos($classname, '_') !== false) {
-            $classparts = explode('_', strtolower($classname) );
-            array_pop($classparts);
-            $path = join(DIRECTORY_SEPARATOR, $classparts) . DIRECTORY_SEPARATOR . $classname . ".php";
+            $classparts = explode('_', $classname );
+            $path = join(DIRECTORY_SEPARATOR, $classparts) . ".php";
+            if(file_exists("{$_SERVER['DOCUMENT_ROOT']}/includes/{$path}")) {
+                @include_once($path);
+            }
+            else {
+                array_pop($classparts);
+                $path = join(DIRECTORY_SEPARATOR, $classparts) . DIRECTORY_SEPARATOR . $classname . ".php";
+                @include_once($path);
+            }
 
-            @include_once($path);
         }
         else {
             @include_once( $classname . '.class.php' );

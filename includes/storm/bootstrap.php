@@ -6,7 +6,7 @@
 
 	                function MadoneModules( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneModule' );
+	                    $qs = new Storm_Queryset( 'MadoneModule' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -17,7 +17,7 @@
 
 	                function MadonePageTypes( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadonePageType' );
+	                    $qs = new Storm_Queryset( 'MadonePageType' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -28,7 +28,7 @@
 
 	                function MadonePages( $params = null )
 	                {
-	                    $qs = new StormKiQuerySet( 'MadonePage' );
+	                    $qs = new Storm_Queryset_Tree( 'MadonePage' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -39,7 +39,7 @@
 
 	                function MadoneTextBlocks( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneTextBlock' );
+	                    $qs = new Storm_Queryset( 'MadoneTextBlock' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -50,7 +50,7 @@
 
 	                function MadoneUsers( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneUser' );
+	                    $qs = new Storm_Queryset( 'MadoneUser' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -61,7 +61,7 @@
 
 	                function MadoneNewsList( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneNews' );
+	                    $qs = new Storm_Queryset( 'MadoneNews' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -72,7 +72,7 @@
 
 	                function MadoneGallerySections( $params = null )
 	                {
-	                    $qs = new StormKiQuerySet( 'MadoneGallerySection' );
+	                    $qs = new Storm_Queryset_Tree( 'MadoneGallerySection' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -83,7 +83,7 @@
 
 	                function MadoneGalleryImages( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneGalleryImage' );
+	                    $qs = new Storm_Queryset( 'MadoneGalleryImage' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -94,7 +94,7 @@
 
 	                function MadoneShowcaseSections( $params = null )
 	                {
-	                    $qs = new StormKiQuerySet( 'MadoneShowcaseSection' );
+	                    $qs = new Storm_Queryset_Tree( 'MadoneShowcaseSection' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -105,7 +105,7 @@
 
 	                function MadoneShowcaseItems( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneShowcaseItem' );
+	                    $qs = new Storm_Queryset( 'MadoneShowcaseItem' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -116,7 +116,7 @@
 
 	                function MadoneFeedbackMessages( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneFeedbackMessage' );
+	                    $qs = new Storm_Queryset( 'MadoneFeedbackMessage' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -127,7 +127,7 @@
 
 	                function MadoneTempImages( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneTempImage' );
+	                    $qs = new Storm_Queryset( 'MadoneTempImage' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -138,7 +138,7 @@
 
 	                function MadoneTempFiles( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneTempFile' );
+	                    $qs = new Storm_Queryset( 'MadoneTempFile' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -149,7 +149,7 @@
 
 	                function MadoneShowcaseImages( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneShowcaseImage' );
+	                    $qs = new Storm_Queryset( 'MadoneShowcaseImage' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -160,7 +160,7 @@
 
 	                function MadoneShowcaseMovies( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneShowcaseMovie' );
+	                    $qs = new Storm_Queryset( 'MadoneShowcaseMovie' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
@@ -171,7 +171,7 @@
 
 	                function MadoneSubscriptionRecipients( $params = null )
 	                {
-	                    $qs = new StormQuerySet( 'MadoneSubscriptionRecipient' );
+	                    $qs = new Storm_Queryset( 'MadoneSubscriptionRecipient' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                

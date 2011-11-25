@@ -1,9 +1,9 @@
 <?
-class MadoneGuestbookImage extends StormModel {
+class MadoneGuestbookImage extends Storm_Model {
 	static function definition() {
 		return array(
-			'record'	=> new StormFkDbField( array( 'model' => 'MadoneGuestbookRecord', 'related' => 'photos' ) ),
-			'image' 	 => new StormImageDbField( array(
+			'record'	=> new Storm_Db_Field_Fk( array( 'model' => 'MadoneGuestbookRecord', 'related' => 'photos' ) ),
+			'image' 	 => new Storm_Db_Field_File_Image( array(
 				'path' => "/upload/images/showcase",
 				'variants' => array(
 					'large' => array( 'width' => 600, 'height' => 600 ),
@@ -11,7 +11,7 @@ class MadoneGuestbookImage extends StormModel {
 					'cms'   => array( 'width' => 120, 'height' => 120, 'spacefill'=> true ),
 				),
 			) ),
-			'position' => new StormIntegerDbField(),
+			'position' => new Storm_Db_Field_Integer(),
 		);
 	}
 	

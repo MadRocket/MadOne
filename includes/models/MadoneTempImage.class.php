@@ -3,13 +3,13 @@
  * Временная картинка
  */
 
-class MadoneTempImage extends StormModel
+class MadoneTempImage extends Storm_Model
 {
     static function definition()
     {
         return array
         (
-			'image' 	=> new StormImageDbField( array( 
+			'image' 	=> new Storm_Db_Field_File_Image( array(
 													'path' 	=> "/upload/temp/images",
 												   	'variants' => array(
 														'cms'   => array( 'width' => 120, 'height' => 120, 'crop' => true ),
@@ -17,7 +17,7 @@ class MadoneTempImage extends StormModel
 												  )
 			),
 			
-			'date'  => new StormDatetimeDbField( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
+			'date'  => new Storm_Db_Field_Datetime( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
         );
     }
     

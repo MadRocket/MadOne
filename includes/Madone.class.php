@@ -28,7 +28,7 @@ class Madone {
     	
     	// Если режим разработки — синхронизируем модели
 		if( self::$developmentMode ) {
-			StormCore::sync();
+			Storm_Core::sync();
 		}
 	}
 	
@@ -61,7 +61,7 @@ class Madone {
 		self::$languages = array();
 		self::$langRegExp = '';
 		
-		foreach( StormCore::getAvailableLanguages() as $language ) {
+		foreach( Storm_Core::getAvailableLanguages() as $language ) {
 			if( ! array_key_exists( 'default', self::$languages ) ) {
 				self::$languages['default'] = $language;
 			} else {
@@ -79,19 +79,19 @@ class Madone {
 					$needle .= '/';
 				}
 				$_SERVER['REQUEST_URI'] = Mad::str_replace_once ( $needle, '', $_SERVER['REQUEST_URI'] );
-				StormCore::setLanguage( self::$languages[ $m[1] ] );
+				Storm_Core::setLanguage( self::$languages[ $m[1] ] );
 			}
 		} else {
 			self::$language = null;	// default language
-			StormCore::setLanguage( self::$languages['default'] );
+			Storm_Core::setLanguage( self::$languages['default'] );
 		}
 
 		// Выбираем локаль PHP в соответствии с локалью шторма
 /* 		setlocale( LC_ALL, StormCore::getLanguage()->getLocale() ); */
-/* FIXME: все кроме LC_NUMERIC, иначе ломется StormFloatDbField (значение не правильно эскейпится и поэтому теряется действительная часть, это происходит потому, что в русском разделитель - запятая, а во все мире - точка) */
-		setlocale( LC_COLLATE | LC_CTYPE | LC_MONETARY | LC_TIME | LC_MESSAGES, StormCore::getLanguage()->getLocale() );
+/* FIXME: все кроме LC_NUMERIC, иначе ломется Storm_Db_Field_Float (значение не правильно эскейпится и поэтому теряется действительная часть, это происходит потому, что в русском разделитель - запятая, а во все мире - точка) */
+		setlocale( LC_COLLATE | LC_CTYPE | LC_MONETARY | LC_TIME | LC_MESSAGES, Storm_Core::getLanguage()->getLocale() );
 		// Устанавливаем внутреннюю кодировку мультибайтовых функций
-		mb_internal_encoding( StormCore::getLanguage()->getCharset() );
+		mb_internal_encoding( Storm_Core::getLanguage()->getCharset() );
 	}
 	
     /**
@@ -234,7 +234,7 @@ class Madone {
 	 */
 	static function postprocess( $text ) {
 		// Добавляем lang-атрибут для текущего языка
-		$text = str_replace( '<html', '<html lang="'. StormCore::getLanguage()->getName() .'"', $text );
+		$text = str_replace( '<html', '<html lang="'. Storm_Core::getLanguage()->getName() .'"', $text );
 		
 		// Если включен язык, отличный от default — переписываем все ссылки кроме static
 		if( self::$language ) {
@@ -253,7 +253,7 @@ class Madone {
 	}
 	
 	static function isCurrentLanguage( $name ) {
-		return StormCore::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
+		return Storm_Core::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
 
     static function twig($path) {
@@ -281,7 +281,7 @@ class Madone {
     }
 
     function getTree($qs_name) {
-        $qs = new StormKiQuerySet( $qs_name );
+        $qs = new Storm_Queryset_Tree( $qs_name );
         return $qs;
     }
 }

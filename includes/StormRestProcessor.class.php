@@ -71,7 +71,7 @@ class StormRestProcessor {
 	                break;
 	
 	                case 'reorder':
-	                if( ! ( class_exists( $model ) && is_subclass_of( $model, 'StormKiModel' ) ) ) {
+	                if( ! ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ) {
 	                    throw new Exception( "Модель {$model} не имеет Ki-индекса, и упорядочить ее невозможно." );
 	                }
 	                StormQuerySet( $model )->reorder( json_decode( $vars['objects'], true ) );
@@ -102,7 +102,7 @@ class StormRestProcessor {
 	                            ]
 	                        }
 	                    ]
-	                    Вся эта структура преобразуется в последовательные запросы к соответствующему StormQuerySet-у.
+	                    Вся эта структура преобразуется в последовательные запросы к соответствующему Storm_Queryset-у.
 	                    Результат обрабатывается методом getJsonSafe и возвращается.
 	                    Можно применять финальные методы limit, first, all, tree, а можно и не применять — автоматически применится all.
 	                    Структура возвращается максимально соответствующая запросу — asArray( true ) для объектов, массивы для массивов.
@@ -207,10 +207,10 @@ class StormRestProcessor {
     
         if( is_object( $something ) ) {
 
-            if( $something instanceof StormModel ) {
+            if( $something instanceof Storm_Model ) {
                 $result = $something->asArray( true );
                 
-            } elseif( $something instanceof StormQuerySet ) {
+            } elseif( $something instanceof Storm_Queryset ) {
                 $result = $this->getJsonSafe( $something->all() );
 
             } else {

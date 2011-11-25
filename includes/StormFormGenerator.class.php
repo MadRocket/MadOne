@@ -21,32 +21,32 @@ class StormFormGenerator {
 		foreach($definition as $name => $def) {
 			print "\t<div class=\"block\">";
 			
-			if($def instanceof StormTextDbField) {
+			if($def instanceof Storm_Db_Field_Text) {
 				print "<label>{$name}</label><textarea name=\"{$name}\"></textarea>";
 			}
-			elseif($def instanceof StormCharDbField) {
+			elseif($def instanceof Storm_Db_Field_Char) {
 				print "<label>{$name}</label><input name=\"{$name}\" type=\"text\" class=\"width-100\" />";
 			}
-			elseif($def instanceof StormIntegerDbField) {
+			elseif($def instanceof Storm_Db_Field_Integer) {
 				print "<label>{$name}</label><input name=\"{$name}\" type=\"text\" class=\"width-100\" />";
 			}
-			elseif($def instanceof StormFloatDbField) {
+			elseif($def instanceof Storm_Db_Field_Float) {
 				print "<label>{$name}</label><input name=\"{$name}\" type=\"text\" class=\"width-100\" />";
 			}
-			elseif($def instanceof StormEnumDbField) {
+			elseif($def instanceof Storm_Db_Field_Enum) {
 				print "<label>{$name}</label><select name=\"{$name}\"></select>";
 			}
-			elseif($def instanceof StormBoolDbField) {
+			elseif($def instanceof Storm_Db_Field_Bool) {
 				print "<label><input name=\"{$name}\" type=\"checkbox\" /> &mdash; {$name}</label>";
 			}
-			elseif($def instanceof StormDatetimeDbField) {
+			elseif($def instanceof Storm_Db_Field_Datetime) {
 				print "<label>{$name}</label><input name=\"{$name}\" type=\"text\" datepicker=\"yes\" class=\"width-100\" />";
 			}
-			elseif($def instanceof StormImageDbField) {
+			elseif($def instanceof Storm_Db_Field_File_Image) {
 				print "<button class=\"upload-{$name} small-styled-button\"><b><b>Загрузить изображение</b></b></button>\n";
 				print "<img class=\"{$name}-preview\" src=\"\" style=\"display: none;\" />";
 			}
-			elseif($def instanceof StormFileDbField) {
+			elseif($def instanceof Storm_Db_Field_File) {
 				print "<button class=\"upload-{$name} small-styled-button\"><b><b>Загрузить файл</b></b></button>";
 				print "<div class=\"{$name}-filename\"></div>";
 			}

@@ -3,20 +3,20 @@
     Тип страницы сайта
 */
 
-class MadonePageType extends StormModel {
+class MadonePageType extends Storm_Model {
     private $instance=null;  // Инициализированный объект класса app_classname
 
     static function definition() {
         return array (
-            'title'			=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100 ) ),
-            'app_classname'	=> new StormCharDbField( array( 'localized'=> false, 'maxlength' => 100, 'default' => 'MadoneMadone_Application', 'index' => true ) ),
-            'settings'		=> new StormTextDbField( array( 'localized' => false ) ),
-            'enabled'		=> new StormBoolDbField( array( 'default' => true ) ),
-            'has_text'		=> new StormBoolDbField( array( 'default' => true ) ),
-            'has_meta'		=> new StormBoolDbField( array( 'default' => true ) ),
-            'position'		=> new StormIntegerDbField(),
-            'has_subpages'	=> new StormBoolDbField( array( 'default' => false ) ),
-            'priority'		=> new StormIntegerDbField( array( 'index' => true ) ),
+            'title'			=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 100 ) ),
+            'app_classname'	=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 100, 'default' => 'MadoneMadone_Application', 'index' => true ) ),
+            'settings'		=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
+            'enabled'		=> new Storm_Db_Field_Bool( array( 'default' => true ) ),
+            'has_text'		=> new Storm_Db_Field_Bool( array( 'default' => true ) ),
+            'has_meta'		=> new Storm_Db_Field_Bool( array( 'default' => true ) ),
+            'position'		=> new Storm_Db_Field_Integer(),
+            'has_subpages'	=> new Storm_Db_Field_Bool( array( 'default' => false ) ),
+            'priority'		=> new Storm_Db_Field_Integer( array( 'index' => true ) ),
         );
     }
     

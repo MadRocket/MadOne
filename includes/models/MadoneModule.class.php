@@ -4,16 +4,16 @@
  * Модуль административного интерфейса Madone
  * @extends StormModel
  */
-class MadoneModule extends StormModel {
+class MadoneModule extends Storm_Model {
     private $instance=null;  // Инициализированный объект модуля Madone, соответствующего classname
 
     static function definition() {
         return array (
-            'title'       => new StormCharDbField( array( 'localized' => false, 'maxlength' => 100, 'default' => 'Новый модуль' ) ),
-            'name'        => new StormCharDbField( array( 'localized' => false, 'maxlength' => 100, 'default' => 'new-module', 'index' => true ) ),
-            'classname'   => new StormCharDbField( array( 'localized' => false, 'maxlength' => 100, 'default' => 'AbstractModule' ) ),
-            'enabled'     => new StormBoolDbField( array( 'default' => true ) ),
-            'position'    => new StormIntegerDbField(),
+            'title'       => new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 100, 'default' => 'Новый модуль' ) ),
+            'name'        => new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 100, 'default' => 'new-module', 'index' => true ) ),
+            'classname'   => new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 100, 'default' => 'AbstractModule' ) ),
+            'enabled'     => new Storm_Db_Field_Bool( array( 'default' => true ) ),
+            'position'    => new Storm_Db_Field_Integer(),
         );
     }
     

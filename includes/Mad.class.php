@@ -329,10 +329,10 @@ class Mad
     
         if( is_object( $something ) ) {
 
-            if( $something instanceof StormModel ) {
+            if( $something instanceof Storm_Model ) {
                 $result = $something->asArray( true );
                 
-            } elseif( $something instanceof StormQuerySet ) {
+            } elseif( $something instanceof Storm_Queryset ) {
                 $result = self::getJsonSafe( $something->all() );
 
             } else {
