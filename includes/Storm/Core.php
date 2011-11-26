@@ -365,7 +365,7 @@ class Storm_Core
 	        function QNOT( $op )            { return new Storm_Qc_Not( $op ); }
 
 	        // Быстрое создание Storm_Queryset
-	        function StormQuerySet( $model ) { return ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ? new Storm_Queryset_Tree( $model ) : new Storm_Queryset( $model ); }
+	        function Storm_Queryset( $model ) { return ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ? new Storm_Queryset_Tree( $model ) : new Storm_Queryset( $model ); }
 
 	        // Утилиты для получения моделей и их Storm_Queryset-ов
 	        if(Storm_Config::$dev || !is_file(__DIR__.'/bootstrap.php')) {

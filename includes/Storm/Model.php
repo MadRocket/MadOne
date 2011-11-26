@@ -48,10 +48,10 @@ abstract class Storm_Model
     	$this->language = Storm_Core::getLanguage();
     
         // Генерируем метаинформацию модели
-        $this->getMeta() = new Storm_Model_Metadata( get_class( $this ), $this->getDefinition() );
+        $this->meta = new Storm_Model_Metadata( get_class( $this ), $this->getDefinition() );
 
         // Спросим у штормоядра какие модели ссылаются на нас и создадим связанные наборы данных
-        foreach( Storm_Core::getInstance()->getRelatedModels( $this->getMeta()->name ) as $r )
+        foreach( Storm_Core::getInstance()->getRelatedModels( $this->meta->name ) as $r )
         {
             // Создадим связанный источник данных
             $this->{ $r->related_queryset_name } = new Storm_Queryset_Fk( $r->set_model, $r->key_field_name, $this );
@@ -67,7 +67,7 @@ abstract class Storm_Model
         }
 
         // Установим значения полей по умолчанию
-		foreach( $this->getMeta()->getFields() as $name => $field ) {
+		foreach( $this->meta->getFields() as $name => $field ) {
 			$languages = $field->localized ? Storm_Core::getAvailableLanguages() : array( $this->language );
 			foreach( $languages as $language ) {
 				if( ! @array_key_exists( $language->getName(), self::$defaultValueCache[ get_class( $this ) ][ $name ] ) ) {
@@ -83,7 +83,7 @@ abstract class Storm_Model
         // Посмотрим, что за параметры пришли к нам и выполним установку значений полей
         if( ! is_array( $params ) )
         {
-            if( $params ) $this->getMeta()->setPkValue( $params );
+            if( $params ) $this->meta->setPkValue( $params );
         }
         else
         {
@@ -99,7 +99,7 @@ abstract class Storm_Model
     
 	protected function getLanguageProxy( $name ) {
 		if( ! array_key_exists( $name, $this->proxies ) ) {
-			throw new Storm_Exception( "В модели '{$this->getMeta()->name}' отсутствует языковой прокси '{$name}'." );
+			throw new Storm_Exception( "В модели '{$this->meta->name}' отсутствует языковой прокси '{$name}'." );
 		}
 		if( ! $this->proxies[ $name ] instanceof Storm_Model_Languageproxy ) {
 			$this->proxies[ $name ] = new Storm_Model_Languageproxy( $this, $this->proxies[ $name ] );
@@ -113,7 +113,7 @@ abstract class Storm_Model
     */
     function loaded()
     {
-        return $this->getMeta()->getPkValue() > 0;
+        return $this->meta->getPkValue() > 0;
     }
 
     /**
@@ -137,14 +137,14 @@ abstract class Storm_Model
         else
         {
             // Если поле с указанным именем у нас есть - устанавливаем его значение
-            if( $this->getMeta()->fieldExists( $name ) )
+            if( $this->meta->fieldExists( $name ) )
             {
-                $this->getMeta()->getField( $name )->setValue( $value );
+                $this->meta->getField( $name )->setValue( $value );
             }
             // Поля нет - exception
             else
             {
-                throw new Storm_Exception( "There is no '${name}' property in {$this->getMeta()->name} model" );
+                throw new Storm_Exception( "There is no '${name}' property in {$this->meta->name} model" );
             }
         }
     }
@@ -161,9 +161,9 @@ abstract class Storm_Model
         }
 
         // Выборка полей модели
-        if( $this->getMeta()->fieldExists( $name ) )
+        if( $this->meta->fieldExists( $name ) )
         {
-        	$return = & $this->getMeta()->getField( $name )->getValue();
+        	$return = & $this->meta->getField( $name )->getValue();
             return $return;
         }
         
@@ -177,11 +177,11 @@ abstract class Storm_Model
 		}
 
         // Поля нет - exception
-		throw new Storm_Exception( "There is no field '$name' in {$this->getMeta()->name} model"  );
+		throw new Storm_Exception( "There is no field '$name' in {$this->meta->name} model"  );
     }
 
     function __isset($name) {
-        return $this->getMeta()->fieldExists( $name );
+        return $this->meta->fieldExists( $name );
     }
     /**
         Представление объекта в виде строки - generic-овая версия.
@@ -189,7 +189,7 @@ abstract class Storm_Model
     */
     function __toString()
     {
-        return "{$this->getMeta()->name} ({$this->getMeta()->pkname}: ". ( is_null( $this->{ $this->getMeta()->pkname } ) ? 'NULL' : $this->{ $this->getMeta()->pkname } ).')';
+        return "{$this->meta->name} ({$this->meta->pkname}: ". ( is_null( $this->{ $this->meta->pkname } ) ? 'NULL' : $this->{ $this->meta->pkname } ).')';
     }
 
     /**
@@ -216,12 +216,12 @@ abstract class Storm_Model
     */
     public function copyFrom( array $source, $copy_pk = false )
     {
-        if( ! is_array( $source ) ) throw new Storm_Exception( "Cannot read data of {$this->getMeta()->name} model from {$source}" );
+        if( ! is_array( $source ) ) throw new Storm_Exception( "Cannot read data of {$this->meta->name} model from {$source}" );
 
-        foreach( $this->getMeta()->getFields() as $name => $field )
+        foreach( $this->meta->getFields() as $name => $field )
         {
             // Пропустим ключевое поле
-            if( ! $copy_pk && $name == $this->getMeta()->pkname ) continue;
+            if( ! $copy_pk && $name == $this->meta->pkname ) continue;
             if( array_key_exists( $name, $source ) ) $field->setValue( $source[ $name ] );
         }
 
@@ -233,7 +233,7 @@ abstract class Storm_Model
     *	В первую очередь метод предназначен для использования в Storm_Queryset::limit.
     */
     public function setValuesFromDatabase( array $source ) {
-        foreach( $this->getMeta()->getFields() as $name => $field ) {
+        foreach( $this->meta->getFields() as $name => $field ) {
 			if( array_key_exists( $name, $source ) ) {
 				if( $field->localized ) {
 					foreach( Storm_Core::getAvailableLanguages() as $language_name => $language ) {
@@ -268,7 +268,7 @@ abstract class Storm_Model
         }
 
         // Проверим, чтобы все NOT NULL поля кроме Storm_Db_Field_Auto были заполнены
-        foreach( $this->getMeta()->getFields() as $name => $field )
+        foreach( $this->meta->getFields() as $name => $field )
         {
             if( ! $field instanceof Storm_Db_Field_Auto && ! $field->null && is_null( $field->getValue() ) )
             {
@@ -277,14 +277,14 @@ abstract class Storm_Model
         }
 
         // Получим имя таблицы
-        $table = Storm_Core::getBackend()->escapeName( Storm_Core::getMapper()->getModelTable( $this->getMeta()->name ) );
+        $table = Storm_Core::getBackend()->escapeName( Storm_Core::getMapper()->getModelTable( $this->meta->name ) );
 
         // Подготовим массив данных модели
         $data = array();
-        foreach( $this->getMeta()->getFields() as $name => $field )
+        foreach( $this->meta->getFields() as $name => $field )
         {
             // Пропустим ключевое поле
-            if( $name == $this->getMeta()->pkname ) continue;
+            if( $name == $this->meta->pkname ) continue;
 
             // Получим значение поля
 			$field->beforeSave();
@@ -320,8 +320,8 @@ abstract class Storm_Model
         }
         
         // Получим имя и значение первичного ключа
-        $pkname = $this->getMeta()->pkname;
-        $pkvalue = $this->getMeta()->getPkValue();
+        $pkname = $this->meta->pkname;
+        $pkvalue = $this->meta->getPkValue();
 
         // флаг вставки новой записи
         $update_done = false;
@@ -385,7 +385,7 @@ abstract class Storm_Model
         // Если значение PK не было установлено - прочитаем его из last insert id БД
         if( is_null( $pkvalue ) )
         {
-            $this->getMeta()->setPkValue( Storm_Core::getBackend()->getLastInsertId( Storm_Core::getBackend()->cursor, Storm_Core::getMapper()->getModelTable( $this->getMeta()->name ), $pkname ) );
+            $this->meta->setPkValue( Storm_Core::getBackend()->getLastInsertId( Storm_Core::getBackend()->cursor, Storm_Core::getMapper()->getModelTable( $this->meta->name ), $pkname ) );
         }
 
         // Вызовем обработчик
@@ -405,8 +405,8 @@ abstract class Storm_Model
         if( method_exists( $this, 'beforeDelete' ) ) $this->beforeDelete();
 
         // Получим имя и значение первичного ключа
-        $pkname = Storm_Core::getBackend()->escapeName( $this->getMeta()->pkname );
-        $pkvalue = $this->getMeta()->getPkValue();
+        $pkname = Storm_Core::getBackend()->escapeName( $this->meta->pkname );
+        $pkvalue = $this->meta->getPkValue();
 
         // Проверим, чтобы ключевое поле было заполнено
         if( is_null( $pkvalue ) ) throw new Storm_Exception( "Primary key is not set, cannot delete a record" );
@@ -414,7 +414,7 @@ abstract class Storm_Model
         // Пройдемся по моделям, которые имеют нас в качестве foreign key и выполним очистку
 
         // Сначала - проверим все связи на not null
-        foreach( Storm_Core::getInstance()->getRelatedModels( $this->getMeta()->name ) as $r )
+        foreach( Storm_Core::getInstance()->getRelatedModels( $this->meta->name ) as $r )
         {
             // Посмотрим, может ли наше поле быть NULL
             $meta = Storm_Core::getInstance()->getStormModelMetadata( $r->set_model );
@@ -423,29 +423,29 @@ abstract class Storm_Model
                 // Поле NOT NULL, посмотрим, есть ли записи
                 if( $this->{ $r->related_queryset_name }->count() > 0 )
                 {
-                    throw new Storm_Exception( "Cannot delete instance of {$this->getMeta()->name} because it is referenced by {$meta->name} instance with NOT NULL constraint" );
+                    throw new Storm_Exception( "Cannot delete instance of {$this->meta->name} because it is referenced by {$meta->name} instance with NOT NULL constraint" );
                 }
             }
         }
 
         // Связи проверены, можно смело все удалить и обнулить
-        foreach( Storm_Core::getInstance()->getRelatedModels( $this->getMeta()->name ) as $r ) {
+        foreach( Storm_Core::getInstance()->getRelatedModels( $this->meta->name ) as $r ) {
             $this->{ $r->related_queryset_name }->clear();
         }
 
         // Получим имя таблицы
-        $table = Storm_Core::getBackend()->escapeName( Storm_Core::getMapper()->getModelTable( $this->getMeta()->name ) );
+        $table = Storm_Core::getBackend()->escapeName( Storm_Core::getMapper()->getModelTable( $this->meta->name ) );
 
         // Выполним запрос удаления нашей записи
         Storm_Core::getBackend()->cursor->execute( "DELETE FROM $table WHERE {$pkname}=%{pk}", array( 'pk'=>$pkvalue ) );
 
         // Удаление не прошло - exception
         if( ! Storm_Core::getBackend()->cursor->rowcount > 0 ) {
-            throw new Storm_Exception( "There is no {$this->getMeta()->name} with {$pkname} = {$pkvalue} in the database" );
+            throw new Storm_Exception( "There is no {$this->meta->name} with {$pkname} = {$pkvalue} in the database" );
         }
 
         // Выполним действия полей по удалению записи
-		foreach($this->getMeta()->getFields() as $key => $field) {
+		foreach($this->meta->getFields() as $key => $field) {
 			$field->beforeDelete();
 		}
 
@@ -461,7 +461,7 @@ abstract class Storm_Model
     */
     function getQuerySet()
     {
-        return new Storm_Queryset( $this->getMeta()->name );
+        return new Storm_Queryset( $this->meta->name );
     }
 
     /**
@@ -474,7 +474,7 @@ abstract class Storm_Model
     {
         $result = array();
 
-        foreach( $this->getMeta()->getFields() as $name => $field )
+        foreach( $this->meta->getFields() as $name => $field )
         {
             if( $full || ! $field instanceof Storm_Db_Field_Text )
             {
@@ -499,23 +499,7 @@ abstract class Storm_Model
     }
     
     function toTraceString() {
-    	return get_class( $this )."[ ". $this->getMeta()->getPkValue() ." ]";
-    }
-
-    /**
-     * @param \Storm_Model_Metadata $meta
-     */
-    public function setMeta($meta)
-    {
-        $this->meta = $meta;
-    }
-
-    /**
-     * @return Storm_Model_Metadata
-     */
-    public function getMeta()
-    {
-        return $this->meta;
+    	return get_class( $this )."[ ". $this->meta->getPkValue() ." ]";
     }
 
     /**

@@ -22,7 +22,7 @@ class StormRestProcessor {
     {
         try {
             // Проверим данные
-            if( ! ( class_exists( $model ) && is_subclass_of( $model, 'StormModel' ) ) ) {
+            if( ! ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model' ) ) ) {
                 throw new Exception( "Класс {$model} не является шторм-моделью и не может быть обработан." );
             } elseif( in_array( $model, $this->disallowedModels ) ) {
                 throw new Exception( "Доступ к модели {$model} запрещен." );
@@ -46,12 +46,12 @@ class StormRestProcessor {
 				switch( $names[0] ) {
 	                
 	                case 'create':
-					$data = StormQuerySet( $model )->create( ( count( $vars ) == 1 && array_key_exists( 'json_data', $vars ) ) ? json_decode( $vars['json_data'], true ) : $vars )->asArray();
+					$data = Storm_Queryset( $model )->create( ( count( $vars ) == 1 && array_key_exists( 'json_data', $vars ) ) ? json_decode( $vars['json_data'], true ) : $vars )->asArray();
 	                break;
 	
 	                case 'update':
 	                $objects = json_decode( $vars['objects'], true );
-	                foreach( StormQuerySet( $model )->filter( array( 'pk__in' => array_keys( $objects ) ) )->all() as $o ) {
+	                foreach( Storm_Queryset( $model )->filter( array( 'pk__in' => array_keys( $objects ) ) )->all() as $o ) {
 	                    $o->copyFrom( $objects[ $o->meta->getPkValue() ] )->save();
 	                    unset( $objects[ $o->meta->getPkValue() ] );
 	                }
@@ -63,7 +63,7 @@ class StormRestProcessor {
 	                foreach( json_decode( $vars['objects'], true ) as $id ) {
 	                    $objects[ $id ] = $id;
 	                }
-	                foreach( StormQuerySet( $model )->filter( array( 'pk__in' => $objects ) )->all() as $o ) {
+	                foreach( Storm_Queryset( $model )->filter( array( 'pk__in' => $objects ) )->all() as $o ) {
 	                    $o->delete();
 	                    unset( $objects[ $o->meta->getPkValue() ] );
 	                }
@@ -74,7 +74,7 @@ class StormRestProcessor {
 	                if( ! ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ) {
 	                    throw new Exception( "Модель {$model} не имеет Ki-индекса, и упорядочить ее невозможно." );
 	                }
-	                StormQuerySet( $model )->reorder( json_decode( $vars['objects'], true ) );
+	                Storm_Queryset( $model )->reorder( json_decode( $vars['objects'], true ) );
 	                break;
 	
 	                case 'retrieve':
@@ -108,7 +108,7 @@ class StormRestProcessor {
 	                    Структура возвращается максимально соответствующая запросу — asArray( true ) для объектов, массивы для массивов.
 	                    */
 	                
-	                    $query = StormQuerySet( $model );
+	                    $query = Storm_Queryset( $model );
 	                    
 	                    if( $vars['query'] ) {
 	                        // Фильтруем, фильтруем, фильтруем
@@ -173,7 +173,7 @@ class StormRestProcessor {
     *   Получение объекта модели
     */
     protected function getModelObject( $model, $id ) {
-        $object = StormQuerySet( $model )->get( $id );
+        $object = Storm_Queryset( $model )->get( $id );
         
         if( ! $object ) {
             throw new Exception( "Объект {$model} с идентификатором {$id} не найден." );

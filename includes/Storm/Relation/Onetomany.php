@@ -7,7 +7,7 @@
     У модели получателя должно появиться специальное поле для быстрого доступа к данным из его источников.
     Эти сведения и хранятся экземпляром класса Storm_Relation_Onetomany.
     Пример связи: new Storm_Relation_Onetomany( 'Owner', 'owner_id', 'Car', 'cars' );
-    В модели Owner будет поле cars для достаупа к RelatedStormQuerySetу с амтомобилями
+    В модели Owner будет поле cars для достаупа к RelatedStorm_Querysetу с амтомобилями
     А у модели Car будет поле owner_id с идентификатором владельца
 */
 

@@ -1,7 +1,7 @@
 <?
 
 /**
- * StormQuerySet class.
+ * Storm_Queryset class.
  * Запрашивалка данных модели.
  */
 class Storm_Queryset
@@ -24,7 +24,7 @@ class Storm_Queryset
 
     /**
         Конструктор.
-        $model -  имя модели, для которой конструируется StormQuerySet.
+        $model -  имя модели, для которой конструируется Storm_Queryset.
     */
     function __construct( $model )
     {
@@ -42,7 +42,7 @@ class Storm_Queryset
     }
 
     /**
-        Получение копии StormQuerySet-а
+        Получение копии Storm_Queryset-а
     */
     function __clone()
     {
@@ -295,7 +295,7 @@ class Storm_Queryset
         // Клонируем себя, чтобы остаться неизменным
         $next = clone $this;
 
-        // Добавляем параметров следующему в цепочке StormQuerySet-у
+        // Добавляем параметров следующему в цепочке Storm_Queryset-у
         $qc = $params instanceof Storm_Qc ? $params : new Storm_Qc( $params );
         $next->qc = $next->qc ? ( $embrace ? QOR( $next->qc, $qc ) : QAND( $next->qc, $qc ) ) : $qc;
 
@@ -579,8 +579,8 @@ class Storm_Queryset
         // Проверим кеш
         if( $use_cache && ( $obj = $this->getCached( $params ) ) !== false ) return $obj;
 
-        // Создадим пустой StormQuerySet
-        $query_set = new StormQuerySet( $this->model );
+        // Создадим пустой Storm_Queryset
+        $query_set = new Storm_Queryset( $this->model );
 
         // Выбираем один объект
         $objects = $query_set->filter( $params )->limit( 1 );

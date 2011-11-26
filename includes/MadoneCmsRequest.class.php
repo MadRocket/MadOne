@@ -46,7 +46,7 @@ class MadoneCmsRequest {
         $this->cmsUri = '/'.join( '/', $this->cmsUri );
         
         // Если следующее имя начинается с заглавной буквы — это обращение к модели
-        if( array_key_exists(0, $names) && preg_match( '/^[A-Z]/', $names[0] ) && class_exists( $names[0] ) && is_subclass_of( $names[0], 'StormModel' ) ) {
+        if( array_key_exists(0, $names) && preg_match( '/^[A-Z]/', $names[0] ) && class_exists( $names[0] ) && is_subclass_of( $names[0], 'Storm_Model' ) ) {
             $this->type = self::MODEL;
         }
         // переключение языка

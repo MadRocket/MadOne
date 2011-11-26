@@ -2,7 +2,7 @@
 /**
  * MadoneSearchRecord class.
  * 
- * @extends StormModel
+ * @extends Storm_Model
  */
 class MadoneSearchRecord extends Storm_Model
 {

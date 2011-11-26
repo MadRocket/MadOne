@@ -25,7 +25,7 @@ class Storm_Db_Field_Value_Fk extends Storm_Db_Field_Value {
 	function & get() {
         // Проверим наличие instance
         if( ! $this->instance && ! is_null( $this->value ) ) {
-            $this->instance = StormQuerySet( $this->model )->get( $this->value );
+            $this->instance = Storm_Queryset( $this->model )->get( $this->value );
         }
         return $this->instance;
 	}

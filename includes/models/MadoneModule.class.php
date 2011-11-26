@@ -2,7 +2,7 @@
 /**
  * MadoneModule class.
  * Модуль административного интерфейса Madone
- * @extends StormModel
+ * @extends Storm_Model
  */
 class MadoneModule extends Storm_Model {
     private $instance=null;  // Инициализированный объект модуля Madone, соответствующего classname
