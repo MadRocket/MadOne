@@ -1,0 +1,27 @@
+<div class="module-content">
+<h1>Настройка</h1>
+{#
+<p style="margin-left: 9px;">
+	<label for="setting_module">После входа в систему</label>
+	<select id="setting_module">
+	<option value="0">показать страницу приветствия</option>
+	<?foreach( Model_Modules( array( enabled => true ) )->order( 'position' )->all() as $m ):?>
+	    <option value="<?=$m->id?>" <?= Model_Session::getInstance()->getUser()->setting_module && Model_Session::getInstance()->getUser()->setting_module->id == $m->id ? 'selected' : '' ?> >открыть раздел <?=$m->title?></option>
+	<?endforeach?>
+	</select>
+</p>
+#}
+</div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+    $("#setting_module").bind( 'change', function( e ) {
+        e.preventDefault();
+        $.post( "<?=$this->ajaxUri?>/module/", { module: $( this ).val() }, function( r ) {
+            if( ! r.success ) {
+                alert( r.message );
+            }
+        }, 'json' );
+    } );
+} );
+</script>

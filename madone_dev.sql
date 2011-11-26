@@ -147,8 +147,8 @@ VALUES
 	(11,'Каталог','ShowcaseApplication',NULL,1,6,0,1,1,2),
 	(12,'Каталог: поиск по каталогу','ShowcaseSearchApplication',NULL,1,8,0,1,1,2),
 	(13,'Подписка','SubscriptionApplication',NULL,0,12,1,1,1,2),
-	(14,'Фотогалерея: раздел фотогалереи','GallerySectionApplication','{\"model\": \"MadoneGallerySection\", \"filter\": \"id\"}',1,5,0,1,1,2),
-	(15,'Каталог: раздел каталога','ShowcaseSectionApplication','{\"model\": \"MadoneShowcaseSection\", \"filter\": \"id\"}',1,7,0,1,1,2),
+	(14,'Фотогалерея: раздел фотогалереи','GallerySectionApplication','{\"model\": \"Model_Gallerysection\", \"filter\": \"id\"}',1,5,0,1,1,2),
+	(15,'Каталог: раздел каталога','ShowcaseSectionApplication','{\"model\": \"Model_Showcasesection\", \"filter\": \"id\"}',1,7,0,1,1,2),
 	(16,'Поиск по сайту','SearchApplication',NULL,1,13,0,0,0,2);
 
 /*!40000 ALTER TABLE `madonepagetype` ENABLE KEYS */;

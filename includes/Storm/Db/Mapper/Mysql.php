@@ -157,6 +157,7 @@ class Storm_Db_Mapper_Mysql extends Storm_Db_Mapper
     */
     function getModelTable( $model )
     {
+        $model = preg_replace('~Model_~', '', $model);
         return ( Storm_Config::$db_prefix ? Storm_Config::$db_prefix : '' ). strtolower( $model );
     }
 

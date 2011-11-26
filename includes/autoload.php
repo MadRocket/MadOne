@@ -1,13 +1,8 @@
 <?php
-// require_once($_SERVER['DOCUMENT_ROOT']."/includes/3rdparty/dompdf/dompdf_config.inc.php");
 # Функции автоматической загрузки классов во время выполнения (autoload)
-
 # Тут нужно прописать полные пути к каталогам, в которых можно найти инклудные файлы
-$include_paths = array
-(
-    "{$_SERVER['DOCUMENT_ROOT']}/includes",
-    "{$_SERVER['DOCUMENT_ROOT']}/includes/applications",
-    "{$_SERVER['DOCUMENT_ROOT']}/includes/module",
+$include_paths = array (
+    "{$_SERVER['DOCUMENT_ROOT']}/includes"
 );
 
 # Исключение для обработки ошибок загрузки класса

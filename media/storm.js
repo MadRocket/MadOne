@@ -69,14 +69,14 @@ Storm.Query.get = function () {
  * На основе клонов Storm.Path строятся RESTfull URI запросов к штормпроцессору.
  */
 Storm.Path = {
-	model: null,	// Имя модели, например MadoneNews
+	model: null,	// Имя модели, например Model_News
 	object: null,	// Идентификатор объекта, например 16
 	field: null		// Имя поля объекта, например enabled
 };
 
 /**
  * Разбор строки — URI в собственные поля
- * path — исходная строка вида MadoneNews/16/enabled. Общий вид — имя_модели/идентификатор_объекта/имя_поля_объекта.
+ * path — исходная строка вида Model_News/16/enabled. Общий вид — имя_модели/идентификатор_объекта/имя_поля_объекта.
  *        имя поля или имя поля и идентификатор объекта могут отсутствовать.
  * Возвращает this
  */
@@ -370,7 +370,7 @@ Storm.structure = function ( path, onSuccess, onFailure ) {
 
 /**
  * Toggle булевого поля, адресуемого path
- * path - путь к полю объекта модели, типа MadoneNews/12/enabled
+ * path - путь к полю объекта модели, типа Model_News/12/enabled
  * onSuccess
  * onFailure
  * Возвращает this.

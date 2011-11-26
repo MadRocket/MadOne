@@ -6,6 +6,6 @@ require_once( "{$_SERVER['DOCUMENT_ROOT']}/includes/autoload.php" );
 header( 'Content-Type: image/png' );
 header( 'Cache-control: no-cache, no-store' );
 
-echo MadCaptcha::create()->getImage();
+echo Madone_Helper_Captcha::create()->getImage();
 
 ?>

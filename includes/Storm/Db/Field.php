@@ -108,7 +108,7 @@ abstract class Storm_Db_Field
     function & getValue( $language = null ) {
     	$value = $this->value->get( $language );
     	if(is_null( $value )) {
-    		return null;
+    		return $value;
     	}
     	else {
             $val = $value->get();

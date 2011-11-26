@@ -1,0 +1,167 @@
+<h1>Галерея</h1>
+
+<div class="module-buttons">
+	<button id="create-section-button" class="btn primary">Создать раздел</button>
+</div>
+
+<div class="module-content">
+
+	<div class="createFormPlace"></div>
+
+	<div class="a-units sortable" stormModel="Model_Gallerysection">
+        <ol id="sections">
+        {% for item in items %}
+            {{ _self.category(item, true) }}
+        {% endfor %}
+        </ol>
+	</div>
+</div>
+
+{% macro category(item, full) %}
+    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+            <div class="a-unit-body{{ item.enabled ? '' : ' disabled'}}">
+                <div class="actions">
+					<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
+                    <img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+					<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+                </div>
+                <h2 stromText="title">{{ item.title }}</h2>
+                <p stromText="title">{{ item.name }}</p>
+            </div>
+            {% if full %}
+            <ol>
+                {% for child in item.getChildren() %}
+                    {{ _self.category(child, full) }}
+                {% endfor %}
+            </ol>
+            {% endif %}
+    </li>
+{% endmacro %}
+
+
+<form id="section-form" class="a-unit-form form-stacked">
+	<div class="clearfix">
+	    <label>Название раздела:</label>
+	    <div class="input">
+	        <input class="span11" type="text" name="title"/>
+	    </div>
+    </div>
+	<div class="clearfix">
+	    <label>Название по-английски:</label>
+	    <div class="input">
+	        <input class="span11" type="text" name="name"/>
+        </div>
+    </div>
+	<div class="clearfix">
+	    <label>Описание:</label>
+	    <div class="input">
+	        <textarea class="width-100 height-300" rich="yes" name="text"></textarea>
+        </div>
+    </div>
+	<div class="actions">
+		<button class="submit btn primary">Сохранить</button>
+		<button class="cancel btn">Отмена</button>
+	</div>
+</form>
+
+<li class="a-unit" id="section-template" style="display:none;">
+    <div class="a-unit-body">
+        <div class="actions">
+			<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
+			<img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+			<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
+			<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+        </div>
+        <h2 stormText="title">Название раздела</h2>
+        <p stormText="name">name</p>
+    </div>
+</li>
+
+<script>
+$( function () {
+    $('#sections').nestedSortable(
+   	    Object.create( Madone.nestedSortableOptions ).extend({
+            stop: function(event, ui){
+                Storm.reorder( 'MadoneGallerySection', { id: {{ root.id }}, children: $('#sections').nestedSortable('toHierarchy') } );
+            }
+        })
+    );
+
+	// Вкл/выкл раздела
+	$( '.enabled' ).click( function( e ) {
+		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
+			if(data.enabled) {
+				$( this ).parents('.a-unit-body:first').removeClass('disabled');
+				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
+			}
+			else {
+				$( this ).parents('.a-unit-body:first').addClass('disabled');
+				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
+			}
+		}));
+	});
+
+	// Удаление раздела
+	$( '.delete' ).click( function( e ) {
+		var title = $( this ).parents( '.a-unit:first' ).find( 'h2:first' ).text();
+        if( confirm( 'Вы действительно хотите удалить раздел «' + title  + '»?' ) ) {
+			var nested = $( this ).parents( '.a-unit:first' ).find( '.a-unit' ).size();
+            if( nested ) {
+                if( ! confirm( Mad.decline( nested, '',
+					'«' + title +'» содержит еще %n вложенный раздел.',
+					'«' + title +'» содержит еще %n вложенных раздела.',
+					'«' + title +'» содержит еще %n вложенных разделов.' ) +
+					' Вы действительно хотите удалить их все?' ) )
+                return false;
+            }
+			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
+				$( this ).parents( '.a-unit:first' ).remove();
+			} ) );
+		}
+	} );
+
+	var sectionForm = Object.create( Storm.Form ).extend( {
+		form: $( '#section-form' ),
+		onFillItem: function ( item, data ) {
+			item.find( 'img.enabled' ).attr( 'src', data.enabled ? '/static/i/admin/icons/16/lamp-on.png' : '/static/i/admin/icons/16/lamp-off.png' );
+			if( ! data.enabled ) {
+				item.find( '.a-unit-body' ).addClass( 'disabled' );
+			}
+			item.attr( 'stormObject', data.id );
+			item.attr( 'id', 'a-unit-' + data.id );
+		}
+	} );
+
+    // Создание раздела
+    $( '#create-section-button' ).click( function ( e ) {
+        e.preventDefault();
+        Object.create( sectionForm ).extend( {
+            object:		'MadoneGallerySection',
+            formPlace:	$( '.createFormPlace' ),
+            item:		$( '#section-template' ),
+            itemPlace:	$( '#sections' )
+        } ).start();
+	} );
+
+    // Редактирование раздела
+    $( '.edit' ).bind( 'click', function( event ) {
+		event.preventDefault();
+		Object.create( sectionForm ).extend( {
+			object:	Storm.buildPath( this ),
+			item:	$( this ).parents( '.a-unit-body' )
+		} ).start();
+    } );
+
+    // Отображение нашей непростой формы списка изображений
+    $( '.image-list' ).bind( 'click', function( event ) {
+		Object.create( Madone.ImageGallery ).extend({
+			stormModel: 'MadoneGalleryImage',
+			PHPSESSID: '{{ sessid }}',
+			object:	Storm.buildPath( this ),
+			item:	$( this ).parents( '.a-unit-body' )
+		}).start();
+    } );
+});
+
+</script>

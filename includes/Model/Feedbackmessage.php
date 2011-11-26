@@ -1,0 +1,43 @@
+<?php
+class Model_Feedbackmessage extends Storm_Model {
+    static function definition() {
+		return array(
+			'name'		=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 255 ) ),
+			'email'		=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 255 ) ),
+			'text'		=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
+			'answermd5'	=> new Storm_Db_Field_Char( array( 'localized' => false, 'maxlength' => 32 ) ),
+			'answer'	=> new Storm_Db_Field_Text( array( 'localized' => false, 'default' => '' ) ),
+			'date'		=> new Storm_Db_Field_Datetime( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
+			'enabled'	=> new Storm_Db_Field_Bool( array( 'default' => 1 ) ),
+		);
+    }
+    
+    function beforeSave() {
+		if( ! $this->name ) {
+    		$this->name = 'Анонимный посетитель';
+    	}
+    	// Проверим ответ, отправим пользователю уведомление
+    	if( $this->email && $this->answer && md5( $this->answer ) != $this->answermd5 ) {
+    	
+			$mail = Outer_Email::create();
+			$mail->AddAddress( $this->email );
+			$mail->Subject = 'Ответ на Ваше сообщение';
+			$mail->Body = $this->answer;
+			$mail->Send();
+
+    		$this->answermd5 = md5( $this->answer );
+    		$this->enabled = false;
+    	}
+    }
+    
+    function afterSave( $new ) {
+    	// Уведомим админа о новом сообщении
+        if( $new ) {
+			$mail = Outer_Email::create();
+			$mail->AddAddress( Madone_Config::$i->{'admin_email'} );
+			$mail->Subject = 'Письмо с сайта '.$_SERVER['SERVER_NAME'];
+			$mail->Body = $this->name.( $this->email ? " ".$this->email : '' )."\n\n".$this->text;
+			$mail->Send();
+        }
+    }
+}

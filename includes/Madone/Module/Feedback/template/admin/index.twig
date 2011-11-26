@@ -1,0 +1,124 @@
+{% import 'macros.twig' as common %}
+<h1>Обратная связь</h1>
+<div class="module-content">
+
+	<div class="a-units a-unit-list" stormModel="Model_Feedbackmessage">
+        {% for item in items %}
+        <div class="a-unit">
+            <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
+                <div class="actions">
+                    <img title="Просмотреть" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                    <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+                </div>
+                <h2>{{ item.name }} {{ item.email }}</h2>
+                <p>{{ item.date }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if items is empty %}
+        <div class="alert-message info">
+            <p><strong>Сообщений нет.</strong> Видимо еще никто не пользовался формой обратной связи.</p>
+        </div>
+    {% endif %}
+
+    {{ common.pager(paginator) }}
+</div>
+
+<div class="a-unit" id="item-template" style="display:none;">
+	<div class="a-unit-body">
+		<div class="actions">
+			<img title="Просмотреть" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+			<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
+			<img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+		</div>
+		<h2>EMAIL</h2>
+		<p>DATE</p>
+	</div>
+</div>
+
+<form id="recipient-form" class="a-unit-form form-stacked" style="display:none;">
+	<div class="clearfix">
+	    <label>Имя:</label>
+	    <div class="input">
+	        <span text="name"></span>
+	    </div>
+    </div>
+    <div class="clearfix">
+	    <label>Email:</label>
+	    <div class="input">
+	        <span class="email"></span>
+	    </div>
+    </div>
+	<div class="clearfix">
+	    <label>Вопрос:</label>
+	    <div class="input">
+	        <pre text="text"></pre>
+        </div>
+    </div>
+    <div class="clearfix">
+	    <label>Ответ:</label>
+	    <div class="input">
+	        <textarea class="span11" name="answer">
+
+	        </textarea>
+	    </div>
+    </div>
+	
+	<div class="actions">
+		<button class="btn primary" name="submit" type="submit" value="1">Сохранить</button>
+		<button class="cancel btn">Отмена</button>
+	</div>
+</form>
+<script type="text/javascript">
+
+$( function() {
+	$( '.enabled' ).click( function( e ) {
+		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
+			if(data.enabled) {
+				$( this ).parents('.a-unit-body:first').removeClass('disabled');
+				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
+			}
+			else {
+				$( this ).parents('.a-unit-body:first').addClass('disabled');			
+				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
+			}	
+		}));
+	});
+	
+	$( '.delete' ).click( function( e ) {
+		if( confirm( 'Вы действительно хотите удалить сообщение?' ) ) {
+			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
+				$( this ).parents( '.a-unit' ).remove()
+			} ) );
+		}
+	} );
+	
+	$( '.edit' ).click( function( e ) {
+		Object.create( Storm.Form ).extend( {
+			form: $( '#recipient-form' ),
+			object: Storm.buildPath( this ),
+			item: $( this ).parents( '.a-unit-body' ),
+			onFill: function( form, data ) {
+				if( data.email ) {
+					form.find( '.email' ).html( '<a href="mailto:{email}">{email}</a>'.supplant( data ) );
+					form.find( 'textarea[name=answer]' ).parents( '.block:first').show();
+					form.find( '.submit' ).show();
+					form.find( '.cancel>b>b' ).text( 'Отмена' ).show();
+				}
+			},
+			onFillItem: function( item, data ) {
+				item.find( 'img.enabled' ).attr( 'src', data.enabled ?
+				'/static/i/admin/icons/16/lamp-on.png' :
+				'/static/i/admin/icons/16/lamp-off.png' );
+				if( ! data.enabled ) {
+					item.addClass( 'disabled' );
+				}
+			}
+		} ).start();
+	} )
+} )
+
+</script>

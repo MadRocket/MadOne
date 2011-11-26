@@ -6,10 +6,10 @@ require_once( "./includes/autoload.php" );
 require_once("./includes/Storm/loader.php");
 
 if( preg_match('~^/admin~', $_SERVER['REQUEST_URI']) ) {    
-    Madone::setErrorHandlers();
-    $app = new MadoneCmsApplication();
+    Madone_Core::setErrorHandlers();
+    $app = new Madone_Application_Cms();
     $app->run();
 }
 else {
-	Madone::run();
+	Madone_Core::run();
 }

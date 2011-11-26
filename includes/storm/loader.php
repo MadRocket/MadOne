@@ -6,12 +6,6 @@
 
 loadStorm( array
 (
-    // Путь к классам моделей
-    'model_paths' => array
-    (
-        "$_SERVER[DOCUMENT_ROOT]/includes/models",
-    ),
-
     // Путь к файлам самой библиотеки Storm
     'storm_path'  => "$_SERVER[DOCUMENT_ROOT]/includes/storm",
 
@@ -20,22 +14,21 @@ loadStorm( array
     Если указано только имя, источник данных получает имя '{ИмяМодели}s'. Модель Car из примера получит источник данных Cars. */
     'models' => array
     (
-        'MadoneModule',
-		'MadonePageType',
-        'MadonePage',
-        'MadoneTextBlock',
-        'MadoneUser',
-        array( 'MadoneNews', 'MadoneNewsList' ),
-		'MadoneGallerySection',
-		'MadoneGalleryImage',
-		'MadoneShowcaseSection',
-		'MadoneShowcaseItem',
-		'MadoneFeedbackMessage',
-		'MadoneTempImage',
-		'MadoneTempFile',		
-		'MadoneShowcaseImage',
-		'MadoneShowcaseMovie',
-		'MadoneSubscriptionRecipient',
+        'Model_Module',
+		'Model_Pagetype',
+        'Model_Page',
+        'Model_Textblock',
+        'Model_User',
+        array( 'Model_News', 'Model_Newslist' ),
+		'Model_Gallerysection',
+		'Model_Galleryimage',
+		'Model_Showcasesection',
+		'Model_Showcaseitem',
+		'Model_Feedbackmessage',
+		'Model_Tempimage',
+		'Model_Tempfile',
+		'Model_Showcaseimage',
+		'Model_Subscriptionrecipient',
 	),
     
 	// Список локалей системы. Должен содержать как минимум одну локаль.
@@ -51,38 +44,6 @@ loadStorm( array
     Далее — системные части загрузчика, ничего настраиваемого уже нет.
 ****************************************************************************************************/
 
-// Обработчик автолоада
-class StormAutoloadClass
-{
-    /**
-        Выполнение загрузки класса
-    */
-    public static function autoload( $classname )
-    {
-        // Подключаем файл, в котором должен лежать наш класс
-        @include_once( "{$classname}.class.php" );
-
-        //  Удалось ли загрузить класс?
-        if( class_exists( $classname ) )
-        {
-            // Если у класса есть метод init -  вызовем его для статической инициализации
-            if( method_exists( $classname, 'init' ) )
-            {
-                call_user_func( array( $classname, 'init' ), $classname );
-            }
-
-            // Если у класса есть метод destruct - запланируем его вызов при завершении скрипта
-            if( method_exists( $classname, 'destruct' ) )
-            {
-                register_shutdown_function( array( $classname, 'destruct' ) );
-            }
-
-            // Все в порядке
-            return;
-        }
-    }
-}
-
 $_storm_loaded = false;
 
 function loadStorm( $options )
@@ -91,26 +52,17 @@ function loadStorm( $options )
 	
     if( $_storm_loaded ) return;
 
-    // Выключаем magic_quotes_runtime, чтобы они не портили нам данные из БД
-    if( get_magic_quotes_runtime() ) set_magic_quotes_runtime( false );
-
-    // Активируем наши инклуды
-    @set_include_path( join( PATH_SEPARATOR,  array_merge( $options['model_paths'], array( $options['storm_path'] ), array( get_include_path() ) ) ) );
-
-    // Активируем автолоад
-//    spl_autoload_register( array('StormAutoloadClass', 'autoload') );
-
     // Настраиваем конфигурацию
-    Storm_Config::$db_backend   = "Storm_Db_Connection_".Config::$Db['db_backend'];
-    Storm_Config::$db_mapper    = "Storm_Db_Mapper_".Config::$Db['db_backend'];
-    Storm_Config::$db_host      = Config::$Db['db_host'];
-    Storm_Config::$db_port      = Config::$Db['db_port'];
-    Storm_Config::$db_name      = Config::$Db['db_name'];
-    Storm_Config::$db_user      = Config::$Db['db_user'];
-    Storm_Config::$db_password  = Config::$Db['db_password'];
-    Storm_Config::$db_charset   = Config::$Db['db_charset'];
-    Storm_Config::$db_prefix    = Config::$Db['db_prefix'];
-    Storm_Config::$db_debug     = Config::$Db['db_debug'];
+    Storm_Config::$db_backend   = "Storm_Db_Connection_".Madone_Config::$Db['db_backend'];
+    Storm_Config::$db_mapper    = "Storm_Db_Mapper_".Madone_Config::$Db['db_backend'];
+    Storm_Config::$db_host      = Madone_Config::$Db['db_host'];
+    Storm_Config::$db_port      = Madone_Config::$Db['db_port'];
+    Storm_Config::$db_name      = Madone_Config::$Db['db_name'];
+    Storm_Config::$db_user      = Madone_Config::$Db['db_user'];
+    Storm_Config::$db_password  = Madone_Config::$Db['db_password'];
+    Storm_Config::$db_charset   = Madone_Config::$Db['db_charset'];
+    Storm_Config::$db_prefix    = Madone_Config::$Db['db_prefix'];
+    Storm_Config::$db_debug     = Madone_Config::$Db['db_debug'];
 	
 	// Доступные локали
     Storm_Config::$locales = $options['locales'];
