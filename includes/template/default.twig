@@ -16,7 +16,7 @@
     </div>
     <div id="top-navigation">
         <ul class="sf-menu">
-        {% for item in madone.getTree('MadonePage').filterLevel(2, 0).filter({'enabled': 1, 'menu': 1}).kiOrder().tree() %}
+        {% for item in madone.getTree('Model_Page').filterLevel(2, 0).filter({'enabled': 1, 'menu': 1}).kiOrder().tree() %}
             <li{{ item.uri == page.uri ? ' class="current"' : '' }}><a href="{{ item.uri }}">{{ item.title|e }}</a></li>
         {% endfor %}
         </ul>

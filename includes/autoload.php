@@ -11,21 +11,9 @@ class AutoloadException extends Exception { }
 # Обработчик автолоада
 class AutoloadClass {
     public static function autoload( $classname ) {
-        if(mb_strpos($classname, '_') !== false) {
-            $classparts = explode('_', $classname );
-            $path = join(DIRECTORY_SEPARATOR, $classparts) . ".php";
-            if(file_exists("{$_SERVER['DOCUMENT_ROOT']}/includes/{$path}")) {
-                @include_once($path);
-            }
-            else {
-                array_pop($classparts);
-                $path = join(DIRECTORY_SEPARATOR, $classparts) . DIRECTORY_SEPARATOR . $classname . ".php";
-                @include_once($path);
-            }
-
-        }
-        else {
-            @include_once( $classname . '.class.php' );
+        $path = preg_replace('/_/', DIRECTORY_SEPARATOR, $classname);
+        if(is_file("{$_SERVER['DOCUMENT_ROOT']}/includes/{$path}.php")) {
+            include_once("{$path}.php");
         }
 
         if( class_exists( $classname ) || interface_exists( $classname ) ) {
