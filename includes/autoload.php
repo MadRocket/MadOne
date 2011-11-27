@@ -12,23 +12,9 @@ class AutoloadException extends Exception { }
 class AutoloadClass {
     public static function autoload( $classname ) {
         $path = preg_replace('/_/', DIRECTORY_SEPARATOR, $classname);
+
         if(is_file("{$_SERVER['DOCUMENT_ROOT']}/includes/{$path}.php")) {
             include_once("{$path}.php");
-        }
-
-        if( class_exists( $classname ) || interface_exists( $classname ) ) {
-            # Если у класса есть метод init -  вызовем его для статической инициализации
-            if( method_exists( $classname, 'init' ) ) {
-                call_user_func( array( $classname, 'init' ) );
-            }
-
-            # Если у класса есть метод destruct - запланируем его вызов при завершении скрипта
-            if( method_exists( $classname, 'destruct' ) ) {
-                register_shutdown_function( array( $classname, 'destruct' ) );
-            }
-
-            # Все в порядке
-            return;
         }
     }
 }
@@ -38,5 +24,3 @@ set_include_path( join( PATH_SEPARATOR,  array_merge( $include_paths, array( get
 
 # Активируем автолоад
 spl_autoload_register( array('AutoloadClass', 'autoload') );
-
-?>

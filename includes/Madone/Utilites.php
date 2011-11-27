@@ -11,7 +11,7 @@ class Madone_Utilites
     /**
     * Инициализация класса
     */
-    static function init()
+    static function _init()
     {
         // Прочитаем массивы $_GET, $_POST и $_FILES в общий, сохраняя ссылки на оригинальные элементы оригинальных массивов
         foreach( $_GET as $k => $v )
@@ -54,6 +54,9 @@ class Madone_Utilites
     */
     static function & vars( $name = null )
     {
+        if(! self::$vars) {
+            self::_init();
+        }
     	if($name) {
     		return self::$vars[ $name ];
     	}

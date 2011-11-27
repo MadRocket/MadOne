@@ -11,7 +11,7 @@ class Madone_Core {
     /**
      *	Инициализация класса
      */
-	static function init() {
+	static function _init() {
 		// Определим нужно ли влючать режим разработки
 		self::detectDevelompentMode();
 	
@@ -100,6 +100,8 @@ class Madone_Core {
      *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
      */
     static function run() {
+        self::_init();
+
 		// Тут будут условия фильтрации страниц
 		$filter = null;
 		
@@ -256,7 +258,7 @@ class Madone_Core {
 
     static function twig($path) {
         $twig = Outer_Twig::get($path);
-        $twig->addGlobal('config', Madone_Config::$i);
+        $twig->addGlobal('config', Madone_Config::getInstance());
         $twig->addGlobal('server', Madone_Utilites::server());
 
         $twig->addGlobal('madone_image_helper', new Madone_Helper_Image());

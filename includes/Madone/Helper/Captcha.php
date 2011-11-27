@@ -27,7 +27,7 @@ class Madone_Helper_Captcha {
 	private $datakey = 'madcaptcha';
 	private $uri = '/includes/madcaptcha.php';
 	
-	static public function init() {
+	static public function _init() {
 		// Поскольку нет способа проверить наличие сессии, а session_start выдает notice, приходится использовать собаку T_T
 		if( ! @session_start() ) {
 			throw new Exception( 'Не удалось запустить сессию, работа MadCaptcha навозможна.' );

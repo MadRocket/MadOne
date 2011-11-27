@@ -17,15 +17,15 @@ class Storm_Core
     private $models; // массив зарегистрированных моделей
     private $querysets; // массив названий querysetов для моделей, ключ - имя модели
 
-    /**
-     * @var
-     */
     private $backend;
     /**
      * @var Storm_Db_Mapper
      */
     private $mapper;
 
+    /**
+     * @var \Storm_Language
+     */
     private $language; // текущий язык, включенный в ядре. Влияет на выборку и сохранение данных.
     private $languages; // массив доступных языков
 
@@ -116,11 +116,29 @@ class Storm_Core
         return self::getInstance()->languages;
     }
 
+    /*******************************
+    Системные методы — обеспечивают работу Storm как единого целого
+     ********************************/
+
     /**
-    Функция старта класса
+    Приватный конструктор — извне невозможно сконструировать экземпляр объекта.
      */
-    public static function init()
+    private function __construct()
     {
+        // Получим backend
+        $this->backend = new Storm_Config::$db_backend(array
+        (
+            'host' => Storm_Config::$db_host,
+            'port' => Storm_Config::$db_port,
+            'name' => Storm_Config::$db_name,
+            'user' => Storm_Config::$db_user,
+            'password' => Storm_Config::$db_password,
+            'charset' => Storm_Config::$db_charset,
+        ));
+
+        // Получим mapper
+        $this->mapper = new Storm_Config::$db_mapper();
+
         // Зарегистрируем все известные из конфига модели
         foreach (Storm_Config::$models as $def)
         {
@@ -135,30 +153,20 @@ class Storm_Core
             }
 
             // Запомним имя модели и querysetа
-            self::getInstance()->models[] = $classname;
-            self::getInstance()->querysets[$classname] = $querysetname;
+            $this->models[] = $classname;
+            $this->querysets[$classname] = $querysetname;
         }
 
-        foreach (self::getInstance()->models as $classname)
+        foreach ($this->models as $classname)
         {
             // Получим связи типа один-ко-многим, и сложим их в наше поле related.
             // Ключи в этом поле — модель, содержащая записи-ключи (one)
-            foreach (self::getInstance()->getStormOneToManyRelations($classname) as $relation)
+            foreach ($this->getStormOneToManyRelations($classname) as $relation)
             {
-                self::getInstance()->related[$relation->key_model][] = $relation;
+                $this->related[$relation->key_model][] = $relation;
             }
         }
-    }
 
-    /*******************************
-    Системные методы — обеспечивают работу Storm как единого целого
-     ********************************/
-
-    /**
-    Приватный конструктор — извне невозможно сконструировать экземпляр объекта.
-     */
-    private function __construct()
-    {
         // Сделаем пустой массив related
         $this->related = array();
 
@@ -175,20 +183,6 @@ class Storm_Core
                 $this->language = $language;
             }
         }
-
-        // Получим backend
-        $this->backend = new Storm_Config::$db_backend(array
-        (
-            'host' => Storm_Config::$db_host,
-            'port' => Storm_Config::$db_port,
-            'name' => Storm_Config::$db_name,
-            'user' => Storm_Config::$db_user,
-            'password' => Storm_Config::$db_password,
-            'charset' => Storm_Config::$db_charset,
-        ));
-
-        // Получим mapper
-        $this->mapper = new Storm_Config::$db_mapper();
     }
 
     /**
