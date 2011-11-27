@@ -100,7 +100,6 @@ class Madone_Core {
      *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
      */
     static function run() {
-		ob_start();
 		// Тут будут условия фильтрации страниц
 		$filter = null;
 		
@@ -137,7 +136,8 @@ class Madone_Core {
 		else {
 			$filter = Q( array( 'lvl' => 1 ) );
 		}
-		
+
+        ob_start();
 		// Выбираем страницы, сортируем так: сначала самые глубоко вложеные, среди одинаково вложенных — с большим приоритетом типа
 		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->order( 'type__priority' )->follow( 1 )->all() as $p ) {
 			// в $uri как раз оказывается полный uri запрошенной страницы :D
@@ -153,8 +153,8 @@ class Madone_Core {
 			}
 			// продолжаем обработку среди всех выбранных приложений, попадающих в этот же uri
 		}
-		
 		ob_end_clean();
+
 		// Не сработало ни одно приложение — ничего не найдено
 		Madone_Core::show404();
     }
@@ -234,10 +234,10 @@ class Madone_Core {
 		// Добавляем lang-атрибут для текущего языка
 		$text = str_replace( '<html', '<html lang="'. Storm_Core::getLanguage()->getName() .'"', $text );
 		
-		// Если включен язык, отличный от default — переписываем все ссылки кроме static
-		if( self::$language ) {
-			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text );
-		}
+// FIXME: i18n support Если включен язык, отличный от default — переписываем все ссылки кроме static
+//		if( self::$language ) {
+//			$text = preg_replace( '~("/)((?!static|'.self::$langRegExp.')[^"]*")~S', '$1'.self::$language.'/$2', $text );
+//		}
 		
 		return $text;
 	}
