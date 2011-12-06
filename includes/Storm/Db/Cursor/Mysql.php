@@ -214,6 +214,8 @@ class Storm_Db_Cursor_Mysql extends Storm_Db_Cursor
             $this->checkResult();
             return $this->position;
         }
+
+        return null;
     }
 }
 

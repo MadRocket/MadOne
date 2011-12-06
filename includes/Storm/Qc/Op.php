@@ -10,7 +10,10 @@ class Storm_Qc_Op
     */
     function __get( $name )
     {
-        if( property_exists( $this, $name ) ) return $this->$name;
+        if( property_exists( $this, $name ) ) {
+            return $this->$name;
+        }
+        return null;
     }
 
     /**

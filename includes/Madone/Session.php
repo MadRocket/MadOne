@@ -63,6 +63,8 @@ class Madone_Session
         
         // Читаем пользователя, если он есть
         $this->user = $this->session['user'] ? unserialize( $this->session['user'] ) : null;
+
+        return $this;
     }
     
     /**

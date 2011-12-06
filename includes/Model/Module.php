@@ -78,7 +78,7 @@ class Model_Module extends Storm_Model {
      * getInstance function.
      * Получение объекта модуля для административного интерфейса
      * @access private
-     * @return void
+     * @return Model_Module
      */
     private function getInstance() {
         if( ! $this->instance ) $this->instance = new $this->classname( $this->name );

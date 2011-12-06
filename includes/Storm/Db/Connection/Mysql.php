@@ -62,6 +62,8 @@ class Storm_Db_Connection_Mysql extends Storm_Db_Connection
             $this->handler = $handler;
             $this->cursor = NULL;
         }
+
+        return $this;
     }
 
     /**

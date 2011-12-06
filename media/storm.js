@@ -961,33 +961,35 @@ Storm.Form.processResponse = function ( response ) {
 };
 
 
-Storm.Form.createItem = function( response ) {
+Storm.Form.createItem = function (response) {
 
-	if( this.mode == 'create' && this.item ) {
-		// Клонируем объект, который будет добавлен вместо формы. Удаляем id.
-		this.item = this.item.clone( true ).hide().removeAttr( 'id' );
-		
-		if( this.itemPlace ) {
-			this.itemPlace.prepend( this.item );
-		} else {
-			this.formPlace.prepend( this.item );
-		}
-	}
+    if (this.mode == 'create' && this.item) {
+        // Клонируем объект, который будет добавлен вместо формы. Удаляем id.
+        this.item = this.item.clone(true).hide().removeAttr('id');
 
-	// Заполняем элемент
-	if( this.item && response ) {
-		for( var name in response ) {
-			if( response.hasOwnProperty( name ) ) {
-				try{
-					this.item.find( '[stormText=' + name + ']' ).text( this.response[ name ] );
-				} catch( e ) {};
-				try{
-					this.item.find( '[stormHtml=' + name + ']' ).html( this.response[ name ] );
-				} catch( e ) {};
-			};
-		};
-	};
-}
+        if (this.itemPlace) {
+            this.itemPlace.prepend(this.item);
+        } else {
+            this.formPlace.prepend(this.item);
+        }
+    }
+
+    // Заполняем элемент
+    if (this.item && response) {
+        for (var name in response) {
+            if (response.hasOwnProperty(name)) {
+                try {
+                    this.item.find('[stormText=' + name + ']').text(this.response[ name ]);
+                } catch (e) {
+                }
+                try {
+                    this.item.find('[stormHtml=' + name + ']').html(this.response[ name ]);
+                } catch (e) {
+                }
+            }
+        }
+    }
+};
 
 /**
  * Заполнение элемента данными с сервера, готовим его к отображению вместо формы

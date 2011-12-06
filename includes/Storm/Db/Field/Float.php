@@ -22,11 +22,11 @@ class Storm_Db_Field_Float extends Storm_Db_Field
                 throw new Storm_Exception_Validation( "'$string' is not valid float value", $this );
             }
 
-            return parent::setValue( (float)$string, $language );
+            parent::setValue( (float)$string, $language );
         }
         else
         {
-            return parent::setValue( $string, $language );
+            parent::setValue( $string, $language );
         }
     }
 }

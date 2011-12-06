@@ -50,6 +50,8 @@ class Model_Page extends Storm_Model_Tree {
                 $this->name = Madone_Utilites::getPathName( $this->title );
             }
         }
+
+        return $this;
     }
     
     function afterSave( $new ) {

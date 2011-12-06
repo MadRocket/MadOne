@@ -46,6 +46,7 @@ class Storm_Relation_Onetomany
         {
             return $this->{ $name };
         }
+        return null;
     }
 }
 

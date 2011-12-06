@@ -61,7 +61,7 @@ class Storm_Db_Field_Value_Datetime extends Storm_Db_Field_Value {
      *
      * @access private
      * @param mixed $name
-     * @return void
+     * @return mixed
      */
     function __get( $name ) {
     	if( ! is_null( $this->value ) ) {
@@ -89,7 +89,7 @@ class Storm_Db_Field_Value_Datetime extends Storm_Db_Field_Value {
      *
      * @access public
      * @param mixed $format
-     * @return void
+     * @return mixed
      */
     function format( $format ) {
     	return is_null( $this->value ) ? null : strftime( $format, $this->value );

@@ -51,4 +51,4 @@ Array.prototype.toString = Object.prototype.toString = function() {
 	}
 	
 	return contents;
-}
+};

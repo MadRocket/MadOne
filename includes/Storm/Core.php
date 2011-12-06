@@ -269,6 +269,8 @@ class Storm_Core
         if (property_exists($this, $name)) {
             return $this->$name;
         }
+
+        return null;
     }
 
     /**

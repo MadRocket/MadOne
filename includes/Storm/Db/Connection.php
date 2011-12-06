@@ -46,6 +46,7 @@ abstract class Storm_Db_Connection
             case 'handler': return $this->getHandler();
             case 'cursor': return $this->getCursor();
         }
+        return null;
     }
 }
 
