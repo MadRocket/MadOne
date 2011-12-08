@@ -6,7 +6,11 @@
 
 class Madone_Module_Pages_Application extends Madone_Application {
     function index() {
-        print $this->render("index-page.twig", array('page' => $this->page ));
+        $template = $this->page->template;
+        if(! $template) {
+            $template = $this->page->lvl == 1 ? "index.twig" : "default.twig";
+        }
+        print $this->render($template, array('page' => $this->page ));
         return true;
     }
 }

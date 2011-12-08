@@ -157,18 +157,18 @@ class Storm_Core
             $this->querysets[$classname] = $querysetname;
         }
 
-        foreach ($this->models as $classname)
-        {
+        // Сделаем пустой массив related
+        $this->related = array();
+
+        foreach ($this->models as $classname) {
             // Получим связи типа один-ко-многим, и сложим их в наше поле related.
             // Ключи в этом поле — модель, содержащая записи-ключи (one)
-            foreach ($this->getStormOneToManyRelations($classname) as $relation)
-            {
+            foreach ($this->getStormOneToManyRelations($classname) as $relation) {
                 $this->related[$relation->key_model][] = $relation;
             }
         }
 
-        // Сделаем пустой массив related
-        $this->related = array();
+
 
         // Починим список локалей, если он не указан
         if (!is_array(Storm_Config::$locales)) {
@@ -225,11 +225,14 @@ class Storm_Core
     }
 
     /**
-    Получение списка связей типа один-ко-многим, определенных заданной моделью
-    Возвращает массив объектов Storm_Relation_Onetomany
+     * Получение списка связей типа один-ко-многим, определенных заданной моделью
+     * Возвращает массив объектов
+     * @param $classname
+     * @return array Storm_Relation_Onetomany
      */
     private function getStormOneToManyRelations($classname)
     {
+
         // Получим поля модели
         $definition = call_user_func(array($classname, 'definition'));
 
