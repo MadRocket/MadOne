@@ -263,9 +263,6 @@ Madone.ImageGallery = Object.create( Storm.Form ).extend({
 	onFill: function ( form, data ) {
 		var Obj = this;
 
-		if( Madone.language !== 'ru' ) {
-			form.find( 'h2:first' ).append( $( '<i class="ru-hint">(' + data.RU.title + ')</i>' ) );
-		}
 		this.form.find( '.gallery' ).addClass( 'loading' );
 		// На заполнение формы загружаем список картинок и выводим их
 		var query = Object.create( Storm.Query ).use( 'filter', { section: data.id } ).use( 'order', 'position' );

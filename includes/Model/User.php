@@ -17,7 +17,7 @@ class Model_User extends Storm_Model
     
     function beforeSave()
     {
-        if( MadoneUsers( array( 'login' => $this->login, 'id__ne' => $this->id ) )->count() )
+        if( Model_Users( array( 'login' => $this->login, 'id__ne' => $this->id ) )->count() )
         {
             throw new Storm_Exception_Validation( "Login '{$this->login}' is already in use", $this->meta->getField( 'login' ) );
         }

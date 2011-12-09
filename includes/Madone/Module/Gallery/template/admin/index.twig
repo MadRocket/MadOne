@@ -83,7 +83,7 @@ $( function () {
     $('#sections').nestedSortable(
    	    Object.create( Madone.nestedSortableOptions ).extend({
             stop: function(event, ui){
-                Storm.reorder( 'MadoneGallerySection', { id: {{ root.id }}, children: $('#sections').nestedSortable('toHierarchy') } );
+                Storm.reorder( 'Model_Gallerysection', { id: {{ root.id }}, children: $('#sections').nestedSortable('toHierarchy') } );
             }
         })
     );
@@ -137,7 +137,7 @@ $( function () {
     $( '#create-section-button' ).click( function ( e ) {
         e.preventDefault();
         Object.create( sectionForm ).extend( {
-            object:		'MadoneGallerySection',
+            object:		'Model_Gallerysection',
             formPlace:	$( '.createFormPlace' ),
             item:		$( '#section-template' ),
             itemPlace:	$( '#sections' )
@@ -156,7 +156,7 @@ $( function () {
     // Отображение нашей непростой формы списка изображений
     $( '.image-list' ).bind( 'click', function( event ) {
 		Object.create( Madone.ImageGallery ).extend({
-			stormModel: 'MadoneGalleryImage',
+			stormModel: 'Model_Galleryimage',
 			PHPSESSID: '{{ sessid }}',
 			object:	Storm.buildPath( this ),
 			item:	$( this ).parents( '.a-unit-body' )
