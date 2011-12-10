@@ -50,7 +50,7 @@
 .a-units > ol {
     margin: 0;
 }
-.a-units.sortable .a-unit {
+.a-units.sortable .a-unit-body {
     cursor: move;
     background-image: url(/static/i/admin/a-unit-sortable-bg.png);
     background-position: 5px 11px;
@@ -76,8 +76,8 @@
     min-height: 34px;
     overflow: hidden;
 }
-.a-unit > div.a-unit-body:hover {
-    background: #fce7be !important;
+.a-unit > .a-unit-body:hover {
+    background-color: #fce7be !important;
 }
 
 .disabled p, .disabled h2, .disabled i {
