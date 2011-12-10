@@ -15,17 +15,16 @@
 </div>
 
 <div class="module-content">
-
-	<form id="mail-form" style="display:none;" class="a-unit-form" action="<?= $this->ajaxUri ?>" method="POST">
+	<form id="mail-form" class="a-unit-form form-stacked" action="<?= $this->ajaxUri ?>" method="post" enctype="multipart/form-data">
 		<div class="block"><label>Тема письма:</label><input class="width-100" type="text" name="title"/></div>
 		<div class="block"><label>Текст письма:</label><textarea class="width-100 height-200" name="text"></textarea></div>
 		<div class="block attachments" stormModel="Model_Tempfile"></div>
 		<div class="block">
-			<button class="attach small-styled-button" type="button"><b><b>Прикрепить файл</b></b></button>
+			<button class="attach small-styled-button" type="button">Прикрепить файл</button>
 		</div>
 		<div class="block">
-			<button class="submit small-styled-button" type="submit"><b><b>Выполнить рассылку</b></b></button>
-			<button class="cancel small-styled-button" type="button"><b><b>Отмена</b></b></button>		
+			<button class="btn primary submit" type="submit">Выполнить рассылку</button>
+			<button class="btn cancel" type="button">Отмена</button>
 		</div>
 	</form>
 

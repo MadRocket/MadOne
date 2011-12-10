@@ -17,7 +17,7 @@
 		{% endfor %}
     </div>
 
-    <form id="block-form" class="a-unit-form form-stacked">
+    <form id="block-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
         <h2 text="name">Имя блока</h2>
 		<div class="clearfix">
 		    <label>Текст</label>
@@ -26,8 +26,8 @@
 		    </div>
         </div>
 		<div class="actions">
-			<button class="submit btn primary">Сохранить</button>
-			<button class="cancel btn">Отмена</button>
+			<button type="submit" class="submit btn primary">Сохранить</button>
+			<button type="reset" class="cancel btn">Отмена</button>
 		</div>
     </form>
 {% else %}

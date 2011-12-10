@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-<form id="recipient-form" class="a-unit-form form-stacked" style="display:none;">
+<form id="recipient-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
 	<div class="clearfix">
 	    <label>Имя:</label>
 	    <div class="input">
@@ -68,8 +68,8 @@
     </div>
 	
 	<div class="actions">
-		<button class="btn primary" name="submit" type="submit" value="1">Сохранить</button>
-		<button class="cancel btn">Отмена</button>
+		<button class="btn primary" name="submit" type="submit">Сохранить</button>
+		<button class="cancel btn" type="reset">Отмена</button>
 	</div>
 </form>
 <script type="text/javascript">

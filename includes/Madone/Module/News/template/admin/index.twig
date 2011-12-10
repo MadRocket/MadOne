@@ -27,7 +27,7 @@
     {{ common.pager(paginator) }}
 </div>
 
-<form id="news-form" class="a-unit-form form-stacked">
+<form id="news-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
 	<div class="clearfix">
 	    <label>Заголовок новости:</label>
 	    <div class="input">
@@ -53,8 +53,8 @@
         </div>
     </div>
 	<div class="actions">
-		<button class="submit btn primary">Сохранить</button>
-		<button class="cancel btn">Отмена</button>
+		<button class="submit btn primary" type="submit">Сохранить</button>
+		<button class="cancel btn" type="reset">Отмена</button>
 	</div>
 </form>
 

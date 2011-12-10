@@ -586,25 +586,16 @@ Storm.Form.cloneForm = function () {
  */
 Storm.Form.bindFormActions = function () {
 	// Сабмит
-	this.form.find( this.submitButtonSelector ).bind( 'click', Function.delegate( this, function( event ) {
-		event.preventDefault();
-		this.submit();
-	} ) );
-	
-	// Отмена
-	this.form.find( this.cancelButtonSelector ).bind( 'click', Function.delegate( this, function( event ) {
-		event.preventDefault();
-		this.cancel();
-	} ) );
-	
-	// Сабмит по enter в текстовых однострочных полях
-//	this.form.find( 'input[type=text]' ).bind( 'keypress', Function.delegate( this, function( event ) {
-//		if( event.keyCode == 13 ) {
-//			$( event.target ).trigger( 'change' );
-//			this.submit();
-//		}
-//	} ) );
-	
+    this.form.bind('submit', Function.delegate( this, function( event ) {
+        event.preventDefault();
+        this.submit();
+    }));
+
+    this.form.bind('reset', Function.delegate( this, function( event ) {
+        event.preventDefault();
+        this.cancel();
+    }));
+
 	return this;
 };
 
