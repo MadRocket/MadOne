@@ -18,7 +18,7 @@ class Model_Page extends Storm_Model_Tree {
         									'default' => 0
             ) ),
 
-            'template' => new Storm_Db_Field_Char( array('maxlength' => 255, 'localized' => false, 'default' => 'default') ),
+            'template' => new Storm_Db_Field_Char( array('maxlength' => 255, 'localized' => false, 'default' => null) ),
 
         	'app_settings'	=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
 
