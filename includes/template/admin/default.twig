@@ -68,10 +68,10 @@
 
                 /* AJAX informer */
                 var timer = null;
-                $("#ajaxInfo").ajaxStart(function(){
-                    timer = setTimeout('$("#ajaxInfo").show();', 500);
+                $("#ajax-info").ajaxStart(function(){
+                    timer = setTimeout('$("#ajax-info").show();', 500);
                 });
-                $("#ajaxInfo").ajaxStop(function(){
+                $("#ajax-info").ajaxStop(function(){
                     clearTimeout(timer);
                     $(this).hide();
                 });
