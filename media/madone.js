@@ -4,7 +4,7 @@ var Madone = window.Madone = {};
 Madone.uri = /(\/[^\/]+)/.test( location.pathname ) ? RegExp.$1 : '';
 
 // Создание Визуального редактора
-Madone.createRichTextEditor = function( name, options ) {
+Madone.createRichTextEditor = function( id, options ) {
 	if( ! options ) {
 		options = {};
 	}
@@ -16,11 +16,8 @@ Madone.createRichTextEditor = function( name, options ) {
 	}
 
 	CKEDITOR.config.customConfig = '/media/ckeditor.config.js?20111023';
-	
-	var editor = CKEDITOR.replace( name );
 
-	editor.config.height = options.height;
-	return editor;
+	return $('#' + id).ckeditor(options);
 };
 
 Madone.useRichTextEditorAPI = function( instanceName, callback ) {
@@ -60,29 +57,6 @@ Madone.nestedSortableOptions = Object.create( Object.Extendable ).extend({
     tolerance: 'pointer',
     toleranceElement: '> div'
 });
-
-Madone.addAjaxLoader = function( object, position ) {
-	object = $( object );
-	var loaderHtml = '<img class="ajax-loader" src="' + '/static/i/admin/ajax-loader-e2e9fe.gif" />';
-	switch( position ) {
-		case 'inside':
-			if( ! object.find( '.ajax-loader' ).size() ) {
-				object.append( $( loaderHtml ) );
-			}
-			break;
-		default:
-			if( ! object.next( '.ajax-loader' ).size() ) {
-				object.after( $( loaderHtml ) );
-			}
-			break;
-	}
-	return this;
-};
-
-Madone.removeAjaxLoader = function( object ) {
-	$( object ).next( '.ajax-loader' ).remove().end().find( '.ajax-loader' ).remove();
-	return this;
-};
 
 Madone.enableRichTextareas = function( immediate ) {
 	var fckCnt = 1;

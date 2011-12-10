@@ -1,6 +1,6 @@
 @import "/static/css/admin/bootstrap-1.4.0.css";
 
-#ajaxInfo {
+#ajax-info {
 	/*background: #fce7be url(/static/i/admin/ajax-load.gif) 6px 8px no-repeat;*/
 	display: none;
     background: #fce7be;
