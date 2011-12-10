@@ -598,12 +598,12 @@ Storm.Form.bindFormActions = function () {
 	} ) );
 	
 	// Сабмит по enter в текстовых однострочных полях
-	this.form.find( 'input[type=text]' ).bind( 'keypress', Function.delegate( this, function( event ) {
-		if( event.keyCode == 13 ) {
-			$( event.target ).trigger( 'change' );
-			this.submit();
-		}
-	} ) );
+//	this.form.find( 'input[type=text]' ).bind( 'keypress', Function.delegate( this, function( event ) {
+//		if( event.keyCode == 13 ) {
+//			$( event.target ).trigger( 'change' );
+//			this.submit();
+//		}
+//	} ) );
 	
 	return this;
 };

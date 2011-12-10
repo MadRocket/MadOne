@@ -9,23 +9,20 @@
 
 
 <div class="module-content">
-
 	<div class="createFormPlace"></div>
-	
 	<div class="a-units sortable" stormModel="Model_Showcaseitem">
-	
 	{% for item in items %}
-	<div class="a-unit" id="id-{{item.id}}">
-	<div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{item.id}}">
-		<div class="actions">
-			<img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
-			<img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-			<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-			<img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
-		</div>
-		<h2 stormText="title">{{ item.title }}</h2>
-		<p stormText="price">{{ item.price }}</p>
-	</div>
+	<div class="a-unit" id="id-{{item.id}}" stormObject="{{item.id}}">
+        <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+            <div class="actions">
+                <img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
+                <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
+                <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
+                <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+            </div>
+            <h2 stormText="title">{{ item.title }}</h2>
+            <p stormText="price">{{ item.price }}</p>
+        </div>
 	</div>
 	{% endfor %}
 </div>
@@ -152,7 +149,7 @@ $( function() {
 				item.find( '.a-unit-body' ).addClass( 'disabled' );
 			}
 			item.attr( 'stormObject', data.id );
-			item.attr( 'id', 'a-unit-' + data.id );
+			item.attr( 'id', 'id-' + data.id );
 		}
 	} );
 	
