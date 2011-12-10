@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ * http://sourceforge.net/projects/phpmorphy
  * @author \$Author$
  */
  
