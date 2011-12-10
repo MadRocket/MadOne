@@ -48,7 +48,7 @@ class Twig_Extension_Core extends Twig_Extension
             // formatting filters
             'date'    => new Twig_Filter_Function('twig_date_format_filter'),
             'format'  => new Twig_Filter_Function('sprintf'),
-            'replace' => new Twig_Filter_Function('twig_strtr'),
+            'replace' => new Twig_Filter_Function('strtr'),
 
             // encoding
             'url_encode'       => new Twig_Filter_Function('twig_urlencode_filter'),
@@ -70,7 +70,9 @@ class Twig_Extension_Core extends Twig_Extension
             'merge'   => new Twig_Filter_Function('twig_array_merge'),
 
             // iteration and runtime
-            'default' => new Twig_Filter_Function('twig_default_filter'),
+            'default' => new Twig_Filter_Node('Twig_Node_Expression_Filter_Default'),
+            '_default' => new Twig_Filter_Function('_twig_default_filter'),
+
             'keys'    => new Twig_Filter_Function('twig_get_array_keys_filter'),
 
             // escaping
@@ -108,14 +110,14 @@ class Twig_Extension_Core extends Twig_Extension
     public function getTests()
     {
         return array(
-            'even'        => new Twig_Test_Function('twig_test_even'),
-            'odd'         => new Twig_Test_Function('twig_test_odd'),
-            'defined'     => new Twig_Test_Function('twig_test_defined'),
-            'sameas'      => new Twig_Test_Function('twig_test_sameas'),
-            'none'        => new Twig_Test_Function('twig_test_none'),
-            'null'        => new Twig_Test_Function('twig_test_none'),
-            'divisibleby' => new Twig_Test_Function('twig_test_divisibleby'),
-            'constant'    => new Twig_Test_Function('twig_test_constant'),
+            'even'        => new Twig_Test_Node('Twig_Node_Expression_Test_Even'),
+            'odd'         => new Twig_Test_Node('Twig_Node_Expression_Test_Odd'),
+            'defined'     => new Twig_Test_Node('Twig_Node_Expression_Test_Defined'),
+            'sameas'      => new Twig_Test_Node('Twig_Node_Expression_Test_Sameas'),
+            'none'        => new Twig_Test_Node('Twig_Node_Expression_Test_Null'),
+            'null'        => new Twig_Test_Node('Twig_Node_Expression_Test_Null'),
+            'divisibleby' => new Twig_Test_Node('Twig_Node_Expression_Test_Divisibleby'),
+            'constant'    => new Twig_Test_Node('Twig_Node_Expression_Test_Constant'),
             'empty'       => new Twig_Test_Function('twig_test_empty'),
         );
     }
@@ -147,6 +149,7 @@ class Twig_Extension_Core extends Twig_Extension
                 '<='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_LessEqual', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'not in' => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_NotIn', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'in'     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_In', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                '..'     => array('precedence' => 25, 'class' => 'Twig_Node_Expression_Binary_Range', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '+'      => array('precedence' => 30, 'class' => 'Twig_Node_Expression_Binary_Add', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '-'      => array('precedence' => 30, 'class' => 'Twig_Node_Expression_Binary_Sub', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '~'      => array('precedence' => 40, 'class' => 'Twig_Node_Expression_Binary_Concat', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
@@ -156,7 +159,6 @@ class Twig_Extension_Core extends Twig_Extension
                 '%'      => array('precedence' => 60, 'class' => 'Twig_Node_Expression_Binary_Mod', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'is'     => array('precedence' => 100, 'callable' => array($this, 'parseTestExpression'), 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'is not' => array('precedence' => 100, 'callable' => array($this, 'parseNotTestExpression'), 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                '..'     => array('precedence' => 110, 'class' => 'Twig_Node_Expression_Binary_Range', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '**'     => array('precedence' => 200, 'class' => 'Twig_Node_Expression_Binary_Power', 'associativity' => Twig_ExpressionParser::OPERATOR_RIGHT),
             ),
         );
@@ -170,13 +172,25 @@ class Twig_Extension_Core extends Twig_Extension
     public function parseTestExpression(Twig_Parser $parser, $node)
     {
         $stream = $parser->getStream();
-        $name = $stream->expect(Twig_Token::NAME_TYPE);
+        $name = $stream->expect(Twig_Token::NAME_TYPE)->getValue();
         $arguments = null;
         if ($stream->test(Twig_Token::PUNCTUATION_TYPE, '(')) {
             $arguments = $parser->getExpressionParser()->parseArguments();
         }
 
-        return new Twig_Node_Expression_Test($node, $name->getValue(), $arguments, $parser->getCurrentToken()->getLine());
+        $class = $this->getTestNodeClass($parser->getEnvironment(), $name);
+
+        return new $class($node, $name, $arguments, $parser->getCurrentToken()->getLine());
+    }
+
+    protected function getTestNodeClass(Twig_Environment $env, $name)
+    {
+        $testMap = $env->getTests();
+        if (isset($testMap[$name]) && $testMap[$name] instanceof Twig_Test_Node) {
+            return $testMap[$name]->getClass();
+        }
+
+        return 'Twig_Node_Expression_Test';
     }
 
     /**
@@ -223,7 +237,8 @@ function twig_cycle($values, $i)
 function twig_date_format_filter($date, $format = 'F j, Y H:i', $timezone = null)
 {
     if (!$date instanceof DateTime && !$date instanceof DateInterval) {
-        if (ctype_digit((string) $date)) {
+        $asString = (string) $date;
+        if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
             $date = new DateTime('@'.$date);
             $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
         } else {
@@ -354,21 +369,10 @@ function twig_join_filter($value, $glue = '')
     return implode($glue, (array) $value);
 }
 
-/**
- * Returns the value or the default value when it is undefined or empty.
- *
- * <pre>
- *
- *  {{ var.foo|default('foo item on var is not defined') }}
- *
- * </pre>
- *
- * @param mixed $value   A value
- * @param mixed $default The default value
- *
- * @param mixed The value or the default value;
- */
-function twig_default_filter($value, $default = '')
+// The '_default' filter is used internally to avoid using the ternary operator
+// which costs a lot for big contexts (before PHP 5.4). So, on average,
+// a function call is cheaper.
+function _twig_default_filter($value, $default = '')
 {
     if (twig_test_empty($value)) {
         return $default;
@@ -408,21 +412,22 @@ function twig_get_array_keys_filter($array)
 /**
  * Reverses an array.
  *
- * @param array|Traversable $array An array or a Traversable instance
+ * @param array|Traversable $array        An array or a Traversable instance
+ * @param Boolean           $preserveKeys Whether to preserve key or not
  *
  * return array The array reversed
  */
-function twig_reverse_filter($array)
+function twig_reverse_filter($array, $preserveKeys = false)
 {
     if (is_object($array) && $array instanceof Traversable) {
-        return array_reverse(iterator_to_array($array));
+        return array_reverse(iterator_to_array($array), $preserveKeys);
     }
 
     if (!is_array($array)) {
         return array();
     }
 
-    return array_reverse($array);
+    return array_reverse($array, $preserveKeys);
 }
 
 /**
@@ -443,29 +448,15 @@ function twig_in_filter($value, $compare)
     if (is_array($compare)) {
         return in_array($value, $compare);
     } elseif (is_string($compare)) {
+        if (!strlen((string) $value)) {
+            return empty($compare);
+        }
         return false !== strpos($compare, (string) $value);
     } elseif (is_object($compare) && $compare instanceof Traversable) {
         return in_array($value, iterator_to_array($compare, false));
     }
 
     return false;
-}
-
-/**
- * Replaces placeholders in a string.
- *
- * <pre>
- *  {{ "I like %this% and %that%."|replace({'%this%': foo, '%that%': "bar"}) }}
- * </pre>
- *
- * @param string $pattern      A string
- * @param string $replacements The values for the placeholders
- *
- * @return string The string where the placeholders have been replaced
- */
-function twig_strtr($pattern, $replacements)
-{
-    return str_replace(array_keys($replacements), array_values($replacements), $pattern);
 }
 
 /**
@@ -491,6 +482,8 @@ function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $cha
         $charset = $env->getCharset();
     }
 
+    $string = (string) $string;
+
     switch ($type) {
         case 'js':
             // escape all non-alphanumeric characters
@@ -511,21 +504,28 @@ function twig_escape_filter(Twig_Environment $env, $string, $type = 'html', $cha
 
         case 'html':
             // see http://php.net/htmlspecialchars
-            if (in_array(strtolower($charset), array(
-                'iso-8859-1', 'iso8859-1',
-                'iso-8859-15', 'iso8859-15',
-                'utf-8',
-                'cp866', 'ibm866', '866',
-                'cp1251', 'windows-1251', 'win-1251', '1251',
-                'cp1252', 'windows-1252', '1252',
-                'koi8-r', 'koi8-ru', 'koi8r',
-                'big5', '950',
-                'gb2312', '936',
-                'big5-hkscs',
-                'shift_jis', 'sjis', '932',
-                'euc-jp', 'eucjp',
-                'iso8859-5', 'iso-8859-5', 'macroman',
-            ))) {
+
+            // Using a static variable to avoid initializing the array
+            // each time the function is called. Moving the declaration on the
+            // top of the function slow downs other escaping types.
+            static $htmlspecialcharsCharsets = array(
+                'iso-8859-1' => true, 'iso8859-1' => true,
+                'iso-8859-15' => true, 'iso8859-15' => true,
+                'utf-8' => true,
+                'cp866' => true, 'ibm866' => true, '866' => true,
+                'cp1251' => true, 'windows-1251' => true, 'win-1251' => true,
+                '1251' => true,
+                'cp1252' => true, 'windows-1252' => true, '1252' => true,
+                'koi8-r' => true, 'koi8-ru' => true, 'koi8r' => true,
+                'big5' => true, '950' => true,
+                'gb2312' => true, '936' => true,
+                'big5-hkscs' => true,
+                'shift_jis' => true, 'sjis' => true, '932' => true,
+                'euc-jp' => true, 'eucjp' => true,
+                'iso8859-5' => true, 'iso-8859-5' => true, 'macroman' => true,
+            );
+
+            if (isset($htmlspecialcharsCharsets[strtolower($charset)])) {
                 return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
             }
 
@@ -722,129 +722,6 @@ function twig_ensure_traversable($seq)
     } else {
         return array();
     }
-}
-
-/**
- * Checks that a variable points to the same memory address than another one.
- *
- * <pre>
- * {% if foo.attribute is sameas(false) %}
- *    the foo attribute really is the ``false`` PHP value
- * {% endif %}
- * </pre>
- *
- * @param mixed $value A PHP variable
- * @param mixed $test  The PHP variable to test against
- *
- * @return Boolean true if the values are the same, false otherwise
- */
-function twig_test_sameas($value, $test)
-{
-    return $value === $test;
-}
-
-/**
- * Checks that a variable is null.
- *
- * <pre>
- *  {{ var is none }}
- * </pre>
- *
- * @param mixed $value a PHP variable.
- *
- * @return Boolean true if the value is null, false otherwise
- */
-function twig_test_none($value)
-{
-    return null === $value;
-}
-
-/**
- * Checks if a variable is divisible by a number.
- *
- * <pre>
- *  {% if loop.index is divisibleby(3) %}
- * </pre>
- *
- * @param integer $value A PHP value
- * @param integer $num   A number
- *
- * @return Boolean true if the value is divisible by the number, false otherwise
- */
-function twig_test_divisibleby($value, $num)
-{
-    return 0 == $value % $num;
-}
-
-/**
- * Checks if a number is even.
- *
- * <pre>
- *  {{ var is even }}
- * </pre>
- *
- * @param integer $value An integer
- *
- * @return Boolean true if the value is even, false otherwise
- */
-function twig_test_even($value)
-{
-    return $value % 2 == 0;
-}
-
-/**
- * Checks if a number is odd.
- *
- * <pre>
- *  {{ var is odd }}
- * </pre>
- *
- * @param integer $value An integer
- *
- * @return Boolean true if the value is odd, false otherwise
- */
-function twig_test_odd($value)
-{
-    return $value % 2 == 1;
-}
-
-/**
- * Checks if a variable is the exact same value as a constant.
- *
- * <pre>
- *  {% if post.status is constant('Post::PUBLISHED') %}
- *    the status attribute is exactly the same as Post::PUBLISHED
- *  {% endif %}
- * </pre>
- *
- * @param mixed $value    A PHP value
- * @param mixed $constant The constant to test against
- *
- * @return Boolean true if the value is the same as the constant, false otherwise
- */
-function twig_test_constant($value, $constant)
-{
-    return constant($constant) === $value;
-}
-
-/**
- * Checks if a variable is defined in the current context.
- *
- * <pre>
- * {# defined works with variable names #}
- * {% if foo is defined %}
- *     {# ... #}
- * {% endif %}
- * </pre>
- *
- * @param mixed $name    A PHP variable
- * @param array $context The current context
- *
- * @return Boolean true if the value is defined, false otherwise
- */
-function twig_test_defined($name, $context)
-{
-    return array_key_exists($name, $context);
 }
 
 /**

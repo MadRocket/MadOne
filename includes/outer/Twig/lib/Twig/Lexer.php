@@ -57,6 +57,7 @@ class Twig_Lexer implements Twig_LexerInterface
         $this->options['lex_comment_regex'] = '/(?:'.preg_quote($this->options['whitespace_trim'], '/').preg_quote($this->options['tag_comment'][1], '/').'\s*|'.preg_quote($this->options['tag_comment'][1], '/').')\n?/s';
         $this->options['lex_block_raw_regex'] = '/\s*raw\s*'.preg_quote($this->options['tag_block'][1], '/').'/As';
         $this->options['lex_block_line_regex'] = '/\s*line\s+(\d+)\s*'.preg_quote($this->options['tag_block'][1], '/').'/As';
+        $this->options['lex_tokens_start_regex'] = '/('.preg_quote($this->options['tag_variable'][0], '/').'|'.preg_quote($this->options['tag_block'][0], '/').'|'.preg_quote($this->options['tag_comment'][0], '/').')('.preg_quote($this->options['whitespace_trim'], '/').')?/s';
     }
 
     /**
@@ -82,6 +83,11 @@ class Twig_Lexer implements Twig_LexerInterface
         $this->tokens = array();
         $this->state = self::STATE_DATA;
         $this->brackets = array();
+        $this->position = -1;
+
+        // find all token starts in one go
+        preg_match_all($this->options['lex_tokens_start_regex'], $this->code, $matches, PREG_OFFSET_CAPTURE);
+        $this->positions = $matches;
 
         while ($this->cursor < $this->end) {
             // dispatch to the lexing functions depending
@@ -117,40 +123,31 @@ class Twig_Lexer implements Twig_LexerInterface
 
     protected function lexData()
     {
-        $pos = $this->end;
-        $append = '';
-
-        // Find the first token after the cursor
-        foreach (array('tag_comment', 'tag_variable', 'tag_block') as $type) {
-            $tmpPos = strpos($this->code, $this->options[$type][0], $this->cursor);
-            if (false !== $tmpPos && $tmpPos < $pos) {
-                $trimBlock = false;
-                $append = '';
-                $pos = $tmpPos;
-                $token = $this->options[$type][0];
-                if (strpos($this->code, $this->options['whitespace_trim'], $pos) === ($pos + strlen($token))) {
-                    $trimBlock = true;
-                    $append = $this->options['whitespace_trim'];
-                }
-            }
-        }
-
         // if no matches are left we return the rest of the template as simple text token
-        if ($pos === $this->end) {
+        if ($this->position == count($this->positions[0]) - 1) {
             $this->pushToken(Twig_Token::TEXT_TYPE, substr($this->code, $this->cursor));
             $this->cursor = $this->end;
             return;
         }
 
+        // Find the first token after the current cursor
+        $position = $this->positions[0][++$this->position];
+        while ($position[1] < $this->cursor) {
+            if ($this->position == count($this->positions[0]) - 1) {
+                return;
+            }
+            $position = $this->positions[0][++$this->position];
+        }
+
         // push the template text first
-        $text = $textContent = substr($this->code, $this->cursor, $pos - $this->cursor);
-        if (true === $trimBlock) {
+        $text = $textContent = substr($this->code, $this->cursor, $position[1] - $this->cursor);
+        if (isset($this->positions[2][$this->position][0])) {
             $text = rtrim($text);
         }
         $this->pushToken(Twig_Token::TEXT_TYPE, $text);
-        $this->moveCursor($textContent.$token.$append);
+        $this->moveCursor($textContent.$position[0]);
 
-        switch ($token) {
+        switch ($this->positions[1][$this->position][0]) {
             case $this->options['tag_comment'][0]:
                 $this->lexComment();
                 break;
@@ -224,7 +221,11 @@ class Twig_Lexer implements Twig_LexerInterface
         }
         // numbers
         elseif (preg_match(self::REGEX_NUMBER, $this->code, $match, null, $this->cursor)) {
-            $this->pushToken(Twig_Token::NUMBER_TYPE, ctype_digit($match[0]) ? (int) $match[0] : (float) $match[0]);
+            $number = (float) $match[0];  // floats
+            if (ctype_digit($match[0]) && $number <= PHP_INT_MAX) {
+                $number = (int) $match[0]; // integers lower than the maximum
+            }
+            $this->pushToken(Twig_Token::NUMBER_TYPE, $number);
             $this->moveCursor($match[0]);
         }
         // punctuation
