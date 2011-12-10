@@ -13,12 +13,17 @@ class Madone_Session
     
     private $loginAttempt = false;   // Была попытка авторизации
     private $loginSucceeded = false; // Попытка авторизации была успешной 
-    
-    private static $instance = null; // Единственный экземпляр класса, который позволительно создать, фишки для singletone
-    
+
     /**
-        Доступ к объекту класса — синглтону
-    */    
+     * @var Madone_Session
+     */
+    private static $instance = null; // Единственный экземпляр класса, который позволительно создать, фишки для singletone
+
+    /**
+     * Доступ к объекту класса — синглтону
+     * @static
+     * @return Madone_Session
+     */
     public static function getInstance() {
         if( self::$instance == null ) self::$instance = new Madone_Session();
         return self::$instance;
