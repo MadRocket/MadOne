@@ -25,8 +25,8 @@
                     <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ item.menu ? 'on' : 'off' }}.png"/>
                     <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
                </div>
-               <h2 stormText="title">{{ item.title }}</h2>
-               <p stormText="name">{{ item.name }}</p>
+               <h2 stormText="title"><a href="/admin/{{ item.module }}/{{ item.id }}">{{ item.title }}</a></h2>
+               <p stormText="name"><a href="{{ item.uri }}">{{ item.name }}</a></p>
            </div>
            {% if full %}
            <ol>
@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <div class="clearfix">
+        <div class="clearfix" style="display: none">
             <label>Тип страницы:</label>
             <div class="input">
                 <select name="type">
@@ -67,7 +67,17 @@
                 <option value="{{ type.id }}">{{ type.title }}</option>
                 {% endfor %}
                 </select>
-                <select name="app_settings"></select>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label>Модуль:</label>
+            <div class="input">
+                <select name="module">
+                {% for module in modules %}
+                <option value="{{ module.name }}">{{ module.title }}</option>
+                {% endfor %}
+                </select>
             </div>
         </div>
 
@@ -132,61 +142,13 @@ $( function () {
    	var pageForm = Object.create( Storm.Form ).extend( {
    		form: $( '#page-form' ),
 
-   		onCreate: function () {
-   			this.metaVisible = false;
-   		},
-
    		onFill: function ( form, data ) {
-   			form.find( '.block > a' ).bind( 'click', { form: this }, function ( e ) {
-   				e.preventDefault();
-   				if( $( this ).attr( 'extra' ) ) {
-   					e.data.form[ $( this ).attr( 'extra' ) ] = true;
-   				}
-   				$( this ).next( 'div' ).show().end().remove();
-   			} );
-
    			form.find( 'select[name=type]' ).bind( 'change', function ( e ) {
    				// Если тип не указан выбираем 1 - обычная страница
    				if(! $(this).val()) {
    					$(this).val(1);
    				}
-
-   				var types = {{ types_json|json_encode|raw }};
-
-   				// Заполним settings
-   				var settings = types[ $(this).val() ].settings;
-
-   				// Для данного типа страницы определены настройки
-   				if( settings ) {
-   					var settingsEl = form.find('select[name=app_settings]');
-   					settingsEl.show();
-   					settingsEl.attr('enabled', 'disabled');
-   					var This = this;
-
-   					// Получим данные модели указаной в настройках
-   					Storm.retrieve( settings.model,  Object.create( Storm.Query ).use( 'order', 'id' ), function ( settingsData ) {
-   						settingsEl.attr('enabled', 'enabled');
-   						settingsEl.find('option').remove();
-   						settingsEl.append($('<option>').attr('value', 'null').text( '---' ) );
-   						for(var item in settingsData) {
-   							var option = $('<option>').attr('value', settingsData[item].id).text( settingsData[item].title );
-   							if( settingsData[item].id == data.app_settings) {
-   								option.attr('selected', 'selected');
-   							}
-
-   							settingsEl.append(option);
-   						}
-   					});
-   				} else {
-   					form.find('select[name=app_settings]').hide();
-   				}
    			} ).trigger( 'change' );
-   		},
-
-   		onFetchData: function ( form, data ) {
-   			if(data.app_settings == 'null') {
-   				data.app_settings = null;
-   			}
    		},
 
    		onFillItem: function ( item, data ) {

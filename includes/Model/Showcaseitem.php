@@ -9,7 +9,8 @@ class Model_Showcaseitem extends Storm_Model
     {
         return array(
             'title' => new Storm_Db_Field_Char(array('maxlength' => 255, 'default' => 'Новая позиция', 'fulltext' => true)),
-            'section' => new Storm_Db_Field_Fk(array('model' => 'Model_Showcasesection', 'related' => 'items')),
+//            'section' => new Storm_Db_Field_Fk(array('model' => 'Model_Showcasesection', 'related' => 'items')),
+            'page' => new Storm_Db_Field_Fk(array('model' => 'Model_Page', 'related' => 'items')),
             'description' => new Storm_Db_Field_Text(array('fulltext' => true)),
             'short_description' => new Storm_Db_Field_Text(),
             'price' => new Storm_Db_Field_Float(array('index' => true)),
@@ -52,7 +53,7 @@ class Model_Showcaseitem extends Storm_Model
     function afterSave($new)
     {
         if ($new && !$this->position) {
-            $last = $this->getQuerySet()->filter(array('id__ne' => $this->id, 'section' => $this->section))->orderDesc('position')->first();
+            $last = $this->getQuerySet()->filter(array('id__ne' => $this->id, 'page' => $this->page))->orderDesc('position')->first();
             $this->position = $last ? $last->position + 1 : 1;
             $this->hiddenSave();
         }

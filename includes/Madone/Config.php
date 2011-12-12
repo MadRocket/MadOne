@@ -9,7 +9,7 @@ class Madone_Config {
         'db_backend'   => 'Mysql',
         'db_host'      => 'localhost',
         'db_port'      => '',
-        'db_name'      => 'Madone_dev2',
+        'db_name'      => 'Madone_dev_context_modules',
         'db_user'      => 'root',
         'db_password'  => 'root',
         'db_charset'   => 'utf8',

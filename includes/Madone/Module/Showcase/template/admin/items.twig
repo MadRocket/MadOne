@@ -1,7 +1,7 @@
 {% import 'macros.twig' as common %}
 
-<h1>{{section.title}}</h1>
-<div class="module-header"><a href="../">вернуться к списку разделов</a></div>
+<h1>{{page.title}}</h1>
+{#<div class="module-header"><a href="../">вернуться к списку разделов</a></div>#}
 
 <div class="module-buttons">
 	<button class="create-unit btn primary">Добавить позицию</button>
@@ -137,7 +137,7 @@ $( function() {
 	var itemForm = Object.create( Storm.Form ).extend( {
 		form: $( '#item-form' ),
 		onFetchData: function( form, data ) {
-			data.section = {{ section.id }};
+			data.page = {{ page.id }};
 			data.price = parseInt( data.price );
 			if( isNaN( data.price ) ) {
 				data.price = null;

@@ -10,7 +10,7 @@ class Model_Galleryimage extends Storm_Model
         return array
         (
 
-			'section'  => new Storm_Db_Field_Fk( array( 'model' => 'Model_Gallerysection', 'related' => 'images' ) ),
+			'page'  => new Storm_Db_Field_Fk( array( 'model' => 'Model_Page', 'related' => 'images' ) ),
             'title'    => new Storm_Db_Field_Char( array( 'maxlength' => 255 ) ),
 			'image'    => new Storm_Db_Field_File_Image( array(	'path' => "/upload/images/gallery",
 													'variants' => array(

@@ -5,8 +5,8 @@
  */
  
 class Outer_Phpmorphy {
-	protected static $dictionaries;
-	protected static $options;
+	protected static $dictionaries = array();
+	protected static $options = array();
 
 	 function __construct() {
 		// Подключаем phpMorphy, готовим опции

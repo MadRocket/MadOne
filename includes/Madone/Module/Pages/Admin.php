@@ -15,17 +15,18 @@ class Madone_Module_Pages_Admin extends Madone_Module {
         }
 
         $types = Model_Pagetypes( array( 'enabled' => true ) )->order( 'position' )->all();
-        $types_array = array();
-		foreach( $types as $type ) {
-			$types_array[ "{$type->id}" ] = $type->asArray( true );
-			$types_array[ "{$type->id}" ]['settings'] = json_decode($type->settings);
-		}
+        $modules = array(
+            array('name' => 'Pages', 'title' => "Текстовая страница"),
+            array('name' => 'News', 'title' => "Новости"),
+            array('name' => 'Showcase', 'title' => "Каталог"),
+            array('name' => 'Gallery', 'title' => "Галерея"),
+        );
 
         return $this->getTemplate( 'index.twig', array(
             'root' => $pages[0],
             'items' => $pages[0]->getChildren(),
             'types' => $types,
-            'types_json' => $types_array
+            'modules' => $modules
         ) );
     }
 }

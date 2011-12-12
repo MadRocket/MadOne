@@ -20,7 +20,7 @@ class Model_Page extends Storm_Model_Tree {
 
             'template' => new Storm_Db_Field_Char( array('maxlength' => 255, 'localized' => false, 'default' => null) ),
 
-        	'app_settings'	=> new Storm_Db_Field_Text( array( 'localized' => false ) ),
+            'module' => new Storm_Db_Field_Char(array('maxlength' => 255, 'localized' => false, 'default' => null)),
 
             'menu'			=> new Storm_Db_Field_Bool( array( 'default' => 1, 'index' => 'nav' ) ),
             'enabled'		=> new Storm_Db_Field_Bool( array( 'localized'=> true, 'default' => 0, 'index' => 'nav' ) ),

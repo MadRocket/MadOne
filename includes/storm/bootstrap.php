@@ -65,17 +65,6 @@
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                
-	                function Model_Gallerysection( $params = null )
-	                {
-	                    return $params ? new Model_Gallerysection( $params ) : new Model_Gallerysection();
-	                }
-
-	                function Model_Gallerysections( $params = null )
-	                {
-	                    $qs = new Storm_Queryset_Tree( 'Model_Gallerysection' );
-	                    return $params ? $qs->filter( $params ) :  $qs;
-	                }
-	                
 	                function Model_Galleryimage( $params = null )
 	                {
 	                    return $params ? new Model_Galleryimage( $params ) : new Model_Galleryimage();
@@ -84,17 +73,6 @@
 	                function Model_Galleryimages( $params = null )
 	                {
 	                    $qs = new Storm_Queryset( 'Model_Galleryimage' );
-	                    return $params ? $qs->filter( $params ) :  $qs;
-	                }
-	                
-	                function Model_Showcasesection( $params = null )
-	                {
-	                    return $params ? new Model_Showcasesection( $params ) : new Model_Showcasesection();
-	                }
-
-	                function Model_Showcasesections( $params = null )
-	                {
-	                    $qs = new Storm_Queryset_Tree( 'Model_Showcasesection' );
 	                    return $params ? $qs->filter( $params ) :  $qs;
 	                }
 	                

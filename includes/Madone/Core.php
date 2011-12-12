@@ -107,7 +107,6 @@ class Madone_Core {
 		
 		// Получаем текущий URI, выделяем из него имена каталогов/файлов
 		$names = Madone_Utilites::getUriPathNames();
-		
 		/*
 		Если есть имена - пытаемся выбрать одну из внутренних страниц сайта
 		Например, условия выборки для страницы /news/archive/2008 получатся такие:
@@ -129,10 +128,16 @@ class Madone_Core {
 			}
 			
 			// Фильтр вложенных страниц приложения
-			$filter = QAND( $filter, Q( array( 'type__has_subpages' => true ) ) );
+//			$filter = QAND( $filter, Q( array( 'type__has_subpages' => true ) ) );
 			
 			// Фильтр полного совпадения uri страниц без вложенных страниц приложения
-			$filter = QOR( $filter, QAND( Q( array( 'uri' => $uri ) ), Q( array( 'type__has_subpages' => false ) ) ) );
+//			$filter = QOR(
+//                $filter,
+//                QAND(
+//                    Q( array( 'uri' => $uri ) ),
+//                    Q( array( 'type__has_subpages' => false ) )
+//                )
+//            );
 		}
 		// Путь пуст, выбираем главную страницу
 		else {
@@ -141,16 +146,20 @@ class Madone_Core {
 
         ob_start();
 		// Выбираем страницы, сортируем так: сначала самые глубоко вложеные, среди одинаково вложенных — с большим приоритетом типа
-		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->order( 'type__priority' )->follow( 1 )->all() as $p ) {
+		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->follow( 1 )->all() as $p ) {
 			// в $uri как раз оказывается полный uri запрошенной страницы :D
 			// Отделим uri приложение внутри страницы
 			$app_uri = mb_substr( $uri, mb_strlen( $p->uri, 'utf-8' ), mb_strlen( $uri, 'utf-8' ), 'utf-8' );
 			
-			// Запускаем приложение, соответствующее типу страницы, если оно отработало — завершаем работу
-            $response = $p->type->getApplicationInstance()->run($p, $app_uri);
+			// Запускаем приложение, соответствующее модулю, если оно отработало — завершаем работу
+            $response = null;
+            $app_classname = "Madone_Module_{$p->module}_Application";
+            if(class_exists($app_classname)) {
+                $app = new $app_classname();
+                $response = $app->run($p, $app_uri);
+            }
             if($response) {
 				print( self::postprocess( ob_get_clean() ) );
-                
 				return;
 			}
 			// продолжаем обработку среди всех выбранных приложений, попадающих в этот же uri
