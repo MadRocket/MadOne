@@ -57,7 +57,7 @@ class Madone_Module {
             $file = "{$file}.twig";
         }
 
-        $twig = Madone_Core::twig( array_merge($this->templatePath, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")) );
+        $twig = Madone_Core::twig( $this->templatePath );
         
         return $twig->loadTemplate($file)->render($vars);
     }

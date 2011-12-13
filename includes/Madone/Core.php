@@ -1,8 +1,8 @@
 <?
 
 /**
-*	Ядро системы управления, отображающее сайт.
-*/
+ * Ядро системы управления, отображающее сайт.
+ */
 class Madone_Core {
     protected static $languages = array();
     protected static $language = null;
@@ -171,9 +171,11 @@ class Madone_Core {
     }
 
     /**
-	* Завершение выполнения скрипта с кодом 404.
-	* Мимикрия под Apache.
-    */
+     * Завершение выполнения скрипта с кодом 404. Мимикрия под Apache.
+     * @static
+     * @param null $uri
+     * @return mixed
+     */
     static function show404( $uri = null ) {
         if( is_null( $uri ) ) {
             $uri = $_SERVER['REQUEST_URI'];
@@ -181,14 +183,19 @@ class Madone_Core {
     
         header( "{$_SERVER['SERVER_PROTOCOL']} 404 Not Found", true, 404 );
 
-// TODO:         print new Template('default/system/404', array('uri' => $uri));
+        print self::twig()->render('404.twig', array('uri' => $uri));
         
-        return;
+        return null;
     }
 
-	/**
-	 *	Обработчик фатальных ошибок.
-	 */
+    /**
+     * Обработчик фатальных ошибок
+     * @static
+     * @param $errno
+     * @param $errstr
+     * @param $errfile
+     * @param $errline
+     */
 	static function fatal_error_handler( $errno, $errstr, $errfile, $errline ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
@@ -208,7 +215,7 @@ class Madone_Core {
 			}
 		} else {
 			if( strstr( $errstr, '<html>' ) === false ) {
-// TODO:				echo new Template( 'fatal-error', array( 'message' => $errstr ) );
+                echo self::twig()->render( 'error.twig', array( 'message' => $errstr ) );
 			} else {
 				echo $errstr;
 			}
@@ -216,9 +223,11 @@ class Madone_Core {
 		exit;
 	}
 
-	/**
-	 *	Обработчик неперехваченных исключений.
-	 */
+    /**
+     * Обработчик неперехваченных исключений
+     * @static
+     * @param $exception
+     */
 	static function uncaught_exception_handler( $exception ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
@@ -232,15 +241,19 @@ class Madone_Core {
 			echo "<html><h2>" . $exception->getMessage() . "</h2><h4>" . get_class( $exception ) ." in " . $exception->getFile() . " on line " . $exception->getLine() . ".</h4>";
 			echo Madone_Utilites::formatDebugTrace( $exception->getTrace() );
 			echo "</html>";
-		} else {
-//	TODO:		echo new Template( 'fatal-error', array( 'message' => $exception->getMessage() ) );
+		}
+        else {
+            echo self::twig()->render('error.twig', array( 'message' => $exception->getMessage() ));
 		}
 		exit;
 	}
-	
-	/**
-	 *	Постобработка кода страницы
-	 */
+
+    /**
+     * Постобработка кода страницы
+     * @static
+     * @param $text
+     * @return mixed
+     */
 	static function postprocess( $text ) {
 		// Добавляем lang-атрибут для текущего языка
 		$text = str_replace( '<html', '<html lang="'. Storm_Core::getLanguage()->getName() .'"', $text );
@@ -265,8 +278,14 @@ class Madone_Core {
 		return Storm_Core::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
 
-    static function twig($path) {
-        $twig = Outer_Twig::get($path);
+    /**
+     * @static
+     * @param $path
+     * @return Twig_Environment
+     */
+    static function twig(array $path = array()) {
+        $path = is_array($path) ? $path : array($path);
+        $twig = Outer_Twig::get(array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")));
         $twig->addGlobal('config', Madone_Config::getInstance());
         $twig->addGlobal('server', Madone_Utilites::server());
 
@@ -276,6 +295,11 @@ class Madone_Core {
         return $twig;
     }
 
+    /**
+     * Получение текстового блока
+     * @param $name
+     * @return Model_Textblock
+     */
     function getBlock($name) {
         return Model_Textblocks()->getOrCreate(array('name' => $name));
     }
