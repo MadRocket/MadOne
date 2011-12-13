@@ -9,6 +9,7 @@ class Model_News extends Storm_Model
 	{
 		return array
 		(
+            'page' => new Storm_Db_Field_Fk(array('model' => "Model_Page", 'related' => 'news')),
 			'date'  => new Storm_Db_Field_Datetime( array( 'default_callback' => 'return time();', 'format' => '%d.%m.%Y', 'index' => true ) ),
 			'title'   => new Storm_Db_Field_Char( array( 'maxlength' => 255, 'default' => 'Заголовок новости') ),
             'image' => new Storm_Db_Field_File_Image( array('path' => '/upload/images/news' )),

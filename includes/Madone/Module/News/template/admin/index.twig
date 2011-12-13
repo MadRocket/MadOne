@@ -88,7 +88,10 @@ $( function() {
 			if( this.mode === 'create' || this.loadedData.date != result.date ) {
 				location.reload();
 			}
-		}
+		},
+        onFetchData: function( form, data ) {
+            data.page = {{ page.id }};
+        }
 	} );
 
 	var createFormOpened = false
