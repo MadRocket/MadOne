@@ -30,7 +30,22 @@ class Madone_Application {
     }
 
     function render($template, $vars) {
+        $templatePath = array();
 
-        return Madone_Core::twig(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template") )->loadTemplate($template)->render($vars);
+        $classname = get_class($this);
+        $path_parts = preg_split('~_~', $classname);
+        array_pop($path_parts);
+        array_shift($path_parts);
+
+        $path = join(DIRECTORY_SEPARATOR, $path_parts);
+        if(is_dir(__DIR__."/{$path}/template")) {
+            $templatePath[] = __DIR__."/{$path}/template";
+        }
+        $module_name = array_pop($path_parts);
+        if(is_dir( "{$_SERVER['DOCUMENT_ROOT']}/inculdes/template/{$module_name}" )) {
+            $templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/inculdes/template/{$module_name}";
+        }
+
+        return Madone_Core::twig($templatePath)->loadTemplate($template)->render($vars);
     }
 }

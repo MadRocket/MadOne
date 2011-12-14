@@ -285,7 +285,7 @@ class Madone_Core {
      */
     static function twig($path = array()) {
         $path = is_array($path) ? $path : array($path);
-        $twig = Outer_Twig::get(array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin")));
+        $twig = Outer_Twig::get(array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template")));
         $twig->addGlobal('config', Madone_Config::getInstance());
         $twig->addGlobal('server', Madone_Utilites::server());
 
