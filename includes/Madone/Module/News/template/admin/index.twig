@@ -3,120 +3,100 @@
 <h1>Новости</h1>
 
 <div class="module-buttons">
-	<button class="create-unit btn primary">Добавить новость</button>
+    <button class="create-unit btn primary">Добавить новость</button>
 </div>
 
 <div class="module-content">
-	<div class="createFormPlace"></div>
+    <div class="createFormPlace"></div>
 
-	<div class="a-units a-unit-list" stormModel="Model_News">
-	{% for item in items %}
+    <div class="a-units a-unit-list" stormModel="Model_News">
+        {% for item in items %}
         <div class="a-unit">
-        <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
-            <div class="actions">
-                <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-                <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-                <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+            <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
+                <div class="actions">
+                    <img title="Редактировать" class="actions__button edit" src="/static/i/admin/1x1.gif"/>
+                    <img title="Включить/Выключить" class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
+                    <img title="Удалить" class="actions__button delete" src="/static/i/admin/1x1.gif"/>
+                </div>
+                <h2 stormText="title">{{ item.title }}</h2>
+
+                <p stormText="date">{{ item.date }}</p>
             </div>
-            <h2 stormText="title">{{ item.title }}</h2>
-            <p stormText="date">{{ item.date }}</p>
         </div>
-        </div>
-	{% endfor %}
+        {% endfor %}
     </div>
-    {{ common.pager(paginator) }}
+    {{ paginator|raw }}
 </div>
 
 <form id="news-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
-	<div class="clearfix">
-	    <label>Заголовок новости:</label>
-	    <div class="input">
-	        <input class="span11" type="text" name="title"/>
-	    </div>
-    </div>
-	<div class="clearfix">
-	    <label>Дата публикации:</label>
-	    <div class="input">
-	        <input datepicker="yes" class="width-100" type="text" name="date"/>
+    <div class="clearfix">
+        <label>Заголовок новости:</label>
+
+        <div class="input">
+            <input class="span11" type="text" name="title"/>
         </div>
     </div>
-	<div class="clearfix">
-	    <label>Анонс:</label>
-	    <div class="input">
-	        <textarea rich="no" class="span11" name="announce"></textarea>
+    <div class="clearfix">
+        <label>Дата публикации:</label>
+
+        <div class="input">
+            <input datepicker="yes" class="width-100" type="text" name="date"/>
         </div>
     </div>
-	<div class="clearfix">
-	    <label>Текст новости:</label>
-	    <div class="input">
-	        <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
+    <div class="clearfix">
+        <label>Анонс:</label>
+
+        <div class="input">
+            <textarea rich="no" class="span11" name="announce"></textarea>
         </div>
     </div>
-	<div class="actions">
-		<button class="submit btn primary" type="submit">Сохранить</button>
-		<button class="cancel btn" type="reset">Отмена</button>
-	</div>
+    <div class="clearfix">
+        <label>Текст новости:</label>
+
+        <div class="input">
+            <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="submit btn primary" type="submit">Сохранить</button>
+        <button class="cancel btn" type="reset">Отмена</button>
+    </div>
 </form>
 
 <script type="text/javascript">
-$( function() {
-	$( '.enabled' ).click( function( e ) {
-		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
-			if(data.enabled) {
-				$( this ).parents('.a-unit-body:first').removeClass('disabled');
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
-			}
-			else {
-				$( this ).parents('.a-unit-body:first').addClass('disabled');
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
-			}
-		}));
-	});
+    $(function () {
+        Madone.units.init('.a-units');
+        var newsForm = Object.create(Storm.Form).extend({
+            form:$('#news-form'),
+            onSubmit:function (form, data, result) {
+                if (this.mode === 'create' || this.loadedData.date != result.date) {
+                    location.reload();
+                }
+            },
+            onFetchData:function (form, data) {
+                data.page = {{ page.id }};
+            }
+        });
 
-	$( '.delete' ).click( function( e ) {
-		if( confirm( 'Вы действительно хотите удалить новость «' + $( this ).parents( '.a-unit-body' ).find( 'h2' ).text() + '»?' ) ) {
-			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
-				$( this ).parents( '.a-unit' ).remove()
-				location.reload()
-			} ) );
-		}
-	} );
+        $('.create-unit').click(function (e) {
+            Object.create(newsForm).extend({
+                object:'Model_News',
+                formPlace:$('.createFormPlace')
+            }).start();
+        });
 
-	var newsForm = Object.create( Storm.Form ).extend( {
-		form: $( '#news-form' ),
-		onSubmit: function( form, data, result ) {
-			if( this.mode === 'create' || this.loadedData.date != result.date ) {
-				location.reload();
-			}
-		},
-        onFetchData: function( form, data ) {
-            data.page = {{ page.id }};
-        }
-	} );
-
-	var createFormOpened = false
-	$( '.create-unit' ).click( function( e ) {
-		e.preventDefault();
-		Object.create( newsForm ).extend( {
-			object: 'Model_News',
-			formPlace: $( '.createFormPlace' )
-		} ).start();
-	} );
-
-	$( '.edit' ).click( function( e ) {
-		Object.create( newsForm ).extend( {
-			object: Storm.buildPath( this ),
-			item: $( this ).parents( '.a-unit-body' ),
-			onFillItem: function( item, data ) {
-				item.find( 'img.enabled' ).attr( 'src', data.enabled ?
-				'/static/i/admin/icons/16/lamp-on.png' :
-				'/static/i/admin/icons/16/lamp-off.png' );
-				if( ! data.enabled ) {
-					item.find( '.a-unit-body' ).addClass( 'disabled' );
-				}
-				item.attr( 'stormObject', data.id );
-			}
-		} ).start();
-	} )
-} )
+        $('.edit').click(function (e) {
+            Object.create(newsForm).extend({
+                object:Storm.buildPath(this),
+                item:$(this).parents('.a-unit-body'),
+                onFillItem:function (item, data) {
+                    if (!data.enabled) {
+                        item.find('.actions__button.enabled').addClass('enabled_off');
+                        item.find('.a-unit-body').addClass('disabled');
+                    }
+                    item.attr('stormObject', data.id);
+                }
+            }).start();
+        })
+    })
 </script>
