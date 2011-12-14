@@ -37,13 +37,14 @@ class Madone_Application {
         array_pop($path_parts);
         array_shift($path_parts);
 
+        $module_name = array_pop($path_parts);
+        if(is_dir( "{$_SERVER['DOCUMENT_ROOT']}/includes/template/{$module_name}" )) {
+            $templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/includes/template/{$module_name}";
+        }
+
         $path = join(DIRECTORY_SEPARATOR, $path_parts);
         if(is_dir(__DIR__."/{$path}/template")) {
             $templatePath[] = __DIR__."/{$path}/template";
-        }
-        $module_name = array_pop($path_parts);
-        if(is_dir( "{$_SERVER['DOCUMENT_ROOT']}/inculdes/template/{$module_name}" )) {
-            $templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/inculdes/template/{$module_name}";
         }
 
         return Madone_Core::twig($templatePath)->loadTemplate($template)->render($vars);
