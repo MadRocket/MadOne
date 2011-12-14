@@ -1,4 +1,4 @@
-<h1>Страницы сайта</h1>
+<h1>Структура сайта</h1>
 <div class="module-buttons">
     <button class="create-page btn primary">Создать страницу</button>
 </div>
@@ -20,13 +20,13 @@
     <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
            <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
                <div class="actions">
-                    <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-                    <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-                    <img title="Показывать в меню" class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-{{ item.menu ? 'on' : 'off' }}.png"/>
-                    <img title="Удалить" class="delete" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
+                   <img class="actions__button edit" src="/static/i/admin/1x1.gif"/>
+                   <img class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
+                   <img class="actions__button menu{{ item.menu ? '' : ' menu_off' }}" stormField="menu" src="/static/i/admin/1x1.gif"/>
+                   <img class="actions__button delete" src="/static/i/admin/1x1.gif"/>
                </div>
-               <h2 stormText="title"><a href="/admin/{{ item.module }}/{{ item.id }}">{{ item.title }}</a></h2>
-               <p stormText="name"><a href="{{ item.uri }}">{{ item.name }}</a></p>
+               <h2><a class="editlink" stormText="title" href="/admin/{{ item.module }}/{{ item.id }}">{{ item.title }}</a></h2>
+               <p><a class="directlink" stormText="name" href="{{ item.uri }}">{{ item.name }}</a></p>
            </div>
            {% if full %}
            <ol>
@@ -119,19 +119,21 @@
 <li class="a-unit" id="page-template" style="display:none;">
     <div class="a-unit-body">
         <div class="actions">
-            <img class="edit "width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-            <img class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
-            <img class="menu" stormField="menu" width="16" height="16" src="/static/i/admin/icons/16/flag-on.png"/>
-            <img class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+            <img class="actions__button edit" src="/static/i/admin/1x1.gif"/>
+            <img class="actions__button enabled" stormField="enabled" src="/static/i/admin/1x1.gif"/>
+            <img class="actions__button menu" stormField="menu" src="/static/i/admin/1x1.gif"/>
+            <img class="actions__button delete" src="/static/i/admin/1x1.gif"/>
         </div>
-        <h2 stormText="title"></h2>
-        <p stormText="name"></p>
+        <h2><a class="editlink" href="" stormText="title"></a></h2>
+        <p><a class="directlink" href="" stormText="name"></a></p>
     </div>
 </li>
 
 <script type="text/javascript">
 $( function () {
-   	$('#pages').nestedSortable(
+    Madone.units.init('.a-units');
+
+    $('#pages').nestedSortable(
    	    Object.create( Madone.nestedSortableOptions ).extend({
             stop: function(event, ui){
                 Storm.reorder( 'Model_Page', { id: {{ root.id }}, children: $('#pages').nestedSortable('toHierarchy') } );
@@ -139,31 +141,33 @@ $( function () {
         })
     );
 
+    $( '.a-units .menu' ).click( function( e ) {
+        Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
+            if(data.menu) {
+                $( this ).removeClass( 'menu_off' );
+            }
+            else {
+                $( this ).addClass( 'menu_off' );
+            }
+        }));
+    });
+
    	var pageForm = Object.create( Storm.Form ).extend( {
    		form: $( '#page-form' ),
 
-   		onFill: function ( form, data ) {
-   			form.find( 'select[name=type]' ).bind( 'change', function ( e ) {
-   				// Если тип не указан выбираем 1 - обычная страница
-   				if(! $(this).val()) {
-   					$(this).val(1);
-   				}
-   			} ).trigger( 'change' );
-   		},
-
    		onFillItem: function ( item, data ) {
-   			item.find( 'img.enabled' ).attr( 'src', data.enabled ? '/static/i/admin/icons/16/lamp-on.png' : '/static/i/admin/icons/16/lamp-off.png' );
-   			if( ! data.enabled ) {
-   				item.find( '.a-unit-body' ).addClass( 'disabled' );
-   			}
-   			item.attr( 'stormObject', data.id );
-   			item.attr( 'id', 'a-unit-' + data.id );
+            if(!data.enabled) {
+                item.find( '.actions__button.enabled' ).addClass('enabled_off');
+                item.find( '.a-unit-body' ).addClass( 'disabled' );
+            }
+   			item.attr( 'stormObject', data.id ).attr( 'id', 'a-unit-' + data.id );
+   			item.find('.editlink').attr('href', "/admin/" + data.module + "/" + data.id);
+   			item.find('.directlink').attr('href', data.uri);
    		}
    	});
 
-       // Новая страница
+    // Новая страница
     $(".create-page").click( function ( e ) {
-        e.preventDefault();
         Object.create( pageForm ).extend( {
             object:		'Model_Page',
             formPlace:	$( '.createFormPlace' ),
@@ -174,52 +178,10 @@ $( function () {
 
     // Редактирование страницы
     $( '.a-units .edit' ).bind( 'click', function( event ) {
-        event.preventDefault();
         Object.create( pageForm ).extend( {
             object:	Storm.buildPath( this ),
             item:	$( this ).parents( '.a-unit-body' )
         } ).start();
-    } );
-
-   	$( '.a-units .enabled' ).click( function( e ) {
-   		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
-   			if(data.enabled) {
-   				$( this ).parents('.a-unit-body:first').removeClass('disabled');
-   				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
-   			}
-   			else {
-   				$( this ).parents('.a-unit-body:first').addClass('disabled');
-   				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
-   			}
-   		}));
-   	} );
-
-   	$( '.a-units .menu' ).click( function( e ) {
-   		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
-   			$( this ).attr( 'src', data.menu ?
-   			'/static/i/admin/icons/16/flag-on.png' :
-   			'/static/i/admin/icons/16/flag-off.png' )
-   		}));
-   	});
-
-   	$( '.a-units .delete' ).click( function( e ) {
-   		var title = $( this ).parents( '.a-unit:first' ).find( 'h2:first' ).text();
-
-           if( confirm( 'Вы действительно хотите удалить страницу «' + title  + '»?' ) ) {
-   			var nested = $( this ).parents( '.a-unit:first' ).find( '.a-unit' ).size();
-               if( nested ) {
-                   if( ! confirm( Mad.decline( nested, '',
-   					'«' + title +'» содержит еще %n вложеную страницу.',
-   					'«' + title +'» содержит еще %n вложеные страницы.',
-   					'«' + title +'» содержит еще %n вложеных страниц.' ) +
-   					' Вы действительно хотите удалить их все?' ) )
-                   return false;
-               }
-
-   			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
-   				$( this ).parents( '.a-unit:first' ).remove();
-   			}));
-   		}
-   	});
+    });
 });
 </script>

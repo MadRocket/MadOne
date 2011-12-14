@@ -80,8 +80,34 @@
     background-color: #fce7be !important;
 }
 
-.disabled p, .disabled h2, .disabled i {
-	color: #ccc !important;
+.a-unit .actions__button {
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+.a-unit .actions__button.edit {
+    background-image: url(/static/i/admin/icons/16/pencil.png);
+}
+.a-unit .actions__button.delete {
+    background-image: url(/static/i/admin/icons/16/cross.png);
+}
+.a-unit .actions__button.menu {
+    background-image: url(/static/i/admin/icons/16/flag-on.png);
+}
+.a-unit .actions__button.menu_off {
+    background-image: url(/static/i/admin/icons/16/flag-off.png);
+}
+
+.a-unit .actions__button.enabled {
+    background-image: url(/static/i/admin/icons/16/lamp-on.png);
+}
+.a-unit .actions__button.enabled_off {
+    background-image: url(/static/i/admin/icons/16/lamp-off.png);
+}
+
+.disabled {
+	opacity: 0.5;
 }
 
 .a-unit-body h2 {
