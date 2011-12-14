@@ -1,0 +1,24 @@
+{% extends 'default.twig' %}
+{% block content %}
+<h3>Новости</h3>
+{% for item in items %}
+<div class="wrapper indent-bot1">
+    <figure class="img-indent">
+        {% if item.image %}
+        <img src="{{ madone_image_helper.get(item.image.original.uri, "/temp/news/170x/" ~ item.image.original.name, "170x*") }}" alt="{{ item.title|e }}">
+        {% endif %}
+    </figure>
+    <div class="extra-box">
+        <h6>{{ item.date|date('d | m | Y') }}</h6>
+        <p class="p0">
+            <a style="color: #545454" href="/news/news{{item.id}}">{{ item.title|e }}</a>
+        </p>
+        <span class="color-3">
+        {{ item.announce }}
+        </span><a class="link-2" href="/news/news{{item.id}}"></a>
+    </div>
+</div>
+{% endfor %}
+
+{{ paginator|raw }}
+{% endblock %}

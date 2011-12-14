@@ -18,14 +18,14 @@ class Madone_Module_News_Application extends Madone_Application {
             return false;
         }
 
-        print $this->render('news/index.twig', array('items' => $paginator->getObjects(), 'paginator' => $paginator, 'page' => $this->page));
+        print $this->render('index.twig', array('items' => $paginator->getObjects(), 'paginator' => $paginator, 'page' => $this->page));
         return true;
     }
 
     function view($id) {
         $item = Model_Newslist(array('id' => $id))->first();
         if($item) {
-            print $this->render( 'news/view.twig', array( 'page' => $this->page, 'item' => $item ) );
+            print $this->render( 'view.twig', array( 'page' => $this->page, 'item' => $item ) );
         }
     }
 
@@ -34,11 +34,11 @@ class Madone_Module_News_Application extends Madone_Application {
             header("Content-type: application/rss+xml");
         }
 
-        print new Template( 'news-rss', array( 'page' => $this->page, 'items' => Model_Newslist(array('enabled' => true))->all() ) );
+//        print new Template( 'news-rss', array( 'page' => $this->page, 'items' => Model_Newslist(array('enabled' => true))->all() ) );
     }
 
     function last($number = 5) {
         $news = Model_Newslist( array( 'enabled' => true ) )->orderDesc( 'date' )->limit($number);
-        return $this->render('news/last.twig', array('items' => $news, 'page' => $this->page));
+        return $this->render('last.twig', array('items' => $news, 'page' => $this->page));
     }
 }
