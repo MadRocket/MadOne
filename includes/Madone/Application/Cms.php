@@ -17,8 +17,8 @@ class Madone_Application_Cms
 
                     // Если в настройках есть модуль по умолчанию, и произведен вход в корень сайта — редиректим
                     if (Madone_Utilites::getUriPath() == $request->getCmsUri() &&
-                        Madone_Session::getInstance()->getUser()->setting_module &&
-                        Madone_Session::getInstance()->getUser()->setting_module->name
+                            Madone_Session::getInstance()->getUser()->setting_module &&
+                            Madone_Session::getInstance()->getUser()->setting_module->name
                     ) {
                         header("Location: {$request->getCmsUri()}/" . Madone_Session::getInstance()->getUser()->setting_module->name . '/', true);
                         exit;
@@ -40,7 +40,8 @@ class Madone_Application_Cms
     }
 
     /**
-    Точка входа приложения
+     * Точка входа приложения
+     * @return bool
      */
     function run()
     {
@@ -56,8 +57,8 @@ class Madone_Application_Cms
                 $twig = Madone_Core::twig("{$_SERVER['DOCUMENT_ROOT']}/includes/template/admin");
                 $twig->loadTemplate('login-page.twig')->display(
                     array(
-                         'login_attempt' => Madone_Session::getInstance()->getLoginAttempt(),
-                         '_madone_login' => Madone_Utilites::vars('_madone_login')
+                        'login_attempt' => Madone_Session::getInstance()->getLoginAttempt(),
+                        '_madone_login' => Madone_Utilites::vars('_madone_login')
                     )
                 );
             }
@@ -77,7 +78,7 @@ class Madone_Application_Cms
             exit;
         }
 
-            // Обрабатываем MODEL
+        // Обрабатываем MODEL
         else {
             if ($request->getType() == Madone_Request_Cms::MODEL) {
                 $processor = new Storm_Processor();
@@ -156,9 +157,9 @@ class Madone_Application_Cms
     }
 
     /**
-    Получение модуля по имени
-    $name - имя модуля
-    Возвращает объект-модуль или null, если таковой не обнаружен
+     * Получение модуля по имени
+     * @param $name - имя модуля
+     * @return Madone_Module|null
      */
     protected function getModuleByName($name)
     {
