@@ -1,25 +1,21 @@
 <?
 
-class Madone_Module_Gallery_Admin extends Madone_Module {
+class Madone_Module_Gallery_Admin extends Madone_Module
+{
 
-    function handleHtmlRequest( $uri ) {
-        // Получим дерево разделов
-        $sections = Model_GallerySections()->kiOrder()->tree();
-        
-        // Если разделов нет — создадим корневой раздел
-        if( ! $sections ) {
-            if( Model_GallerySections()->filterLevel( 1 )->count() == 0 ) {
-                Model_GallerySections()->createRoot( array( 'title' => 'Главный раздел', 'enabled' => 1 ) );
-                $sections = Model_GallerySections()->kiOrder()->tree();
+    function handleHtmlRequest($uri)
+    {
+        $names = Madone_Utilites::getUriPathNames();
+        if ($names && array_key_exists(2, $names) && is_numeric($id = $names[2])) {
+            if ($page = Model_Pages()->get($id)) {
+                $pagination = new Madone_Paginator($page->images->order('position')->order('id'), 20);
+                return $this->getTemplate('index.twig', array(
+                    'paginator' => $pagination,
+                    'items' => $pagination->getObjects(),
+                    'page' => $page,
+                ));
             }
         }
-
-        return $this->getTemplate( 'index.twig', array(
-            'items' => $sections,
-            'root' => $sections[0],
-            'items' => $sections[0]->getChildren(),
-            'sessid' => $_COOKIE['PHPSESSID']
-        ) );
     }
 }
 

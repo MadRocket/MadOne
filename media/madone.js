@@ -283,8 +283,9 @@ Madone.ImageGallery = Object.create(Storm.Form).extend({
     }
 });
 
-Madone.units = {sortable: false};
+Madone.units = {options: {sortable: false, container: '.a-unit'}};
 Madone.units.init = function (handler) {
+
     $(handler).find('.enabled').live('click', function (e) {
         Storm.toggle(Storm.buildPath(this), Function.delegate(this, function (data) {
             if (data.enabled) {
@@ -297,9 +298,12 @@ Madone.units.init = function (handler) {
     });
 
     $(handler).find('.delete').live('click', function (e) {
-        var title = $(this).parents('.a-unit:first').find('h2:first').text();
+        var item = $(this).parents('[stormObject]:first');
+        // TODO: correct title selector
+        var title = item.find('h2:first').text();
         if (confirm('Вы действительно хотите удалить «' + title + '»?')) {
-            var nested = $(this).parents('.a-unit:first').find('.a-unit').size();
+            // TODO: correct child nodes selector
+            var nested = item.children('[stormObject]').length;
             if (nested) {
                 if (!confirm('Все вложенные элементы также будут удалены! Продолжить?')){
                     return false;
@@ -307,7 +311,7 @@ Madone.units.init = function (handler) {
             }
 
             Storm.remove(Storm.buildPath(this), Function.delegate(this, function () {
-                $(this).parents('.a-unit:first').remove();
+                item.remove();
             }));
         }
     });

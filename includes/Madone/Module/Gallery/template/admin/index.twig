@@ -1,167 +1,123 @@
 <h1>Галерея</h1>
 
-<div class="module-buttons">
-	<button id="create-section-button" class="btn primary">Создать раздел</button>
+<div>
+    <div class="gallery-dropzone">
+        Перетащите файлы сюда
+    </div>
+    <form class="form-stacked upload">
+        <div class="clearfix"><label>Выберите файлы для загрузки:</label>
+            <input type="file" name="image" class="uploadify" multiple/>
+            <span class="help-block">Можно выбрать сразу несколько файлов</span>
+        </div>
+    </form>
 </div>
 
 <div class="module-content">
-
-	<div class="createFormPlace"></div>
-
-	<div class="a-units sortable" stormModel="Model_Gallerysection">
-        <ol id="sections">
+    <ul class="media-grid" stormModel="Model_Galleryimage">
         {% for item in items %}
-            {{ _self.category(item, true) }}
+        <li id="{{ item.id }}" stormObject="{{ item.id }}">
+            <span class="control">
+                <a href="#" class="actions__button edit"></a><a href="#" class="actions__button delete"></a>
+            </span>
+        <a rel="gallery" class="original-link" href="{{ item.image.original.uri }}">
+            <img class="thumbnail" src="{{ item.image.cms.uri }}" alt="">
+        </a></li>
         {% endfor %}
-        </ol>
-	</div>
+    </ul>
+
+    {{ paginator|raw }}
 </div>
-
-{% macro category(item, full) %}
-    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
-            <div class="a-unit-body{{ item.enabled ? '' : ' disabled'}}">
-                <div class="actions">
-					<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
-                    <img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-					<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-					<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
-                </div>
-                <h2 stromText="title">{{ item.title }}</h2>
-                <p stromText="title">{{ item.name }}</p>
-            </div>
-            {% if full %}
-            <ol>
-                {% for child in item.getChildren() %}
-                    {{ _self.category(child, full) }}
-                {% endfor %}
-            </ol>
-            {% endif %}
-    </li>
-{% endmacro %}
-
-
-<form id="section-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
-	<div class="clearfix">
-	    <label>Название раздела:</label>
-	    <div class="input">
-	        <input class="span11" type="text" name="title"/>
-	    </div>
-    </div>
-	<div class="clearfix">
-	    <label>Название по-английски:</label>
-	    <div class="input">
-	        <input class="span11" type="text" name="name"/>
-        </div>
-    </div>
-	<div class="clearfix">
-	    <label>Описание:</label>
-	    <div class="input">
-	        <textarea class="width-100 height-300" rich="yes" name="text"></textarea>
-        </div>
-    </div>
-	<div class="actions">
-		<button class="submit btn primary" type="submit">Сохранить</button>
-		<button class="cancel btn" type="reset">Отмена</button>
-	</div>
-</form>
-
-<li class="a-unit" id="section-template" style="display:none;">
-    <div class="a-unit-body">
-        <div class="actions">
-			<img class="image-list" title="Открыть список изображений" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
-			<img class="edit" title="Редактировать" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-			<img class="enabled" title="Включить/выключить" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
-			<img class="delete" title="Удалить" width="16" height="16" alt="Удалить" src="/static/i/admin/icons/16/cross.png"/>
-        </div>
-        <h2 stormText="title">Название раздела</h2>
-        <p stormText="name">name</p>
-    </div>
+<li id="template" style="display: none;" stormObject="">
+    <span class="control">
+        <a href="#" class="actions__button edit"></a><a href="#" class="actions__button delete"></a>
+    </span>
+    <a class="original-link" href="">
+        <img class="thumbnail" src="" alt="">
+    </a>
 </li>
+<style type="text/css">
+    .media-grid li {
+        display: block;
+        float: left;
+        position: relative;
+    }
+    .media-grid li:hover .control {
+        display: block;
+    }
+    .media-grid .control {
+        position: absolute;
+        display: none;
+        margin: 6px 0 0 23px;
+    }
+    .media-grid .actions__button {
+        background-color: #fff;
+        margin: 0 0 0 6px;
+    }
+    .gallery-dropzone {
+        float: right;
+        width: 50%;
+        height: 60px;
+        border: 3px dashed #ccc;
+        border-radius: 15px;
+        color: #ccc;
+        text-align: center;
+        line-height: 60px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        Madone.units.init('.media-grid');
+        $(".media-grid img").live('mousedown', function (event) {
+            /* Google chrome img selection fix */
+            event.preventDefault();
+        });
+        $(".media-grid").sortable({
+            items:'li',
+            handle:'a',
+            appendTo:'.media-grid',
+            helper:'clone',
+            placeholder:'ui-sortable-placeholder',
+            forcePlaceholderSize:true,
+            stop:function (event, ui) {
+                var objects = {};
+                $.each($(".media-grid").sortable('toArray'), function (i, id) {
+                    try {
+                        objects[ parseInt(id) ] = { position:i + 1 };
+                    } catch (e) {
+                    }
+                });
 
-<script>
-$( function () {
-    $('#sections').nestedSortable(
-   	    Object.create( Madone.nestedSortableOptions ).extend({
-            stop: function(event, ui){
-                Storm.reorder( 'Model_Gallerysection', { id: {{ root.id }}, children: $('#sections').nestedSortable('toHierarchy') } );
+                $.post("/admin/Model_Galleryimage/update/", { objects:JSON.stringify(objects) }, function (r) {
+                    if (!r.success) {
+                        alert(r.message);
+                    }
+                }, 'json');
             }
-        })
-    );
+        });
 
-	// Вкл/выкл раздела
-	$( '.enabled' ).click( function( e ) {
-		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function ( data ) {
-			if(data.enabled) {
-				$( this ).parents('.a-unit-body:first').removeClass('disabled');
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
-			}
-			else {
-				$( this ).parents('.a-unit-body:first').addClass('disabled');
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
-			}
-		}));
-	});
+        $(".original-link").fancybox();
 
-	// Удаление раздела
-	$( '.delete' ).click( function( e ) {
-		var title = $( this ).parents( '.a-unit:first' ).find( 'h2:first' ).text();
-        if( confirm( 'Вы действительно хотите удалить раздел «' + title  + '»?' ) ) {
-			var nested = $( this ).parents( '.a-unit:first' ).find( '.a-unit' ).size();
-            if( nested ) {
-                if( ! confirm( Mad.decline( nested, '',
-					'«' + title +'» содержит еще %n вложенный раздел.',
-					'«' + title +'» содержит еще %n вложенных раздела.',
-					'«' + title +'» содержит еще %n вложенных разделов.' ) +
-					' Вы действительно хотите удалить их все?' ) )
-                return false;
+        var page_id = {{page.id}};
+        $('.upload').fileupload({
+            formData:[
+                {name:"page", value:page_id }
+            ],
+            sequentialUploads:true,
+            dropZone:$('.gallery-dropzone'),
+            dataType:'json',
+            url:Storm.getPath('Model_Galleryimage').getUri() + '/create/',
+            done:function (e, data) {
+                var item = $('#template').clone(true).attr('id', data.result.data.id).attr('stormObject', data.result.data.id);
+                item.find('.original-link').attr('rel', 'gallery').attr('href', data.result.data.image.original.uri).find('img').attr('src', data.result.data.image.cms.uri);
+                item.appendTo('.media-grid').show();
             }
-			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
-				$( this ).parents( '.a-unit:first' ).remove();
-			} ) );
-		}
-	} );
-
-	var sectionForm = Object.create( Storm.Form ).extend( {
-		form: $( '#section-form' ),
-		onFillItem: function ( item, data ) {
-			item.find( 'img.enabled' ).attr( 'src', data.enabled ? '/static/i/admin/icons/16/lamp-on.png' : '/static/i/admin/icons/16/lamp-off.png' );
-			if( ! data.enabled ) {
-				item.find( '.a-unit-body' ).addClass( 'disabled' );
-			}
-			item.attr( 'stormObject', data.id );
-			item.attr( 'id', 'a-unit-' + data.id );
-		}
-	} );
-
-    // Создание раздела
-    $( '#create-section-button' ).click( function ( e ) {
-        e.preventDefault();
-        Object.create( sectionForm ).extend( {
-            object:		'Model_Gallerysection',
-            formPlace:	$( '.createFormPlace' ),
-            item:		$( '#section-template' ),
-            itemPlace:	$( '#sections' )
-        } ).start();
-	} );
-
-    // Редактирование раздела
-    $( '.edit' ).bind( 'click', function( event ) {
-		event.preventDefault();
-		Object.create( sectionForm ).extend( {
-			object:	Storm.buildPath( this ),
-			item:	$( this ).parents( '.a-unit-body' )
-		} ).start();
-    } );
-
-    // Отображение нашей непростой формы списка изображений
-    $( '.image-list' ).bind( 'click', function( event ) {
-		Object.create( Madone.ImageGallery ).extend({
-			stormModel: 'Model_Galleryimage',
-			PHPSESSID: '{{ sessid }}',
-			object:	Storm.buildPath( this ),
-			item:	$( this ).parents( '.a-unit-body' )
-		}).start();
-    } );
-});
-
+        }).bind('fileuploaddragover', function (e) {
+            $('.gallery-dropzone').css('border-color', '#fce7be');
+        }).bind('fileuploaddrop', function (e) {
+            $('.gallery-dropzone').css('border-color', '#ccc');
+        });
+        $('.gallery-dropzone').bind('mouseout', function(event){
+            $('.gallery-dropzone').css('border-color', '#ccc');
+        });
+    });
 </script>

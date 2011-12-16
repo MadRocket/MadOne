@@ -28,7 +28,7 @@ class Model_Galleryimage extends Storm_Model
     {
         if( $new && ! $this->position )
         {
-            $last = $this->getQuerySet()->filter( array( 'id__ne' => $this->id, 'section' => $this->section ) )->orderDesc( 'position' )->first();
+            $last = $this->getQuerySet()->filter( array( 'id__ne' => $this->id, 'page' => $this->page ) )->orderDesc( 'position' )->first();
             $this->position = $last ? $last->position + 1 : 1;
             $this->hiddenSave();
         }
