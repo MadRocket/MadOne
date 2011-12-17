@@ -1,10 +1,9 @@
 <?
 
 /**
-    Процессор REST-запросов к моделям шторма.
-    Нужно очень аккуратно разграничивать доступ к этому интерфейсу, ибо он позволяет редактировать любую модель сайта.
-*/
-
+ * Процессор REST-запросов к моделям шторма.
+ * Нужно очень аккуратно разграничивать доступ к этому интерфейсу, ибо он позволяет редактировать любую модель сайта.
+ */
 class Storm_Processor {
 
     // Массив имен моделей, которые нельзя редактировать через процессор
@@ -13,11 +12,12 @@ class Storm_Processor {
     );
 
     /**
-    *   Обработка запроса
-    *   $model - имя модели
-    *   $uri - путь запроса, например '/5/update/'
-    *   $vars - переменные, переданные вместе с запросом (обычно это Mad::vars())
-    */
+     * Обработка запроса
+     * @param $model имя модели
+     * @param $uri путь запроса, например '/5/update/'
+     * @param $vars переменные, переданные вместе с запросом (обычно это Mad::vars())
+     * @return mixed
+     */
     function process( $model, $uri, $vars )
     {
         try {
@@ -71,10 +71,10 @@ class Storm_Processor {
 	                break;
 	
 	                case 'reorder':
-	                if( ! ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ) {
-	                    throw new Exception( "Модель {$model} не имеет Ki-индекса, и упорядочить ее невозможно." );
-	                }
-	                Storm_Queryset( $model )->reorder( json_decode( $vars['objects'], true ) );
+                        if( ! ( class_exists( $model ) && is_subclass_of( $model, 'Storm_Model_Tree' ) ) ) {
+                            throw new Exception( "Модель {$model} не имеет Ki-индекса, и упорядочить ее невозможно." );
+                        }
+                        Storm_Queryset( $model )->reorder( json_decode( $vars['objects'], true ) );
 	                break;
 	
 	                case 'retrieve':
@@ -168,10 +168,13 @@ class Storm_Processor {
             ) );
         }    
     }
-    
+
     /**
-    *   Получение объекта модели
-    */
+     * Получение объекта модели
+     * @param $model
+     * @param $id
+     * @return bool|mixed|null
+     */
     protected function getModelObject( $model, $id ) {
         $object = Storm_Queryset( $model )->get( $id );
         
@@ -181,11 +184,14 @@ class Storm_Processor {
 
         return $object;
     }
-    
+
     /**
-    *   Проверка пустоты массива данных объектов. Если в массиве есть элементы, выбрасывается Exception
-    *   с сообщением, что имеющиеся в массиве объекты не найдены.
-    */
+     * Проверка пустоты массива данных объектов. Если в массиве есть элементы, выбрасывается Exception
+     * с сообщением, что имеющиеся в массиве объекты не найдены.
+     * @param $model
+     * @param array $objects
+     * @return bool
+     */
     protected function checkUnusedObjects( $model, array $objects ) {
         if( $objects ) {
             throw new Exception( 
@@ -196,33 +202,34 @@ class Storm_Processor {
         }
         return true;
     }
-    
+
     /**
-    *   Перевод чего-то в JSON-безопасную форму.
-    *   $something можут быть строкой, массивом, массивом объектов, QuerySet-ом, моделью %D
-    */
-    protected function getJsonSafe( $something ) {
+     * Перевод чего-то в JSON-безопасную форму.
+     * @param $input могут быть строкой, массивом, массивом объектов, QuerySet-ом, моделью %D
+     * @return array|null
+     */
+    protected function getJsonSafe( $input ) {
     
         $result = null;
     
-        if( is_object( $something ) ) {
+        if( is_object( $input ) ) {
 
-            if( $something instanceof Storm_Model ) {
-                $result = $something->asArray( true );
+            if( $input instanceof Storm_Model ) {
+                $result = $input->asArray( true );
                 
-            } elseif( $something instanceof Storm_Queryset ) {
-                $result = $this->getJsonSafe( $something->all() );
+            } elseif( $input instanceof Storm_Queryset ) {
+                $result = $this->getJsonSafe( $input->all() );
 
             } else {
-                throw new Exception( "Cannot make ".get_class( $something )." object JSON-safe." );
+                throw new Exception( "Cannot make ".get_class( $input )." object JSON-safe." );
             }
-        } elseif( is_array( $something ) ) {
+        } elseif( is_array( $input ) ) {
             $result = array();
-            foreach( $something as $k => $v ) {
+            foreach( $input as $k => $v ) {
                 $result[ $k ] = $this->getJsonSafe( $v );
             }
         } else {
-            $result = $something;
+            $result = $input;
         }
         
         return $result;

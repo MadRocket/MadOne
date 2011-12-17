@@ -8,10 +8,12 @@
 class Storm_Queryset_Tree extends Storm_Queryset
 {
 	static protected $joinNumber = 1;
+
     /**
-        Конструктор.
-        $model -  имя модели, для которой конструируется Storm_Queryset_Tree.
-    */
+     * Конструктор.
+     * $model -  имя модели, для которой конструируется Storm_Queryset_Tree.
+     * @param $model
+     */
     function __construct( $model )
     {
         // Сконструируем все родительские штуки
@@ -20,8 +22,9 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
     
     /**
-        Сортировка по положению в дереве
-    */
+     * Сортировка по положению в дереве
+     * @return \Storm_Queryset
+     */
     function kiOrder()
     {
         // Выставляем упорядочивание по левому ключу
@@ -29,59 +32,66 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Создание подузла, установка его первым
-        $parent — объект или id родителя
-        $params — данные для кинициализации объекта, как в конструкторе
-    */
+     * Создание подузла, установка его первым
+     * @param $parent — объект или id родителя
+     * @param array $params — данные для кинициализации объекта, как в конструкторе
+     * @return
+     */
     function createFirstChild( $parent, array $params )
     {
         return $this->_create( $parent, 'first-child', $params );
     }
 
     /**
-        Создание подузла, установка его последним
-        $parent — объект или id родителя
-        $params — данные для инициализации объекта, как в конструкторе
-    */
+     * Создание подузла, установка его последним
+     * @param $parent — объект или id родителя
+     * @param array $params — данные для инициализации объекта, как в конструкторе
+     * @return
+     */
     function createLastChild( $parent, array $params )
     {
         return $this->_create( $parent, 'last-child', $params );
     }
 
     /**
-        Создание узла перед указаным
-        $neighbour — объект или id соседнего узла
-        $params — данные для инициализации объекта, как в конструкторе
-    */
+     * Создание узла перед указаным
+     * @param $neighbour — объект или id соседнего узла
+     * @param array $params — данные для инициализации объекта, как в конструкторе
+     * @return
+     */
     function createBefore( $neighbour, array $params )
     {
         return $this->_create( $neighbour, 'before', $params );
     }
 
     /**
-        Создание узла после указанного
-        $neighbour — объект или id соседнего узла
-        $params — данные для инициализации объекта, как в конструкторе
-    */
+     * Создание узла после указанного
+     * @param $neighbour — объект или id соседнего узла
+     * @param array $params — данные для инициализации объекта, как в конструкторе
+     * @return
+     */
     function createAfter( $neighbour, array $params )
     {
         return $this->_create( $neighbour, 'after', $params );
     }
-    
+
     /**
-        Создание корневого узла
-        $params — данные для инициализации объекта, как в конструкторе
-    */
+     * Создание корневого узла
+     * @param array $params — данные для инициализации объекта, как в конструкторе
+     * @return
+     */
     function createRoot( array $params )
     {
         return $this->_create( null, 'before', $params );
     }
 
     /**
-        Создание объекта с Ki-сортировкой по переданным аргументам
-        $anchor — ключевая запись, отностительно которой производится вставка новой. null — вставка корневой записи.
-        $mode — режим вставки относительно $anchor: 'before', 'after', 'last-child', 'first-child'.
-    */
+     * Создание объекта с Ki-сортировкой по переданным аргументам
+     * @param $anchor — ключевая запись, отностительно которой производится вставка новой. null — вставка корневой записи.
+     * @param $mode — режим вставки относительно $anchor: 'before', 'after', 'last-child', 'first-child'.
+     * @param array $params
+     * @return
+     */
     public function _create( $anchor, $mode, array $params )
     {
         // Проверим режим добавления
@@ -158,8 +168,10 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-    *   Создание новой записи. Запись создается первой дочерней корня или корневой, если корневой записи нет.
-    */
+     * Создание новой записи. Запись создается первой дочерней корня или корневой, если корневой записи нет.
+     * @param array $params
+     * @return
+     */
     function create( array $params ) {
         // Выберем корневой элемент
         $root = $this->filterLevel( 1 )->first();
@@ -168,12 +180,12 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Получение узлов определенного уровня вложенности
-        $a — конкретный уровень (если не указан $b) или левая граница диапазона
-        $b — правая граница диапазона, границы включаются в выборку
-        $a = 0 означает «начиная с первого уровня»
-        $b = 0 означает «до самого последнего уровня»
-    */
+     * Получение узлов определенного уровня вложенности
+     * @param $embrace
+     * @param $a — конкретный уровень (если не указан $b) или левая граница диапазона $a = 0 означает «начиная с первого уровня»
+     * @param null $b — правая граница диапазона, границы включаются в выборку $b = 0 означает «до самого последнего уровня»
+     * @return \Storm_Queryset
+     */
     function queryLevel( $embrace, $a, $b = null )
     {
         $params = null;
@@ -205,12 +217,12 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Фильтрация или включение узлов
-        $item — опорный узел
-        $where — SQL условие выборки
-        $embrace — включить выбранные узлы, если false — выполняется фильтрация выбраных узлов
-    */
-    
+     * Фильтрация или включение узлов
+     * @param $item — опорный узел
+     * @param $where — SQL условие выборки
+     * @param bool $embrace — включить выбранные узлы, если false — выполняется фильтрация выбраных узлов
+     * @return \Storm_Queryset_Tree
+     */
     private function queryItems( $item, $where, $embrace = false )
     {
         if( is_object( $item ) ) $item = $item->meta->getPkValue();
@@ -240,16 +252,20 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Получение родительской ветки
-    */
+     * Получение родительской ветки
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function filterParents( $item )
     {
         return $this->queryItems( $item, '%{alias}.lk < %{item_alias}.lk AND %{alias}.rk > %{item_alias}.rk', false );
     }
 
     /**
-        Получение дочерних узлов
-    */
+     * Получение дочерних узлов
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function filterChildren( $item )
     {
         return $this->queryItems( $item, '%{alias}.lk > %{item_alias}.lk AND %{alias}.rk < %{item_alias}.rk', false );
@@ -264,16 +280,23 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Получение дочерних узлов
-    */
+     * Получение дочерних узлов
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function embraceChildren( $item )
     {
         return $this->queryItems( $item, '%{alias}.lk > %{item_alias}.lk AND %{alias}.rk < %{item_alias}.rk', true );
     }
-    
+
     /**
-        Получение стоящих рядом узлов
-    */
+     * Получение стоящих рядом узлов
+     * @param $item
+     * @param $where
+     * @param $parent_where
+     * @param bool $embrace
+     * @return \Storm_Queryset_Tree
+     */
     private function querySiblingItems( $item, $where, $parent_where, $embrace = false )
     {
         if( is_object( $item ) ) $item = $item->meta->getPkValue();
@@ -306,60 +329,73 @@ class Storm_Queryset_Tree extends Storm_Queryset
         // Возвращаем следующий объект
         return $next;
     }
-    
+
     /**
-        Получение элемента и его соседей на том же уровне
-    */
+     * Получение элемента и его соседей на том же уровне
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function filterSiblings( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk AND %{alias}.lvl = %{item_alias}.lvl )', '%{parent_alias}.lvl = %{item_alias}.lvl - 1', false );
     }
 
     /**
-        Получение элемента, его соседей на том же уровне и всех детей соседей и самого элемента
-    */
+     * Получение элемента, его соседей на том же уровне и всех детей соседей и самого элемента
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function filterSiblingsAndChildren( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk )', '%{parent_alias}.lvl = %{item_alias}.lvl - 1', false );
     }
 
     /**
-        Получение элемента и его соседей на том же уровне
-    */
+     * Получение элемента и его соседей на том же уровне
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function embraceSiblings( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk AND %{alias}.lvl = %{item_alias}.lvl )', '%{parent_alias}.lvl = %{item_alias}.lvl - 1', true );
     }
 
     /**
-        Получение элемента, его соседей на том же уровне и всех детей соседей и самого элемента
-    */
+     * Получение элемента, его соседей на том же уровне и всех детей соседей и самого элемента
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function embraceSiblingsAndChildren( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk )', '%{parent_alias}.lvl = %{item_alias}.lvl - 1 ', true );
     }
 
     /**
-        Получение ветки, в которой участвует узел
-    */
+     * Получение ветки, в которой участвует узел
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function filterBranch( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk )', '%{parent_alias}.lvl = 2', false );
     }
 
     /**
-        Получение ветки, в которой участвует узел
-    */
+     * Получение ветки, в которой участвует узел
+     * @param $item
+     * @return \Storm_Queryset_Tree
+     */
     function embraceBranch( $item )
     {
         return $this->querySiblingItems( $item, '( %{alias}.lk > %{parent_alias}.lk AND %{alias}.rk < %{parent_alias}.rk )', '%{parent_alias}.lvl = 2', true );
     }
 
     /**
-        Переупорядочивание всего дерева в соответствии с переданным образцом
-        $order — массив, определяющий новый порядок дерева
-        ключ — идентификатор узла, значение — уровень вложенности
-    */
+     * Переупорядочивание всего дерева в соответствии с переданным образцом
+     * @param array $order_tree массив, определяющий новый порядок дерева, ключ — идентификатор узла, значение — уровень вложенности
+     * @return bool
+     * @throws Storm_Exception
+     */
     function reorder( array $order_tree )
     {
         // Выберем все узлы, которые у нас есть
@@ -399,12 +435,14 @@ class Storm_Queryset_Tree extends Storm_Queryset
         
         return true;
     }
-    
+
     /**
-        Получение ключей Ki для переданного дерева узлов
-        каждый элемент имеет уникальный id и опциональный массив children — такие же узлы, как и он
-        Возвращает хэш элементов вида id => array( lk => L, rk => R, lvl => LV )
-    */
+     * Получение ключей Ki для переданного дерева узлов
+     * каждый элемент имеет уникальный id и опциональный массив children — такие же узлы, как и он
+     * Возвращает хэш элементов вида id => array( lk => L, rk => R, lvl => LV )
+     * @param $tree
+     * @return array
+     */
     private function getKies( $tree )
     {
         // Пройдем по дереву и расставим Ki
@@ -419,12 +457,13 @@ class Storm_Queryset_Tree extends Storm_Queryset
         
         return $kies;
     }
+
     /**
-        Рекурсивная расстановка Ki для дерева
-        $item — корень дерева
-        $ki — начальное значение Ki, не указывать при вызове
-        Возвращает конечное значение ki дерева
-    */    
+     * Рекурсивная расстановка Ki для дерева
+     * @param $item корень дерева
+     * @param int $ki начальное значение Ki, не указывать при вызове
+     * @return int Возвращает конечное значение ki дерева
+     */
     private function setItemKi( & $item, $ki = 1 )
     {
         $item['lk'] = $ki++;
@@ -443,10 +482,11 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
 
     /**
-        Получение плоского списка из дерева
-        $tree корень дерева
-        Возвращает массив с ключами id, lvl, lk, rk
-    */
+     * Получение плоского списка из дерева
+     * @param $item корень дерева
+     * @param int $lvl
+     * @return array Возвращает массив с ключами id, lvl, lk, rk
+     */
     private function getFlatListFromTree( $item, $lvl = 1 )
     {
         $list = array();
@@ -465,9 +505,10 @@ class Storm_Queryset_Tree extends Storm_Queryset
     }
     
     /**
-        Получение выбранных элементов в виде дерева — заполняет дочерние элементы узлов, позже можно вызывать их методы getChildren()
-        Возвращает массив узлов
-    */
+     * Получение выбранных элементов в виде дерева — заполняет дочерние элементы узлов, позже можно вызывать их методы getChildren()
+     * Возвращает массив узлов
+     * @return array
+     */
     function tree()
     {
         $nodes = $this->kiOrder()->all();
