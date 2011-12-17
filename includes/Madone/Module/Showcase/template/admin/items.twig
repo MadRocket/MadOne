@@ -12,13 +12,13 @@
 	<div class="createFormPlace"></div>
 	<div class="a-units sortable" stormModel="Model_Showcaseitem">
 	{% for item in items %}
-	<div class="a-unit" id="id-{{item.id}}" stormObject="{{item.id}}">
-        <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+	<div class="a-unit{{ item.enabled ? '' : ' disabled' }}" id="id-{{item.id}}" stormObject="{{item.id}}">
+        <div class="a-unit-body">
             <div class="actions">
-                <img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
-                <img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-                <img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ item.enabled ? 'on' : 'off' }}.png"/>
-                <img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+                {#<img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>#}
+                <img title="Редактировать" class="actions__button edit" src="/static/i/admin/1x1.gif"/>
+                <img title="Включить/Выключить" class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
+                <img title="Удалить" class="actions__button delete" src="/static/i/admin/1x1.gif"/>
             </div>
             <h2 stormText="title">{{ item.title }}</h2>
             <p stormText="price">{{ item.price }}</p>
@@ -78,10 +78,9 @@
 <div class="a-unit" id="item-template" style="display:none;">
 	<div class="a-unit-body">
         <div class="actions">
-			<img title="Открыть список изображений" class="image-list" width="16" height="16" src="/static/i/admin/icons/16/image.png"/>
-			<img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-			<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-on.png"/>
-			<img title="Удалить" class="delete" width="16" height="16" src="/static/i/admin/icons/16/cross.png"/>
+            <img title="Редактировать" class="actions__button edit" src="/static/i/admin/1x1.gif"/>
+            <img title="Включить/Выключить" class="actions__button enabled" stormField="enabled" src="/static/i/admin/1x1.gif"/>
+            <img title="Удалить" class="actions__button delete" src="/static/i/admin/1x1.gif"/>
         </div>
         <h2 stormText="title">Название позиции</h2>
         <p stormText="price">Цена, руб</p>
@@ -91,49 +90,8 @@
 <script type="text/javascript">
 
 $( function() {
-    $(".a-units").sortable({
-		helper: 'clone',
-		placeholder: 'ui-sortable-placeholder',
-		forcePlaceholderSize: true,
-		stop: function(event, ui) {
-			var objects = {};
+    $(".a-units").madoneUnits({sortable: true});
 
-            $.each( $(".a-units").sortable( 'toArray' ), function( i, n ) {
-                var id = n.split( '-' );
-                try {
-		              objects[ parseInt( id[1] ) ] = { position: i + 1 };
-                } catch( e ) { };
-            });
-
-			$.post( "/admin/Model_ShowcaseItem/update/", { objects: JSON.stringify( objects ) }, function( r ) {
-		        if( ! r.success ) {
-		            alert( r.message );
-		        }
-	    	}, 'json' );
-		}
-	});
-
-	$( '.enabled' ).click( function( e ) {
-		Storm.toggle( Storm.buildPath( this ), Function.delegate( this, function( data ) {
-			if(data.enabled) {
-				$( this ).parents('.a-unit-body:first').removeClass('disabled');
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-on.png');
-			}
-			else {
-				$( this ).parents('.a-unit-body:first').addClass('disabled');			
-				$( this ).attr( 'src', '/static/i/admin/icons/16/lamp-off.png' );
-			}	
-		} ) );
-	} );
-	
-	$( '.delete' ).click( function( e ) {
-		if( confirm( 'Вы действительно хотите удалить позицию «' + $( this ).parents( '.a-unit-body' ).find( 'h2' ).text() + '»?' ) ) {
-			Storm.remove( Storm.buildPath( this ), Function.delegate( this, function() {
-				$( this ).parents( '.a-unit' ).remove()
-			} ) );
-		}
-	} );
-	
 	var itemForm = Object.create( Storm.Form ).extend( {
 		form: $( '#item-form' ),
 		onFetchData: function( form, data ) {
@@ -144,11 +102,6 @@ $( function() {
 			}
 		},
 		onFillItem: function ( item, data ) {
-			item.find( 'img.enabled' ).attr( 'src', data.enabled ? '/static/i/admin/icons/16/lamp-on.png' : '/static/i/admin/icons/16/lamp-off.png' );
-			if( ! data.enabled ) {
-				item.find( '.a-unit-body' ).addClass( 'disabled' );
-			}
-			item.attr( 'stormObject', data.id );
 			item.attr( 'id', 'id-' + data.id );
 		}
 	} );
@@ -170,16 +123,14 @@ $( function() {
 		} ).start();
 	} );
 	
-    // Отображение нашей непростой формы списка изображений :)
-    $( '.image-list' ).bind( 'click', function( event ) {
-		Object.create( Madone.ImageGallery ).extend({
-			stormModel: 'Model_Showcaseimage',
-			PHPSESSID: '{{ sessid }}',
-			object:	Storm.buildPath( this ),
-			item:	$( this ).parents( '.a-unit-body' )
-		}).start();
-    } );
-
+    {#// Отображение нашей непростой формы списка изображений :)#}
+    {#$( '.image-list' ).bind( 'click', function( event ) {#}
+		{#Object.create( Madone.ImageGallery ).extend({#}
+			{#stormModel: 'Model_Showcaseimage',#}
+			{#object:	Storm.buildPath( this ),#}
+			{#item:	$( this ).parents( '.a-unit-body' )#}
+		{#}).start();#}
+    {#} );#}
 });
 
 </script>

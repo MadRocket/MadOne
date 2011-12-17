@@ -9,17 +9,16 @@
 <div class="module-content">
     <div class="createFormPlace"></div>
 
-    <div class="a-units a-unit-list" stormModel="Model_News">
+    <div class="a-units" stormModel="Model_News">
         {% for item in items %}
-        <div class="a-unit">
-            <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
+        <div class="a-unit{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
+            <div class="a-unit-body">
                 <div class="actions">
                     <img title="Редактировать" class="actions__button edit" src="/static/i/admin/1x1.gif"/>
                     <img title="Включить/Выключить" class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
                     <img title="Удалить" class="actions__button delete" src="/static/i/admin/1x1.gif"/>
                 </div>
                 <h2 stormText="title">{{ item.title }}</h2>
-
                 <p stormText="date">{{ item.date }}</p>
             </div>
         </div>
@@ -65,7 +64,8 @@
 
 <script type="text/javascript">
     $(function () {
-        Madone.units.init('.a-units');
+        $('.a-units').madoneUnits();
+
         var newsForm = Object.create(Storm.Form).extend({
             form:$('#news-form'),
             onSubmit:function (form, data, result) {
@@ -88,14 +88,7 @@
         $('.edit').click(function (e) {
             Object.create(newsForm).extend({
                 object:Storm.buildPath(this),
-                item:$(this).parents('.a-unit-body'),
-                onFillItem:function (item, data) {
-                    if (!data.enabled) {
-                        item.find('.actions__button.enabled').addClass('enabled_off');
-                        item.find('.a-unit-body').addClass('disabled');
-                    }
-                    item.attr('stormObject', data.id);
-                }
+                item:$(this).parents('.a-unit-body')
             }).start();
         })
     })

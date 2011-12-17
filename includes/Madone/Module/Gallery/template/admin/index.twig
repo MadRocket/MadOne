@@ -2,7 +2,7 @@
 
 <div>
     <div class="gallery-dropzone">
-        Перетащите файлы сюда
+        Либо перетащите файлы с рабочего стола на эту область
     </div>
     <form class="form-stacked upload">
         <div class="clearfix"><label>Выберите файлы для загрузки:</label>
@@ -66,34 +66,16 @@
 </style>
 <script type="text/javascript">
     $(function () {
-        Madone.units.init('.media-grid');
-        $(".media-grid img").live('mousedown', function (event) {
+        $('.media-grid').madoneUnits({
+            sortable: 'plain',
+            itemSelector: '[stormObject]'
+        });
+
+        $(".thumbnail").bind('mousedown', function (event) {
             /* Google chrome img selection fix */
             event.preventDefault();
         });
-        $(".media-grid").sortable({
-            items:'li',
-            handle:'a',
-            appendTo:'.media-grid',
-            helper:'clone',
-            placeholder:'ui-sortable-placeholder',
-            forcePlaceholderSize:true,
-            stop:function (event, ui) {
-                var objects = {};
-                $.each($(".media-grid").sortable('toArray'), function (i, id) {
-                    try {
-                        objects[ parseInt(id) ] = { position:i + 1 };
-                    } catch (e) {
-                    }
-                });
 
-                $.post("/admin/Model_Galleryimage/update/", { objects:JSON.stringify(objects) }, function (r) {
-                    if (!r.success) {
-                        alert(r.message);
-                    }
-                }, 'json');
-            }
-        });
 
         $(".original-link").fancybox();
 

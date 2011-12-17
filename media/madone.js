@@ -42,7 +42,7 @@ Madone.RichTextEditorGetHTML = function (name) {
 };
 
 
-Madone.nestedSortableOptions = Object.create(Object.Extendable).extend({
+Madone.nestedSortableOptions = {
     disableNesting:'no-nest',
     forcePlaceholderSize:true,
     handle:'div',
@@ -54,7 +54,7 @@ Madone.nestedSortableOptions = Object.create(Object.Extendable).extend({
     tabSize:15,
     tolerance:'pointer',
     toleranceElement:'> div'
-});
+};
 
 Madone.enableRichTextareas = function (immediate) {
     var fckCnt = 1;
@@ -283,36 +283,68 @@ Madone.ImageGallery = Object.create(Storm.Form).extend({
     }
 });
 
-Madone.units = {options: {sortable: false, container: '.a-unit'}};
-Madone.units.init = function (handler) {
+(function ($) {
+    $.fn.madoneUnits = function (options) {
+        // Create some defaults, extending them with any options that were provided
+        var settings = $.extend({
+            'itemSelector':'.a-unit',
+            'sortable': false
+        }, options);
 
-    $(handler).find('.enabled').live('click', function (e) {
-        Storm.toggle(Storm.buildPath(this), Function.delegate(this, function (data) {
-            if (data.enabled) {
-                $(this).removeClass('enabled_off').parents('.a-unit-body:first').removeClass('disabled');
-            }
-            else {
-                $(this).addClass('enabled_off').parents('.a-unit-body:first').addClass('disabled');
-            }
-        }));
-    });
+        return this.each(function () {
+            var $this = $(this);
+            var model = $this.attr('stormModel');
 
-    $(handler).find('.delete').live('click', function (e) {
-        var item = $(this).parents('[stormObject]:first');
-        // TODO: correct title selector
-        var title = item.find('h2:first').text();
-        if (confirm('Вы действительно хотите удалить «' + title + '»?')) {
-            // TODO: correct child nodes selector
-            var nested = item.children('[stormObject]').length;
-            if (nested) {
-                if (!confirm('Все вложенные элементы также будут удалены! Продолжить?')){
-                    return false;
+            if (settings.sortable) {
+                $this.sortable({
+                    helper:'clone',
+                    placeholder:'ui-sortable-placeholder',
+                    forcePlaceholderSize:true,
+                    stop:function (event, ui) {
+                        var objects = {};
+                        $.each($this.sortable('toArray'), function (i, id) {
+                            try {
+                                objects[ parseInt(id) ] = { position:i + 1 };
+                            } catch (e) {
+                            }
+                        });
+                        $.post("/admin/" + model + "/update/", { objects:JSON.stringify(objects) }, function (r) {
+                            if (!r.success) {
+                                alert(r.message);
+                            }
+                        }, 'json');
+                    }
+                });
+            }
+
+            $this.find('.enabled').live('click', function (e) {
+                Storm.toggle(Storm.buildPath(this), Function.delegate(this, function (data) {
+                    if (data.enabled) {
+                        $(this).removeClass('enabled_off').parents(settings.itemSelector).filter(':first').removeClass('disabled');
+                    }
+                    else {
+                        $(this).addClass('enabled_off').parents(settings.itemSelector).filter(':first').addClass('disabled');
+                    }
+                }));
+            });
+            $this.find('.delete').live('click', function (e) {
+                var item = $(this).parents(settings.itemSelector).filter(':first');
+                // TODO: correct title selector
+                var title = item.find('h2:first').text();
+                if (confirm('Вы действительно хотите удалить «' + title + '»?')) {
+                    // TODO: correct child nodes selector
+                    var nested = item.children(settings.itemSelector).length;
+                    if (nested) {
+                        if (!confirm('Все вложенные элементы также будут удалены! Продолжить?')) {
+                            return false;
+                        }
+                    }
+
+                    Storm.remove(Storm.buildPath(this), Function.delegate(this, function () {
+                        item.remove();
+                    }));
                 }
-            }
-
-            Storm.remove(Storm.buildPath(this), Function.delegate(this, function () {
-                item.remove();
-            }));
-        }
-    });
-};
+            });
+        });
+    };
+})(jQuery);

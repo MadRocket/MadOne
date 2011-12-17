@@ -17,8 +17,8 @@
 </div>
 
 {% macro pageitem(item, full) %}
-    <li class="a-unit" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
-           <div class="a-unit-body{{ item.enabled ? '' : ' disabled' }}">
+    <li class="a-unit{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}" id="a-unit-{{ item.id }}">
+           <div class="a-unit-body">
                <div class="actions">
                    <img class="actions__button edit" src="/static/i/admin/1x1.gif"/>
                    <img class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
@@ -131,14 +131,14 @@
 
 <script type="text/javascript">
 $( function () {
-    Madone.units.init('.a-units');
+    $('.a-units').madoneUnits();
 
     $('#pages').nestedSortable(
-   	    Object.create( Madone.nestedSortableOptions ).extend({
+   	    $.extend({
             stop: function(event, ui){
                 Storm.reorder( 'Model_Page', { id: {{ root.id }}, children: $('#pages').nestedSortable('toHierarchy') } );
             }
-        })
+        }, Madone.nestedSortableOptions)
     );
 
     $( '.a-units .menu' ).click( function( e ) {
@@ -156,11 +156,7 @@ $( function () {
    		form: $( '#page-form' ),
 
    		onFillItem: function ( item, data ) {
-            if(!data.enabled) {
-                item.find( '.actions__button.enabled' ).addClass('enabled_off');
-                item.find( '.a-unit-body' ).addClass( 'disabled' );
-            }
-   			item.attr( 'stormObject', data.id ).attr( 'id', 'a-unit-' + data.id );
+   			item.attr( 'id', 'a-unit-' + data.id );
    			item.find('.editlink').attr('href', "/admin/" + data.module + "/" + data.id);
    			item.find('.directlink').attr('href', data.uri);
    		}

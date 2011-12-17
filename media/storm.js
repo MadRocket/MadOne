@@ -989,7 +989,13 @@ Storm.Form.createItem = function (response) {
 Storm.Form.fillItem = function ( response ) {
 	
 	this.createItem( response );
-	
+
+    if (!response.enabled) {
+        this.item.find('.actions__button.enabled').addClass('enabled_off');
+        this.item.find('.a-unit-body').addClass('disabled');
+    }
+    this.item.attr('stormObject', response.id);
+
 	// Вызываем пользовательскую обработку
 	this.onFillItem( this.item, response );
 	
