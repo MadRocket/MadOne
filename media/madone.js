@@ -31,17 +31,6 @@ Madone.useRichTextEditorAPI = function (instanceName, callback) {
     } )();
 };
 
-Madone.RichTextEditorSetHTML = function (name, html) {
-    Madone.useRichTextEditorAPI(name, function () {
-        this.setData(html);
-    });
-};
-
-Madone.RichTextEditorGetHTML = function (name) {
-    return CKEDITOR.instances[instanceName].getData();
-};
-
-
 Madone.nestedSortableOptions = {
     disableNesting:'no-nest',
     forcePlaceholderSize:true,
