@@ -140,23 +140,6 @@ class Madone_Utilites
     }
 
     /**
-        Получение превью переданного текста не более указанной длины, не разрезая слова
-    */
-    static function getTextPreview( $str, $maxlen )
-    {
-        if( mb_strlen( $str, 'utf-8' ) > $maxlen )
-        {
-            // Получаем подстроку на один символ больше, чем нужно
-            $str = mb_substr( $str, 0, $maxlen + 1, 'utf-8' );
-
-            // Делаем замену с конца
-            $str = preg_replace( '/[\s?!.,:;]+[^\s?!.,:;]*$/', '', $str );
-        }
-
-        return $str;
-    }
-
-    /**
         Получение uri path текущей страницы, на основе $_SERVER[REQUEST_URI], или любой другой переданной переменной
         Возвращает путь в виде /levelone/leveltwo/levelthree, или /levelone/leveltwo/levelthree.html
         Последний слеш удаляется, кроме первого (вырожденный path = '/').
