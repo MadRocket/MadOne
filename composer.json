@@ -1,0 +1,11 @@
+{
+    "name": "Madone CMS",
+    "version": "3.0.0-dev",
+    "require": {
+        "symfony/class-loader": "2.1.*",
+        "symfony/http-foundation": "2.1.*",
+        "twig/twig": "1.5.*",
+        "twig/extensions": "master-dev",
+        "swiftmailer/swiftmailer": "4.1.*"
+    }
+}

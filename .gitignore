@@ -3,3 +3,6 @@
 includes/storm/bootstrap.php
 upload
 includes/outer/router
+composer.phar
+composer.lock
+vendor

@@ -1,26 +1,21 @@
 <?php
-# Функции автоматической загрузки классов во время выполнения (autoload)
-# Тут нужно прописать полные пути к каталогам, в которых можно найти инклудные файлы
-$include_paths = array (
-    "{$_SERVER['DOCUMENT_ROOT']}/includes"
-);
 
-# Исключение для обработки ошибок загрузки класса
-class AutoloadException extends Exception { }
+require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
-# Обработчик автолоада
-class AutoloadClass {
-    public static function autoload( $classname ) {
-        $path = preg_replace('/_/', DIRECTORY_SEPARATOR, $classname);
+use Symfony\Component\ClassLoader\UniversalClassLoader;
 
-        if(is_file("{$_SERVER['DOCUMENT_ROOT']}/includes/{$path}.php")) {
-            include_once("{$path}.php");
-        }
-    }
-}
+$loader = new UniversalClassLoader();
 
-# Активируем наши инклуды
-set_include_path( join( PATH_SEPARATOR,  array_merge( $include_paths, array( get_include_path() ) ) ) );
+$loader->registerPrefixes(array(
+    // My
+    'Madone_' => __DIR__.'/',
+    'Model_'  => __DIR__.'/',
+    'Storm_'  => __DIR__.'/',
+    'Outer_'  => __DIR__.'/',
 
-# Активируем автолоад
-spl_autoload_register( array('AutoloadClass', 'autoload') );
+    // Vendor
+    'Twig_' => __DIR__.'/../vendor/twig/twig/lib/',
+    'Twig_Extensions_' => __DIR__.'/../vendor/twig/extensions/lib/',
+));
+
+$loader->register();

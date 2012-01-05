@@ -1,10 +1,9 @@
 <?php
 /**
- * 
+ * Twig Bridge
  * @author \$Author$
  */
 
-require_once 'Twig/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 class Outer_Twig {
