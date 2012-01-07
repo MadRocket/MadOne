@@ -19,11 +19,11 @@ class Storm_Utilities_Fulltextprocessor {
 			}
 		}
 
-        if( ! Outer_Phpmorphy::checkLanguage( $language->getName() ) ) {
+        if( ! Madone_Morphology::checkLanguage( $language->getName() ) ) {
 			return join( ' ', $bulk_words );
 		}
 
-        $morphy = new Outer_Phpmorphy();
+        $morphy = new Madone_Morphology();
 		$base_form = $morphy->get( $language->getName() )->getBaseForm( $bulk_words );
 
 		$fullList = array();
@@ -58,11 +58,11 @@ class Storm_Utilities_Fulltextprocessor {
             }
         }
 
-		if( ! Outer_Phpmorphy::checkLanguage( $language->getName() ) ) {
+		if( ! Madone_Morphology::checkLanguage( $language->getName() ) ) {
 			return join( ' ', $bulk_words );
 		}
 				
-		$morphy = new Outer_Phpmorphy();
+		$morphy = new Madone_Morphology();
 		$forms = $morphy->get( $language->getName() )->getAllForms( $bulk_words );
 		
 		if(!is_array($forms) && is_string($forms)) {

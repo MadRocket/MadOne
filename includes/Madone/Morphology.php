@@ -4,7 +4,7 @@
  * @author \$Author$
  */
  
-class Outer_Phpmorphy {
+class Madone_Morphology {
 	protected static $dictionaries = array();
 	protected static $options = array();
 
@@ -44,5 +44,3 @@ class Outer_Phpmorphy {
         return array_key_exists($lang, self::$dictionaries);
     }
 }
-
-?>
