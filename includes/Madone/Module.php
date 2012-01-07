@@ -57,7 +57,7 @@ class Madone_Module {
             $file = "{$file}.twig";
         }
 
-        $twig = Madone_Core::twig( $this->templatePath );
+        $twig = Madone_Core::template( $this->templatePath );
         
         return $twig->loadTemplate($file)->render($vars);
     }

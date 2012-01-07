@@ -47,6 +47,6 @@ class Madone_Application {
             $templatePath[] = __DIR__."/{$path}/template";
         }
 
-        return Madone_Core::twig($templatePath)->loadTemplate($template)->render($vars);
+        return Madone_Core::template($templatePath)->loadTemplate($template)->render($vars);
     }
 }

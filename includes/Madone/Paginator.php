@@ -119,7 +119,7 @@ class Madone_Paginator
 
         }
 
-        return Madone_Core::twig(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default") )->loadTemplate('pager.twig')->render(array('pager' => $this));
+        return Madone_Core::template(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default") )->loadTemplate('pager.twig')->render(array('pager' => $this));
     }
 
     /**

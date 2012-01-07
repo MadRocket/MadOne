@@ -186,7 +186,7 @@ class Madone_Core {
 		ob_end_clean();
 
 		// Не сработало ни одно приложение — ничего не найдено
-        self::getResponse()->setContent( self::twig()->render('404.twig', array('uri' => $uri)) );
+        self::getResponse()->setContent( self::template()->render('404.twig', array('uri' => $uri)) );
         self::getResponse()->setStatusCode(404, "Страница не найдена");
         self::getResponse()->send();
     }
@@ -218,7 +218,7 @@ class Madone_Core {
 			}
 		} else {
 			if( strstr( $errstr, '<html>' ) === false ) {
-                echo self::twig()->render( 'error.twig', array( 'message' => $errstr ) );
+                echo self::template()->render( 'error.twig', array( 'message' => $errstr ) );
 			} else {
 				echo $errstr;
 			}
@@ -246,7 +246,7 @@ class Madone_Core {
 			echo "</html>";
 		}
         else {
-            echo self::twig()->render('error.twig', array( 'message' => $exception->getMessage() ));
+            echo self::template()->render('error.twig', array( 'message' => $exception->getMessage() ));
 		}
 		exit;
 	}
@@ -268,13 +268,19 @@ class Madone_Core {
      * @param $path
      * @return Twig_Environment
      */
-    static function twig($path = array()) {
+    static function template($path = array()) {
         $path = is_array($path) ? $path : array($path);
-        $twig = Outer_Twig::get(array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template")));
+        $path = array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template"));
+
+        $twig = new Twig_Environment(new Twig_Loader_Filesystem($path));
+
+        $twig->addExtension(new Twig_Extensions_Extension_Text());
+        $twig->addExtension(new Twig_Extensions_Extension_Debug());
+
         $twig->addGlobal('config', Madone_Config::getInstance());
 
         $twig->addGlobal('madone_image_helper', new Madone_Helper_Image());
-        $twig->addGlobal( 'madone', new Madone_Core() );
+        $twig->addGlobal('madone', new Madone_Core());
 
         return $twig;
     }
