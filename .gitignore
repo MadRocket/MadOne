@@ -1,3 +1,4 @@
+.gitignore
 .idea
 .DS_Store
 includes/storm/bootstrap.php
