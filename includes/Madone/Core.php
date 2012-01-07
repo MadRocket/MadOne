@@ -25,7 +25,14 @@ class Madone_Core {
     /**
      *	Инициализация класса
      */
-	static function _init() {
+	static function init() {
+
+        $storm_path  = "$_SERVER[DOCUMENT_ROOT]/includes/storm";
+        $models = Madone_Config::getInstance()->models;
+        $locales = Madone_Config::getInstance()->locales;
+
+        Storm_Core::load($storm_path, $models, $locales);
+
 		// Определим нужно ли влючать режим разработки
 		self::detectDevelompentMode();
 
@@ -127,8 +134,6 @@ class Madone_Core {
      *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
      */
     public static function run() {
-        self::_init();
-
 		// Тут будут условия фильтрации страниц
 		$filter = null;
 		

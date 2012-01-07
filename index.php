@@ -2,11 +2,11 @@
 error_reporting( E_ALL );
 date_default_timezone_set('Asia/Krasnoyarsk');
 
-require_once( "./includes/autoload.php" );
-require_once("./includes/Storm/loader.php");
+require_once( __DIR__."/autoload.php" );
 
-if( preg_match('~^/admin~', $_SERVER['REQUEST_URI']) ) {    
-    Madone_Core::setErrorHandlers();
+Madone_Core::init();
+
+if( preg_match('~^/admin~', Madone_Core::getRequest()->getPathInfo()) ) {
     $app = new Madone_Application_Cms();
     $app->run();
 }

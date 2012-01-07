@@ -22,6 +22,34 @@ class Madone_Config {
     public $site_title = "Тестовый сайт";
     public $admin_email = "rojkov.dmitry@gmail.com";
 
+    /**
+     * Список моделей. Обязательно прописать тут каждую модель проекта, иначе Storm их не увидит.
+     * Указывется или только имя или массив из имени и имени источника данных. Например: 'Car', array( 'Company', 'Companies' ).
+     * Если указано только имя, источник данных получает имя '{ИмяМодели}s'. Модель Car из примера получит источник данных Cars.
+     * @var array
+     */
+    public $models = array (
+        'Model_Module',
+        'Model_Pagetype',
+        'Model_Page',
+        'Model_Textblock',
+        'Model_User',
+        array( 'Model_News', 'Model_Newslist' ),
+        'Model_Galleryimage',
+        'Model_Showcaseitem',
+        'Model_Feedbackmessage',
+        'Model_Tempimage',
+        'Model_Tempfile',
+        'Model_Showcaseimage',
+        'Model_Subscriptionrecipient',
+    );
+
+    public $locales = array (
+        'ru_RU.UTF-8',
+//		'en_US.UTF-8',
+//		'de_DE.UTF-8',
+    );
+
 	static public $instance;
 	static private $attributes;
 

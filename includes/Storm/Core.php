@@ -33,6 +33,30 @@ class Storm_Core
     Общедоступные штуки.
      *********************/
 
+    static public function load($path, $models, $locales)
+    {
+        // Настраиваем конфигурацию
+        Storm_Config::$db_backend = "Storm_Db_Connection_" . Madone_Config::$Db['db_backend'];
+        Storm_Config::$db_mapper = "Storm_Db_Mapper_" . Madone_Config::$Db['db_backend'];
+        Storm_Config::$db_host = Madone_Config::$Db['db_host'];
+        Storm_Config::$db_port = Madone_Config::$Db['db_port'];
+        Storm_Config::$db_name = Madone_Config::$Db['db_name'];
+        Storm_Config::$db_user = Madone_Config::$Db['db_user'];
+        Storm_Config::$db_password = Madone_Config::$Db['db_password'];
+        Storm_Config::$db_charset = Madone_Config::$Db['db_charset'];
+        Storm_Config::$db_prefix = Madone_Config::$Db['db_prefix'];
+        Storm_Config::$db_debug = Madone_Config::$Db['db_debug'];
+
+        // Доступные локали
+        Storm_Config::$locales = $locales;
+
+        // Модели
+        Storm_Config::$models = $models;
+
+        // Регистрируем утилиты, и собственно этим и запускаем Storm в работу
+        self::getInstance()->registerUtilities();
+    }
+
     /**
     Синхронизация базы данных
      */
@@ -167,7 +191,6 @@ class Storm_Core
                 $this->related[$relation->key_model][] = $relation;
             }
         }
-
 
 
         // Починим список локалей, если он не указан
