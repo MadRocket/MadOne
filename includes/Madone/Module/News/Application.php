@@ -11,7 +11,7 @@ class Madone_Module_News_Application extends Madone_Application {
     );
 
     function index() {
-        $paginator = new Madone_Paginator( Model_Newslist( array( 'enabled' => true ) )->orderDesc( 'date' ), 5 );
+        $paginator = new Madone_Paginator( Model_Newslist( array( 'enabled' => true, 'page' => $this->page ) )->orderDesc( 'date' ), 5 );
 
         // Выбрана левая страница - не обрабатываем
         if( ! $paginator->getObjects() && $paginator->getPage() > 1 ) {
