@@ -42,9 +42,8 @@ class Madone_Application {
             $templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/includes/template/{$module_name}";
         }
 
-        $path = join(DIRECTORY_SEPARATOR, $path_parts);
-        if(is_dir(__DIR__."/{$path}/template")) {
-            $templatePath[] = __DIR__."/{$path}/template";
+        if(is_dir(__DIR__."/Module/{$module_name}/template")) {
+            $templatePath[] = __DIR__."/Module/{$module_name}/template";
         }
 
         return Madone_Core::template($templatePath)->loadTemplate($template)->render($vars);
