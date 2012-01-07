@@ -18,12 +18,8 @@ class Model_Feedbackmessage extends Storm_Model {
     	}
     	// Проверим ответ, отправим пользователю уведомление
     	if( $this->email && $this->answer && md5( $this->answer ) != $this->answermd5 ) {
-    	
-			$mail = Outer_Email::create();
-			$mail->AddAddress( $this->email );
-			$mail->Subject = 'Ответ на Ваше сообщение';
-			$mail->Body = $this->answer;
-			$mail->Send();
+
+            Madone_Email::send('Ответ на Ваше сообщение', null, $this->email, $this->answer);
 
     		$this->answermd5 = md5( $this->answer );
     		$this->enabled = false;
@@ -33,11 +29,7 @@ class Model_Feedbackmessage extends Storm_Model {
     function afterSave( $new ) {
     	// Уведомим админа о новом сообщении
         if( $new ) {
-			$mail = Outer_Email::create();
-			$mail->AddAddress( Madone_Config::$i->{'admin_email'} );
-			$mail->Subject = 'Письмо с сайта '.$_SERVER['SERVER_NAME'];
-			$mail->Body = $this->name.( $this->email ? " ".$this->email : '' )."\n\n".$this->text;
-			$mail->Send();
+            Madone_Email::send('Письмо с сайта '.$_SERVER['SERVER_NAME'], null, Madone_Config::getInstance()->{'admin_email'}, $this->name.( $this->email ? " ".$this->email : '' )."\n\n".$this->text);
         }
     }
 }
