@@ -11,10 +11,6 @@ $loader->registerPrefixes(array(
     'Model_'  => __DIR__.'/',
     'Storm_'  => __DIR__.'/',
     'Outer_'  => __DIR__.'/',
-
-    // Vendor
-    'Twig_' => __DIR__.'/../vendor/twig/twig/lib/',
-    'Twig_Extensions_' => __DIR__.'/../vendor/twig/extensions/lib/',
 ));
 
 $loader->register();
