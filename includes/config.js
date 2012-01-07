@@ -1,1 +1,0 @@
-{"site_title":"Тестовый сайт","admin_email":"rojkov.dmitry@gmail.com", "NewsApplication": {"items_on_page": 10}}

@@ -19,11 +19,14 @@ class Madone_Config {
         'db_debug'    => false
     );
 
+    public $site_title = "Тестовый сайт";
+    public $admin_email = "rojkov.dmitry@gmail.com";
+
 	static public $instance;
 	static private $attributes;
 
     private function __construct() {
-   	    $this->readFromFile();
+//   	    $this->readFromFile();
     }
 
     public static function getInstance() {
@@ -62,10 +65,10 @@ class Madone_Config {
     }
     
     static function writeToFile() {
-	    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js', json_encode(self::$attributes));
+//	    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js', json_encode(self::$attributes));
     }
     
     private function readFromFile() {
-		self::$attributes = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js'), true);
+//		self::$attributes = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js'), true);
     }
 }
