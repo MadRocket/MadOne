@@ -5,27 +5,53 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Assetic\Factory\AssetFactory;
 
-class Madone_Core {
+class Madone_Core extends Pimple{
     protected static $languages = array();
     protected static $language = null;
     protected static $langRegExp = null;
     protected static $developmentMode = true;
 
-    /**
-     * @var Symfony\Component\HttpFoundation\Request
-     */
-    protected static $request = null;
+    public function __construct() {
+        /**
+         * @var $this['request'] Symfony\Component\HttpFoundation\Request
+         */
+        $this->init();
 
-    /**
-     * @var Symfony\Component\HttpFoundation\Response
-     */
-    protected static $response = null;
+        $this['request'] = $this->share(function ($c) {
+            return Request::createFromGlobals();
+        });
+
+        $this['response'] = $this->share(function($c) {
+            return new Response( );
+        });
+
+        $this['template'] = function($container, $path = array()) {
+            $path = is_array($path) ? $path : array($path);
+            $path = array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template"));
+
+            $twig = new Twig_Environment(new Twig_Loader_Filesystem($path), array('cache' => "{$_SERVER['DOCUMENT_ROOT']}/cache/template"));
+
+            $twig->addExtension(new Twig_Extensions_Extension_Text());
+            $twig->addExtension(new Twig_Extensions_Extension_Debug());
+            $twig->addExtension(new \Assetic\Extension\Twig\AsseticExtension($container->asseticFactory()));
+
+            $twig->addGlobal('config', Madone_Config::getInstance());
+            $twig->addGlobal('madone', $container);
+            // TODO: Twig functions <img src="{{ "/path/to/image.jpg"|image_transform("=220x400") }}" />
+            // Take a look at avalanche123/AvalancheImagineBundle
+    //        $twig->addFunction('image_transform', new Twig_Function_Method());
+            $twig->addGlobal('madone_image_helper', new Madone_Helper_Image());
+
+            return $twig;
+        };
+    }
 
     /**
      *	Инициализация класса
      */
-	static function init() {
+	function init() {
 
         $storm_path  = "$_SERVER[DOCUMENT_ROOT]/includes/storm";
         $models = Madone_Config::getInstance()->models;
@@ -35,10 +61,6 @@ class Madone_Core {
 
 		// Определим нужно ли влючать режим разработки
 		self::detectDevelompentMode();
-
-        self::$request = Request::createFromGlobals();
-
-        self::$response = new Response( );
 
 		// На инициализацию устанавливаем собственные обработчики ошибок и исключений
 		self::setErrorHandlers();
@@ -119,26 +141,17 @@ class Madone_Core {
 		mb_internal_encoding( Storm_Core::getLanguage()->getCharset() );
 	}
 
-
-    public static function getRequest() {
-        return self::$request;
-    }
-
-    public static function getResponse() {
-        return self::$response;
-    }
-
     /**
      *	Обработка HTTP запроса к сайту.
      *	Основное метод, через который работают все страницы.
      *	Не возвращает ничего, текст сайта отправляется на стандартный вывод.
      */
-    public static function run() {
+    public function run() {
 		// Тут будут условия фильтрации страниц
 		$filter = null;
 		
 		// Получаем текущий URI, выделяем из него имена каталогов/файлов
-        $path = self::getRequest()->getPathInfo();
+        $path = $this['request']->getPathInfo();
 		$names = Madone_Utilites::getUriPathNames($path);
 		/*
 		Если есть имена - пытаемся выбрать одну из внутренних страниц сайта
@@ -176,13 +189,13 @@ class Madone_Core {
             $app_response = null;
             $app_classname = "Madone_Module_{$p->module}_Application";
             if(class_exists($app_classname)) {
-                $app = new $app_classname();
+                $app = new $app_classname($this);
                 $app_response = $app->run($p, $app_uri);
             }
             if($app_response) {
                 $content = ob_get_clean();
-                self::getResponse()->setContent( $content );
-                self::getResponse()->send();
+                $this['response']->setContent( $content );
+                $this['response']->send();
 
 				return;
 			}
@@ -191,20 +204,19 @@ class Madone_Core {
 		ob_end_clean();
 
 		// Не сработало ни одно приложение — ничего не найдено
-        self::getResponse()->setContent( self::template()->render('404.twig', array('uri' => $uri)) );
-        self::getResponse()->setStatusCode(404, "Страница не найдена");
-        self::getResponse()->send();
+        $this['response']->setContent( $this['template']->render('404.twig', array('uri' => $uri)) );
+        $this['response']->setStatusCode(404, "Страница не найдена");
+        $this['response']->send();
     }
 
     /**
      * Обработчик фатальных ошибок
-     * @static
      * @param $errno
      * @param $errstr
      * @param $errfile
      * @param $errline
      */
-	static function fatal_error_handler( $errno, $errstr, $errfile, $errline ) {
+	function fatal_error_handler( $errno, $errstr, $errfile, $errline ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
 			ob_end_clean();
@@ -223,7 +235,7 @@ class Madone_Core {
 			}
 		} else {
 			if( strstr( $errstr, '<html>' ) === false ) {
-                echo self::template()->render( 'error.twig', array( 'message' => $errstr ) );
+                echo $this['template']->render( 'error.twig', array( 'message' => $errstr ) );
 			} else {
 				echo $errstr;
 			}
@@ -233,10 +245,9 @@ class Madone_Core {
 
     /**
      * Обработчик неперехваченных исключений
-     * @static
      * @param Exception $exception
      */
-	static function uncaught_exception_handler( $exception ) {
+    function uncaught_exception_handler( $exception ) {
 		// Сбрасываем все буферы вывода, которые есть
 		while( ob_get_level() ) {
 			ob_end_clean();
@@ -251,7 +262,7 @@ class Madone_Core {
 			echo "</html>";
 		}
         else {
-            echo self::template()->render('error.twig', array( 'message' => $exception->getMessage() ));
+            echo $this['template']->render('error.twig', array( 'message' => $exception->getMessage() ));
 		}
 		exit;
 	}
@@ -268,26 +279,9 @@ class Madone_Core {
 		return Storm_Core::getLanguage()->getName() == mb_strtolower( $name ) ? true : false;
 	}
 
-    /**
-     * @static
-     * @param $path
-     * @return Twig_Environment
-     */
-    static function template($path = array()) {
-        $path = is_array($path) ? $path : array($path);
-        $path = array_merge($path, array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default", "{$_SERVER['DOCUMENT_ROOT']}/includes/template"));
-
-        $twig = new Twig_Environment(new Twig_Loader_Filesystem($path));
-
-        $twig->addExtension(new Twig_Extensions_Extension_Text());
-        $twig->addExtension(new Twig_Extensions_Extension_Debug());
-
-        $twig->addGlobal('config', Madone_Config::getInstance());
-
-        $twig->addGlobal('madone_image_helper', new Madone_Helper_Image());
-        $twig->addGlobal('madone', new Madone_Core());
-
-        return $twig;
+    static function asseticFactory() {
+        $factory = new AssetFactory("{$_SERVER['DOCUMENT_ROOT']}/static");
+        return $factory;
     }
 
     /**
@@ -313,5 +307,3 @@ class Madone_Core {
         return $qs;
     }
 }
-
-?>

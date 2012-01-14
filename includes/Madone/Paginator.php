@@ -19,6 +19,8 @@ class Madone_Paginator
     private $count; // Количество объектов всего
     private $objects; // Объекты
 
+    protected $container;
+
     function __construct(Storm_Queryset $query, $size, $uri = null)
     {
         $this->query = $query;
@@ -26,8 +28,10 @@ class Madone_Paginator
         $this->uri = Madone_Utilites::getUriPath();
 
         $this->detectPage();
-        $this->fetch();
+//        $this->fetch();
     }
+
+
 
     public function fetch()
     {
@@ -119,7 +123,9 @@ class Madone_Paginator
 
         }
 
-        return Madone_Core::template(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default") )->loadTemplate('pager.twig')->render(array('pager' => $this));
+        $template = $this->container['template'];
+        $template->getLoader()->setPaths(array_merge(array("{$_SERVER['DOCUMENT_ROOT']}/includes/template/_default"), $template->getLoader()->getPaths()));
+        return $template->loadTemplate('pager.twig')->render(array('pager' => $this));
     }
 
     /**
@@ -250,6 +256,14 @@ class Madone_Paginator
     {
         return $this->uri;
     }
-}
 
-?>
+    public function setContainer($contaner)
+    {
+        $this->container = $contaner;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
+    }
+}

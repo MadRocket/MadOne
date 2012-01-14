@@ -54,7 +54,7 @@ class Madone_Config {
 	static private $attributes;
 
     private function __construct() {
-//   	    $this->readFromFile();
+
     }
 
     public static function getInstance() {

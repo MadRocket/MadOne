@@ -10,11 +10,18 @@ class Madone_Module {
     protected $uriPath;
     protected $templatePath;
 
+    protected $routes;
+    protected $container;
+
+
+
     /**
      * @throws Exception
      * @param $name - имя, под которым модуль будет работать
      */
-    function __construct( $name ) {
+    function __construct( $name, $container ) {
+
+        $this->container = $container;
 
         // Проверим наличие имени
         if( ! $name ) {
@@ -57,8 +64,9 @@ class Madone_Module {
             $file = "{$file}.twig";
         }
 
-        $twig = Madone_Core::template( $this->templatePath );
-        
+        $twig = $this->container['template'];
+        $twig->getLoader()->setPaths( array_merge($this->templatePath, $twig->getLoader()->getPaths())  );
+
         return $twig->loadTemplate($file)->render($vars);
     }
 
@@ -68,16 +76,28 @@ class Madone_Module {
      * @param $uri
      * @return string
      */
-    function handleHtmlRequest( $uri ) {
-        return $this->getTemplate( 'index.twig' );
+    function respond( $uri ) {
+        $this->uri = $uri;
+
+        if(! $this->routes) {
+            $this->routes = array('/?' => 'index');
+        }
+        $router = new Madone_Router();
+        return $router->route($this->routes, $uri, $this);
     }
 
     /**
-    *   Получение ответа на HTML-запрос.
-    *   Может быть переопределен в потомках для реализации непростой функциональности, недоступной через запросы к моделям.
-    */
+     * Получение ответа на HTML-запрос.
+     * Может быть переопределен в потомках для реализации непростой функциональности, недоступной через запросы к моделям.
+     * @var $uri
+     * @return string
+     */
     function handleAjaxRequest( $uri ) {
         return json_encode( array( 'success' => true, 'message' => get_class( $this ).' приветствует Вас и желает Вам приятного дня.' ) );
+    }
+
+    function index() {
+        return $this->getTemplate( 'index.twig' );
     }
 }
 

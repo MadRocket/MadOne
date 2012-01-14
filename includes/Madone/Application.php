@@ -1,18 +1,19 @@
-<?
-/**
- * Прародитель приложений
- */
-class Madone_Application {
+<?php
 
+class Madone_Application {
+    protected $container;
     protected $routes;
     protected $page;
     protected $uri;
 
+    public function __construct($container) {
+        $this->container = $container;
+    }
+
     /**
-     * Запуск приложения!
      * @param Model_Page $page соответствующий объект структуры сайта
      * @param string $uri путь к искомой странице _внутри_ приложения.
-     * @return bool Возвращает true, если страница обработана этим приложением, false, если страница приложением не обработана.
+     * @return mixed Возвращает true, если страница обработана этим приложением, false, если страница приложением не обработана.
      */
     function run( Model_Page $page, $uri = '' ) {
         $this->page = $page;
@@ -46,6 +47,9 @@ class Madone_Application {
             $templatePath[] = __DIR__."/Module/{$module_name}/template";
         }
 
-        return Madone_Core::template($templatePath)->loadTemplate($template)->render($vars);
+        $twig = $this->container['template'];
+        $twig->getLoader()->setPaths( array_merge($templatePath, $twig->getLoader()->getPaths())  );
+
+        return $twig->loadTemplate($template)->render($vars);
     }
 }
