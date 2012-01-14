@@ -18,15 +18,15 @@ class Madone_Module_News_Application extends Madone_Application {
             return false;
         }
 
-        print $this->render('index.twig', array('items' => $paginator->getObjects(), 'paginator' => $paginator, 'page' => $this->page));
-        return true;
+        return $this->render('index.twig', array('items' => $paginator->getObjects(), 'paginator' => $paginator, 'page' => $this->page));
     }
 
     function view($id) {
         $item = Model_Newslist(array('id' => $id))->first();
         if($item) {
-            print $this->render( 'view.twig', array( 'page' => $this->page, 'item' => $item ) );
+            return $this->render( 'view.twig', array( 'page' => $this->page, 'item' => $item ) );
         }
+        return false;
     }
 
     function rss() {

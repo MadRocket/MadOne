@@ -10,7 +10,6 @@ class Madone_Module_Pages_Application extends Madone_Application {
         if(! $template) {
             $template = $this->page->lvl == 1 ? "index.twig" : "default.twig";
         }
-        print $this->render($template, array('page' => $this->page ));
-        return true;
+        return $this->render($template, array('page' => $this->page ));
     }
 }

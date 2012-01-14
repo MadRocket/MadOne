@@ -178,7 +178,6 @@ class Madone_Core extends Pimple{
 			$filter = Q( array( 'lvl' => 1 ) );
 		}
 
-        ob_start();
 		// Выбираем страницы, сортируем так: сначала самые глубоко вложеные, среди одинаково вложенных — с большим приоритетом типа
 		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->follow( 1 )->all() as $p ) {
 			// в $uri как раз оказывается полный uri запрошенной страницы :D
@@ -193,15 +192,13 @@ class Madone_Core extends Pimple{
                 $app_response = $app->run($p, $app_uri);
             }
             if($app_response) {
-                $content = ob_get_clean();
-                $this['response']->setContent( $content );
+                $this['response']->setContent( $app_response );
                 $this['response']->send();
 
 				return;
 			}
 			// продолжаем обработку среди всех выбранных приложений, попадающих в этот же uri
 		}
-		ob_end_clean();
 
 		// Не сработало ни одно приложение — ничего не найдено
         $this['response']->setContent( $this['template']->render('404.twig', array('uri' => $uri)) );

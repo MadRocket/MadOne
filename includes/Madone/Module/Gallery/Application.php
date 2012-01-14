@@ -16,7 +16,7 @@ class Madone_Module_Gallery_Application extends Madone_Application {
         $items = $paginator->getObjects();
         $items = array_chunk($items, 2);
 
-        print $this->render('gallery/index.twig', array('items' => $items, 'paginator' => $paginator, 'page' => $this->page));
+        return $this->render('gallery/index.twig', array('items' => $items, 'paginator' => $paginator, 'page' => $this->page));
     }
 
     public function category($slug) {
@@ -25,6 +25,6 @@ class Madone_Module_Gallery_Application extends Madone_Application {
         $items = $paginator->getObjects();
         $items = array_chunk($items, 2);
 
-        print $this->render('gallery/category.twig', array('category' => $category,'items' => $items, 'paginator' => $paginator, 'page' => $this->page));
+        return $this->render('gallery/category.twig', array('category' => $category,'items' => $items, 'paginator' => $paginator, 'page' => $this->page));
     }
 }

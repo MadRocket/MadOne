@@ -1,15 +1,6 @@
-<?
+<?php
 /**
- * ShowcaseApplication class.
- * 
  * @extends Madone_Application
- *
- * Default settings:
- * title = Каталог
- * has_text = 0
- * has_meta = 1
- * has_subpages = 1
- * priority = 2
  */
 class Madone_Module_Showcase_Application extends Madone_Application {
     protected $routes = array(
@@ -21,7 +12,7 @@ class Madone_Module_Showcase_Application extends Madone_Application {
     public function index() {
         $items = Model_Showcaseitems( array( 'enabled' => true, 'special' => true ) )->all();
         $items = array_chunk($items, 2);
-        print $this->render('showcase/index.twig', array('page' => $this->page, 'items' => $items));
+        return $this->render('showcase/index.twig', array('page' => $this->page, 'items' => $items));
     }
 
     public function category($slug) {
@@ -33,7 +24,7 @@ class Madone_Module_Showcase_Application extends Madone_Application {
         $items = Model_Showcaseitems( array( 'section' => $section, 'enabled' => true ) )->all();
         $items = array_chunk($items, 2);
 
-        print $this->render('showcase/category.twig', array('page' => $this->page, 'section' => $section, 'items' => $items));
+        return $this->render('showcase/category.twig', array('page' => $this->page, 'section' => $section, 'items' => $items));
     }
 
     public function item($slug, $id) {
@@ -44,8 +35,6 @@ class Madone_Module_Showcase_Application extends Madone_Application {
             return false;
         }
 
-        print $this->render('showcase/item.twig', array('page' => $this->page, 'section' => $section, 'item' => $item));
+        return $this->render('showcase/item.twig', array('page' => $this->page, 'section' => $section, 'item' => $item));
     }
 }
-
-?>
