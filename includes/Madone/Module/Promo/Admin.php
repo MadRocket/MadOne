@@ -4,8 +4,8 @@
  * @author \$Author$
  */
  
-class Madone_Module_Promo_Admin extends AbstractModule {
-    function handleHtmlRequest($uri) {
+class Madone_Module_Promo_Admin extends Madone_Module {
+    function index() {
         if(array_key_exists('submit', $_POST)) {
             if(array_key_exists('id', $_POST)) {
                 if( $_FILES['image']['name'] ) {

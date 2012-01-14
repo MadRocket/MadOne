@@ -1,8 +1,8 @@
-<?
+<?php
 
 class Madone_Module_Pages_Admin extends Madone_Module {
 
-    function handleHtmlRequest( $uri ) {
+    function index() {
         // Получаем дерево страниц
         $pages = Model_Pages()->kiOrder()->follow(2)->tree();
         
@@ -30,5 +30,3 @@ class Madone_Module_Pages_Admin extends Madone_Module {
         ) );
     }
 }
-
-?>

@@ -9,7 +9,7 @@ class Madone_Module_Showcase_Admin extends Madone_Module
      * @param $uri
      * @return mixed
      */
-    function handleHtmlRequest( $uri ) {
+    function respond( $uri ) {
 
 		// Фильтруем вывод позиций раздела
 		$names = Madone_Utilites::getUriPathNames();
