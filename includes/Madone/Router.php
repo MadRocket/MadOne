@@ -48,24 +48,24 @@ class Madone_Router {
         // GET ? POST
         $reflection = new ReflectionClass($object);
 
-        foreach($collection as $route => $target) {
+        foreach($collection as $route => $target_method) {
             if( preg_match($this->compile_route($route), $uri, $m) ) {
-                if(method_exists($object, $target)) {
+                if(method_exists($object, $target_method)) {
                     $call_params = array();
-                    foreach( $reflection->getMethod($target)->getParameters() as $p) {
+                    foreach( $reflection->getMethod($target_method)->getParameters() as $p) {
                         /** @var $p ReflectionParameter */
                         $call_params[$p->name] = $m[$p->name];
                     }
-                    call_user_func_array(array($object, $target), $call_params);
-                    return true;
+
+                    return call_user_func_array(array($object, $target_method), $call_params);
                 }
                 else {
-                    throw new Exception("Method {$target} doesn't exists in {$reflection->getName()}!");
+                    throw new Exception("Method {$target_method} doesn't exists in {$reflection->getName()}!");
                 }
             }
         }
 
-        return false;
+        return null;
     }
 }
 
