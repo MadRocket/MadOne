@@ -7,3 +7,4 @@ includes/outer/router
 composer.phar
 composer.lock
 vendor
+cache
