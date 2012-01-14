@@ -15,8 +15,12 @@
         "php": ">=5.3.0",
         "symfony/class-loader": "2.1.*",
         "symfony/http-foundation": "2.1.*",
+        "symfony/config": "2.1.*",
         "twig/twig": "1.5.*",
         "twig/extensions": "master-dev",
-        "swiftmailer/swiftmailer": "4.1.*"
+        "swiftmailer/swiftmailer": "4.1.*",
+        "pimple/pimple": "*",
+        "kriswallsmith/assetic": "master-dev",
+        "imagine/Imagine": "master-dev"
     }
 }
