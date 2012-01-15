@@ -2,7 +2,7 @@
 error_reporting( E_ALL );
 date_default_timezone_set('Asia/Krasnoyarsk');
 
-require_once( __DIR__."/autoload.php" );
+require __DIR__ . '/vendor/.composer/autoload.php';
 
 $madone = new Madone_Core();
 

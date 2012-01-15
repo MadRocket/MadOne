@@ -13,7 +13,6 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/class-loader": "2.1.*",
         "symfony/http-foundation": "2.1.*",
         "symfony/config": "2.1.*",
         "twig/twig": "1.5.*",
@@ -22,5 +21,12 @@
         "pimple/pimple": "*",
         "kriswallsmith/assetic": "master-dev",
         "imagine/Imagine": "master-dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Madone_": "includes/",
+            "Model_": "includes/",
+            "Storm_": "includes/"
+        }
     }
 }
