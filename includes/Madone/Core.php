@@ -190,13 +190,14 @@ class Madone_Core extends Pimple{
             if(class_exists($app_classname)) {
                 $app = new $app_classname($this);
                 $app_response = $app->run($p, $app_uri);
-            }
-            if($app_response) {
-                $this['response']->setContent( $app_response );
-                $this['response']->send();
 
-				return;
-			}
+                if($app_response) {
+                    $this['response']->setContent( $app_response );
+                    $this['response']->send();
+
+    				return;
+    			}
+            }
 			// продолжаем обработку среди всех выбранных приложений, попадающих в этот же uri
 		}
 
