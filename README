@@ -1,15 +1,17 @@
 CMS MadOne
+
 Requirements:
-PHP 5.3.x
+PHP >= 5.3.2
 MySQL 5.0
-Apache 2.0 + mod_rewirte
+Apache 2.0 + mod_rewrite
 
 All comments are in russian language, i'll translate in near future.
 
 Install:
 1. Copy files
 2. Import madone_dev.sql
-3. Configure DB /includes/Config.class.php
+3. Configure DB /includes/Madone/Config.php
+4. run # php composer.phar install
 
 admin section http://yoursite.com/admin
 login: admin
