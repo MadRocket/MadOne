@@ -319,7 +319,7 @@ Madone.ImageGallery = Object.create(Storm.Form).extend({
             $this.find('.delete').live('click', function (e) {
                 var item = $(this).parents(settings.itemSelector).filter(':first');
                 // TODO: correct title selector
-                var title = item.find('h2:first').text();
+                var title = item.find('h2:first').text().trim();
                 if (confirm('Вы действительно хотите удалить «' + title + '»?')) {
                     // TODO: correct child nodes selector
                     var nested = item.children(settings.itemSelector).length;

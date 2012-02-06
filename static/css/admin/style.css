@@ -1,4 +1,4 @@
-@import "/static/css/admin/bootstrap-1.4.0.css";
+@import "/media/bootstrap/css/bootstrap.min.css";
 
 #ajax-info {
 	/*background: #fce7be url(/static/i/admin/ajax-load.gif) 6px 8px no-repeat;*/
@@ -40,6 +40,9 @@
 .madone-module {
 	padding: 15px 0 0;
     overflow: hidden;
+}
+.madone-module h1 {
+    margin-bottom: 1em;
 }
 
 .a-units {

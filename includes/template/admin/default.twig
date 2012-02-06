@@ -1,82 +1,86 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD
-	HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="ru">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-		<title>{{ title ? title : config.site_title }} — MadOne</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>{{ title ? title : config.site_title }} — MadOne</title>
 
-        <link rel="stylesheet" type="text/css" href="/static/css/admin/style.css"/>
-        
-		<script type="text/javascript" src="http://yandex.st/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/admin/style.css"/>
 
-		<script type="text/javascript" src="/media/improved.js"></script>
-		{# TODO: storm.js, mad.js, madone.js should be in one object #}
-		<script type="text/javascript" src="/media/storm.js?20111123"></script>
-		<script type="text/javascript" src="/media/mad.js"></script>
-		<script type="text/javascript" src="/media/madone.js"></script>
+    <script type="text/javascript" src="/media/jquery.min.js"></script>
+    <script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
 
-		<!-- Jquery UI -->
-		<script type="text/javascript" src="/media/jquery-ui-1.8.4/jquery-ui-1.8.4.custom.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="/media/jquery-ui-1.8.4/ui-lightness/jquery-ui-1.8.4.custom.css"  />
+    {# TODO: storm.js, mad.js, madone.js should be in one object #}
+    <script type="text/javascript" src="/media/improved.js"></script>
+    <script type="text/javascript" src="/media/storm.js?20111123"></script>
+    <script type="text/javascript" src="/media/mad.js"></script>
+    <script type="text/javascript" src="/media/madone.js"></script>
 
-        <!--[if IE]>
-        <script type="text/javascript" src="/media/json2.js"></script>
-        <![endif]-->
+    <!-- Jquery UI -->
+    <script type="text/javascript" src="/media/jquery-ui-1.8.4/jquery-ui-1.8.4.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/media/jquery-ui-1.8.4/ui-lightness/jquery-ui-1.8.4.custom.css"/>
 
-        <script type="text/javascript" src="/media/jquery.ui.nestedSortable.js"></script>
+    <!--[if IE]>
+    <script type="text/javascript" src="/media/json2.js"></script>
+    <![endif]-->
 
-		<script type="text/javascript" src="/media/jquery.form.js"></script>
-		<script type="text/javascript" src="/media/jquery.fileupload-5.3.js"></script>
+    <script type="text/javascript" src="/media/jquery.ui.nestedSortable.js"></script>
 
-		<!-- Визуальный редактор -->
-		<script type="text/javascript" src="/media/ckeditor-3.6.1/ckeditor.js"></script>
-        <script type="text/javascript" src="/media/ckeditor-3.6.1/adapters/jquery.js"></script>
+    <script type="text/javascript" src="/media/jquery.form.js"></script>
+    <script type="text/javascript" src="/media/jquery.fileupload-5.3.js"></script>
 
-		<!-- Лайтбокс. Используется в галереях для просмотра крупных изображений -->
-		<script type="text/javascript" src="/media/jquery.fancybox-1.3.1/jquery.fancybox-1.3.1.pack.js"></script>
-		<link rel="stylesheet" href="/media/jquery.fancybox-1.3.1/jquery.fancybox-1.3.1.css">
+    <!-- Визуальный редактор -->
+    <script type="text/javascript" src="/media/ckeditor-3.6.1/ckeditor.js"></script>
+    <script type="text/javascript" src="/media/ckeditor-3.6.1/adapters/jquery.js"></script>
 
-		<script type="text/javascript" src="/media/initialization.js"></script>
-	</head>
-    <body>
-    	<div id="ajax-info">Жду ответ от сервера...</div>
-        <div class="topbar">
-        <div class="topbar-inner">
-            <div class="container fixed">
-                <h3><a class="logo" href="/" title="Перейти на сайт">{{ config.site_title }}</a></h3>
-                {% include "header-menu.twig" %}
-            </div>
+    <!-- Лайтбокс. Используется в галереях для просмотра крупных изображений -->
+    <script type="text/javascript" src="/media/jquery.fancybox-1.3.1/jquery.fancybox-1.3.1.pack.js"></script>
+    <link rel="stylesheet" href="/media/jquery.fancybox-1.3.1/jquery.fancybox-1.3.1.css">
+
+    <script type="text/javascript" src="/media/initialization.js"></script>
+</head>
+<body>
+<div id="ajax-info">Жду ответ от сервера...</div>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a href="/" class="brand" title="Перейти на сайт">Тестовый сайт{{ config.site_title }}</a>
+            {% include "header-menu.twig" %}
         </div>
-        </div>
-        <div class="container-fluid">
-            <div class="sidebar" style="padding-top:60px;">
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div style="padding-top: 60px;">
                 {% include 'menu.twig' %}
             </div>
-            <div class="content" style="padding-top:60px;">
-                <div class="madone-module">
-                    {{ content|raw }}
-                </div>
+        </div>
+        <div class="span10" >
+            <div class="madone-module" style="padding-top: 60px;">
+                {{ content|raw }}
             </div>
         </div>
-        <script type="text/javascript">
-            $(function(){
-                // Dropdown menu
-                $('.secondary-nav a.menu').click(function(){
-                    $('.secondary-nav .menu').toggleClass('open');
-                    return false;
-                });
 
-                /* AJAX informer */
-                var timer = null;
-                $("#ajax-info").ajaxStart(function(){
-                    timer = setTimeout('$("#ajax-info").show();', 500);
-                });
-                $("#ajax-info").ajaxStop(function(){
-                    clearTimeout(timer);
-                    $(this).hide();
-                });
-            });
-        </script>
-        {% block script %}{% endblock %}
-    </body>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        // Dropdown menu
+        $('.dropdown-toggle').dropdown();
+
+        /* AJAX informer */
+        var timer = null;
+        $("#ajax-info").ajaxStart(function () {
+            timer = setTimeout('$("#ajax-info").show();', 500);
+        });
+        $("#ajax-info").ajaxStop(function () {
+            clearTimeout(timer);
+            $(this).hide();
+        });
+    });
+</script>
+{% block script %}{% endblock %}
+</body>
 </html>
