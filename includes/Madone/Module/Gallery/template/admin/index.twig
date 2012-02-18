@@ -4,7 +4,7 @@
     <div class="gallery-dropzone">
         Либо перетащите файлы с рабочего стола на эту область
     </div>
-    <form class="form-stacked upload">
+    <form class="upload">
         <div class="clearfix"><label>Выберите файлы для загрузки:</label>
             <input type="file" name="image" class="uploadify" multiple/>
             <span class="help-block">Можно выбрать сразу несколько файлов</span>
@@ -13,7 +13,7 @@
 </div>
 
 <div class="module-content">
-    <ul class="media-grid" stormModel="Model_Galleryimage">
+    <ul class="thumbnails" stormModel="Model_Galleryimage">
         {% for item in items %}
         <li id="{{ item.id }}" stormObject="{{ item.id }}">
             <span class="control">
@@ -36,20 +36,20 @@
     </a>
 </li>
 <style type="text/css">
-    .media-grid li {
+    .thumbnails li {
         display: block;
         float: left;
         position: relative;
     }
-    .media-grid li:hover .control {
+    .thumbnails li:hover .control {
         display: block;
     }
-    .media-grid .control {
+    .thumbnails .control {
         position: absolute;
         display: none;
         margin: 6px 0 0 23px;
     }
-    .media-grid .actions__button {
+    .thumbnails .actions__button {
         background-color: #fff;
         margin: 0 0 0 6px;
     }
@@ -66,7 +66,7 @@
 </style>
 <script type="text/javascript">
     $(function () {
-        $('.media-grid').madoneUnits({
+        $('.thumbnails').madoneUnits({
             sortable: 'plain',
             itemSelector: '[stormObject]'
         });
@@ -91,7 +91,7 @@
             done:function (e, data) {
                 var item = $('#template').clone(true).attr('id', data.result.data.id).attr('stormObject', data.result.data.id);
                 item.find('.original-link').attr('rel', 'gallery').attr('href', data.result.data.image.original.uri).find('img').attr('src', data.result.data.image.cms.uri);
-                item.appendTo('.media-grid').show();
+                item.appendTo('.thumbnails').show();
             }
         }).bind('fileuploaddragover', function (e) {
             $('.gallery-dropzone').css('border-color', '#fce7be');

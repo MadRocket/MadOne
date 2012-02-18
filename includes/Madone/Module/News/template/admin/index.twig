@@ -3,7 +3,7 @@
 <h1>Новости</h1>
 
 <div class="module-buttons">
-    <button class="create-unit btn primary">Добавить новость</button>
+    <button class="create-unit btn btn-primary">Добавить новость</button>
 </div>
 
 <div class="module-content">
@@ -13,10 +13,12 @@
         {% for item in items %}
         <div class="a-unit{{ item.enabled ? '' : ' disabled' }}" stormObject="{{ item.id }}">
             <div class="a-unit-body">
-                <div class="actions">
-                    <img title="Редактировать" class="actions__button edit" src="/static/i/admin/1x1.gif"/>
-                    <img title="Включить/Выключить" class="actions__button enabled{{ item.enabled ? '' : ' enabled_off' }}" stormField="enabled" src="/static/i/admin/1x1.gif"/>
-                    <img title="Удалить" class="actions__button delete" src="/static/i/admin/1x1.gif"/>
+                <div class="actions button-toolbar">
+                    <div class="btn-group">
+                        <a title="Редактировать" href="#" class="edit-item btn"><i class="icon-pencil"></i></a>
+                        <a title="Включить/Выключить" href="#" class="enabled btn" stormField="enabled"><i class="icon-off"></i></a>
+                        <a title="Удалить" href="#" class="delete btn"><i class="icon-trash"></i></a>
+                    </div>
                 </div>
                 <h2 stormText="title">{{ item.title }}</h2>
                 <p stormText="date">{{ item.date }}</p>
@@ -27,7 +29,7 @@
     {{ paginator|raw }}
 </div>
 
-<form id="news-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
+<form id="news-form" class="a-unit-form " method="post" enctype="multipart/form-data">
     <div class="clearfix">
         <label>Заголовок новости:</label>
 
@@ -56,8 +58,8 @@
             <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
         </div>
     </div>
-    <div class="actions">
-        <button class="submit btn primary" type="submit">Сохранить</button>
+    <div class="form-actions">
+        <button class="submit btn btn-primary" type="submit">Сохранить</button>
         <button class="cancel btn" type="reset">Отмена</button>
     </div>
 </form>
@@ -85,7 +87,7 @@
             }).start();
         });
 
-        $('.edit').click(function (e) {
+        $('.edit-item').click(function (e) {
             Object.create(newsForm).extend({
                 object:Storm.buildPath(this),
                 item:$(this).parents('.a-unit-body')

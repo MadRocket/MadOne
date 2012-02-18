@@ -192,7 +192,7 @@ Storm.buildPath = function ( element ) {
 	path.model	= nesting.filter( '[stormModel]:last'  ).attr( 'stormModel' );
 	path.object	= nesting.filter( '[stormObject]:last' ).attr( 'stormObject' );
 	path.field	= nesting.filter( '[stormField]:last'  ).attr( 'stormField' );
-	
+
 	return path;
 };
 

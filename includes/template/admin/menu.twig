@@ -1,13 +1,13 @@
-<div class="well">
-    <ul id="madone-navigation" class="unstyled">
-        {% for i in menuItems %}
-        <li>
-            {% if i.selected %}
-            <span class="label">{{ i.title }}</span>
-            {% else %}
-            <a href="{{ i.uri }}">{{ i.title }}</a>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul id="madone-navigation" class="nav nav-tabs nav-stacked">
+    {% for i in menuItems %}
+        {% if i.selected %}
+    <li class="active">
+        <a href="#">{{ i.title }}</a>
+    </li>
+        {% else %}
+    <li>
+        <a href="{{ i.uri }}">{{ i.title }}</a>
+    </li>
+        {% endif %}
+    {% endfor %}
+</ul>

@@ -1,15 +1,15 @@
-<ul class="nav secondary-nav">
-<li class="menu">
-    <a href="#" class="menu">Аккаунт</a>
-    <ul class="menu-dropdown">
-        <li><a href="/admin/password/">Смена пароля</a></li>
-        <li><a href="/admin/settings/">Настройка</a></li>
-        <li class="divider"></li>
-        <li><a href="/admin/logout/">Выход</a></li>
-    </ul>
-</li>
+<ul class="nav pull-right">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Аккаунт <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="/admin/password/">Смена пароля</a></li>
+            <li><a href="/admin/settings/">Настройка</a></li>
+            <li class="divider"></li>
+            <li><a href="/admin/logout/">Выход</a></li>
+        </ul>
+    </li>
 </ul>
-{#
+        {#
 <span class="system-menu"><span><span class="first"><a href="http://{{ server.SERVER_NAME }}/">Перейти на сайт</a></span>
 <?
 	$langs = array_values( StormCore::getAvailableLanguages() );

@@ -53,7 +53,7 @@ class Madone_Config {
 	static public $instance;
 	static private $attributes;
 
-    private function __construct() {
+    public function __construct() {
 
     }
 
