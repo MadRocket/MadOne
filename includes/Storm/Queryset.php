@@ -196,7 +196,7 @@ class Storm_Queryset
         $Joins = join( ' ', $Joins );
 
         // Сгенерируем текст запроса
-        $sql = "SELECT $Distinct $Fields FROM $Table AS $Alias $Joins $Where $Order $Limit";
+        $sql = "SELECT $Distinct $Fields FROM `$Table` AS $Alias $Joins $Where $Order $Limit";
 
         return array( 'sql' => $sql, 'params' => $qc['params'], 'fields' => $fdata );
     }
