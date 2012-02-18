@@ -24,7 +24,7 @@
             <div class="btn-group">
                 <a href="#" class="edit-item btn"><i class="icon-pencil"></i></a>
                 <a href="#" class="enabled btn" stormField="enabled"><i class="icon-off"></i></a>
-                <a href="#" class="menu btn" stormField="menu"><i class="icon-flag"></i></a>
+                <a href="#" class="menu btn" stormField="menu"><i class="{{ item.menu ? 'icon-eye-open' : 'icon-eye-close' }}"></i></a>
                 <a href="#" class="delete btn"><i class="icon-trash"></i></a>
             </div>
         </div>
@@ -131,10 +131,12 @@
         $('.a-units .menu').click(function (e) {
             Storm.toggle(Storm.buildPath(this), Function.delegate(this, function (data) {
                 if (data.menu) {
-                    $(this).removeClass('menu_off');
+                    $(this).find('i').addClass('icon-eye-open');
+                    $(this).find('i').removeClass('icon-eye-close');
                 }
                 else {
-                    $(this).addClass('menu_off');
+                    $(this).find('i').removeClass('icon-eye-open');
+                    $(this).find('i').addClass('icon-eye-close');
                 }
             }));
         });
