@@ -182,7 +182,7 @@ class Madone_Core extends Pimple {
 		}
 
 		// Выбираем страницы, сортируем так: сначала самые глубоко вложеные, среди одинаково вложенных — с большим приоритетом типа
-		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->follow( 1 )->all() as $p ) {
+		foreach( Model_Pages()->filter( $filter )->filter( array( 'enabled' => true ) )->orderDesc( 'lvl' )->all() as $p ) {
 			// в $uri как раз оказывается полный uri запрошенной страницы :D
 			// Отделим uri приложение внутри страницы
 			$app_uri = mb_substr( $uri, mb_strlen( $p->uri, 'utf-8' ), mb_strlen( $uri, 'utf-8' ), 'utf-8' );

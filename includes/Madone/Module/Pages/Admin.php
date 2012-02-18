@@ -4,7 +4,7 @@ class Madone_Module_Pages_Admin extends Madone_Module {
 
     function index() {
         // Получаем дерево страниц
-        $pages = Model_Pages()->kiOrder()->follow(2)->tree();
+        $pages = Model_Pages()->kiOrder()->tree();
         
         // Если список пуст, проверим наличие главной страницы
         if( ! $pages ) {
@@ -14,7 +14,7 @@ class Madone_Module_Pages_Admin extends Madone_Module {
             }
         }
 
-        $types = Model_Pagetypes( array( 'enabled' => true ) )->order( 'position' )->all();
+//        $types = Model_Pagetypes( array( 'enabled' => true ) )->order( 'position' )->all();
         $modules = array(
             array('name' => 'Pages', 'title' => "Текстовая страница"),
             array('name' => 'News', 'title' => "Новости"),
@@ -25,7 +25,7 @@ class Madone_Module_Pages_Admin extends Madone_Module {
         return $this->getTemplate( 'index.twig', array(
             'root' => $pages[0],
             'items' => $pages[0]->getChildren(),
-            'types' => $types,
+//            'types' => $types,
             'modules' => $modules
         ) );
     }
