@@ -5,10 +5,12 @@
     <div class="a-units" stormModel="Model_Textblock">
 		{% for i in items %}
 			<div class="a-unit" stormObject="{{ i.id }}">
-			<div class="a-unit-body{{ i.enabled ? '' : 'disabled' }}">
-				<div class="actions">
-					<img title="Редактировать" class="edit" width="16" height="16" src="/static/i/admin/icons/16/pencil.png"/>
-					<img title="Включить/Выключить" class="enabled" stormField="enabled" width="16" height="16" src="/static/i/admin/icons/16/lamp-{{ i.enabled ? 'on' : 'off' }}.png"/>
+			<div class="a-unit-body{{ i.enabled ? '' : ' disabled' }}">
+				<div class="actions button-toolbar">
+                    <div class="btn-group">
+                        <a title="Редактировать" href="#" class="edit-item btn"><i class="icon-pencil"></i></a>
+                        <a title="Включить/Выключить" href="#" class="enabled btn" stormField="enabled"><i class="icon-off"></i></a>
+                    </div>
 				</div>
 				<h2 stormText="name">{{ i.name }}</h2>
 				<p>&nbsp;</p>
@@ -17,7 +19,7 @@
 		{% endfor %}
     </div>
 
-    <form id="block-form" class="a-unit-form form-stacked" method="post" enctype="multipart/form-data">
+    <form id="block-form" class="a-unit-form" method="post" enctype="multipart/form-data">
         <h2 text="name">Имя блока</h2>
 		<div class="clearfix">
 		    <label>Текст</label>
@@ -25,8 +27,8 @@
 		        <textarea rich="yes" class="width-100 height-300" name="text"></textarea>
 		    </div>
         </div>
-		<div class="actions">
-			<button type="submit" class="submit btn primary">Сохранить</button>
+		<div class="form-actions">
+			<button type="submit" class="submit btn btn-primary">Сохранить</button>
 			<button type="reset" class="cancel btn">Отмена</button>
 		</div>
     </form>
@@ -50,7 +52,7 @@
 			}));
 		});
 
-		$( '.edit' ).click( function( e ) {
+		$( '.edit-item' ).click( function( e ) {
 			Object.create( Storm.Form ).extend( {
 				object: Storm.buildPath( this ),
 				form: $( '#block-form' ),
