@@ -23,7 +23,7 @@ class Storm_Queryset_Tree extends Storm_Queryset
     
     /**
      * Сортировка по положению в дереве
-     * @return \Storm_Queryset
+     * @return \Storm_Queryset_Tree
      */
     function kiOrder()
     {
