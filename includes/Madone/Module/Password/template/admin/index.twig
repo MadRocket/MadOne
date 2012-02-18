@@ -1,26 +1,14 @@
 <div class="module-content">
     <h1>Смена пароля</h1>
     <form method="post" enctype="multipart/form-data">
-        <div class="clearfix">
-            <label>Старый пароль:</label>
-            <div class="input">
-                <input type="password" name="old_password" id="old-password" />
-            </div>
-        </div>
-        <div class="clearfix">
-            <label>Новый пароль:</label>
-            <div class="input">
-                <input type="password" name="new_password" id="new-password" />
-            </div>
-        </div>
-        <div class="clearfix">
-            <label>Повторите новый пароль:</label>
-            <div class="input">
-                <input type="password"  name="new_password_retype" id="new-password-retype" />
-            </div>
-        </div>
-        <div class="actions">
-            <button type="submit" id="change-password" disabled="disabled" class="btn primary">Изменить пароль</button>
+        <label>Старый пароль:</label>
+        <input type="password" name="old_password" id="old-password" />
+        <label>Новый пароль:</label>
+        <input type="password" name="new_password" id="new-password" />
+        <label>Повторите новый пароль:</label>
+        <input type="password"  name="new_password_retype" id="new-password-retype" />
+        <div class="form-actions">
+            <button type="submit" id="change-password" disabled="disabled" class="btn btn-primary">Изменить пароль</button>
         </div>
     </form>
 </div>

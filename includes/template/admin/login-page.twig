@@ -10,24 +10,13 @@
         <div class="madone-content">
             <div class="container" style="padding-top: 120px;">
                 <div class="row">
-                    <div class="span8 columns offset4">
+                    <div class="span8 columns offset2">
                         <h1>MadOne</h1>
 
-                        <form method="post" class="madone-login-form">
-                            <div class="clearfix">
-                                <label>Имя</label>
-                                <div class="input">
-                                    <input tabindex="1" type="text" name="_madone_login" value="{{ _madone_login }}"/></div>
-                                </div>
-                            <div class="clearfix">
-                                <label>Пароль</label>
-                                <div class="input">
-                                    <input tabindex="2" type="password" name="_madone_password"/>
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button tabindex="3" type="submit" class="btn primary">Войти</button>
-                            </div>
+                        <form method="post" class="well form-inline madone-login-form">
+                            <input class="span3" tabindex="1" type="text" name="_madone_login" value="{{ _madone_login }}"/>
+                            <input class="span3" tabindex="2" type="password" name="_madone_password"/>
+                            <button tabindex="3" type="submit" class="btn btn-primary">Войти</button>
                         </form>
                         {% if login_attempt %}
                             <div class="alert-message error">
