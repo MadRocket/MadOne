@@ -9,7 +9,7 @@ class Madone_Config {
         'db_backend'   => 'Mysql',
         'db_host'      => 'localhost',
         'db_port'      => '',
-        'db_name'      => 'Madone_dev_context_modules',
+        'db_name'      => 'Madone_dev',
         'db_user'      => 'root',
         'db_password'  => 'root',
         'db_charset'   => 'utf8',
@@ -30,24 +30,21 @@ class Madone_Config {
      */
     public $models = array (
         'Model_Module',
-        'Model_Pagetype',
         'Model_Page',
         'Model_Textblock',
         'Model_User',
         array( 'Model_News', 'Model_Newslist' ),
         'Model_Galleryimage',
         'Model_Showcaseitem',
+        'Model_Showcaseimage',
         'Model_Feedbackmessage',
         'Model_Tempimage',
         'Model_Tempfile',
-        'Model_Showcaseimage',
-        'Model_Subscriptionrecipient',
+//        'Model_Subscriptionrecipient',
     );
 
     public $locales = array (
         'ru_RU.UTF-8',
-//		'en_US.UTF-8',
-//		'de_DE.UTF-8',
     );
 
 	static public $instance;
@@ -90,13 +87,5 @@ class Madone_Config {
 
     function __isset( $name ) {
         return array_key_exists($name, self::$attributes);
-    }
-    
-    static function writeToFile() {
-//	    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js', json_encode(self::$attributes));
-    }
-    
-    private function readFromFile() {
-//		self::$attributes = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'].'/includes/config.js'), true);
     }
 }
