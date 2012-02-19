@@ -11,11 +11,11 @@
     <div class="extra-box">
         <h6>{{ item.date|date('d | m | Y') }}</h6>
         <p class="p0">
-            <a style="color: #545454" href="/news/news{{item.id}}">{{ item.title|e }}</a>
+            <a style="color: #545454" href="{{_page.uri}}/news{{item.id}}">{{ item.title|e }}</a>
         </p>
         <span class="color-3">
         {{ item.announce }}
-        </span><a class="link-2" href="/news/news{{item.id}}"></a>
+        </span><a class="link-2" href="{{_page.uri}}/news{{item.id}}"></a>
     </div>
 </div>
 {% endfor %}

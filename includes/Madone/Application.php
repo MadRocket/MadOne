@@ -38,17 +38,22 @@ class Madone_Application {
         array_pop($path_parts);
         array_shift($path_parts);
 
+        // Adding site specific module templates to templatePath
         $module_name = array_pop($path_parts);
         if(is_dir( "{$_SERVER['DOCUMENT_ROOT']}/includes/template/{$module_name}" )) {
             $templatePath[] = "{$_SERVER['DOCUMENT_ROOT']}/includes/template/{$module_name}";
         }
-
+        // Adding standart module templates to templatePath
         if(is_dir(__DIR__."/Module/{$module_name}/template")) {
             $templatePath[] = __DIR__."/Module/{$module_name}/template";
         }
 
         $twig = $this->container['template'];
+        /** @var $twig Twig_Environment */
         $twig->getLoader()->setPaths( array_merge($templatePath, $twig->getLoader()->getPaths())  );
+
+        // Setting up default environment
+        $vars['_page'] = $this->page;
 
         return $twig->loadTemplate($template)->render($vars);
     }

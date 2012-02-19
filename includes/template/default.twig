@@ -18,7 +18,7 @@
     <div id="top-navigation">
         <ul class="sf-menu">
         {% for item in madone.getTree('Model_Page').filterLevel(2, 0).filter({'enabled': 1, 'menu': 1}).kiOrder().tree() %}
-            <li{{ item.uri == page.uri ? ' class="current"' : '' }}><a href="{{ item.uri }}">{{ item.title|e }}</a></li>
+            <li{{ item.uri == _page.uri ? ' class="current"' : '' }}><a href="{{ item.uri }}">{{ item.title|e }}</a></li>
         {% endfor %}
         </ul>
     </div>
@@ -27,7 +27,7 @@
     </div>
 
     {% block content %}
-        {{ page.text|raw }}
+        {{ _page.text|raw }}
     {% endblock %}
 
     {% include "footer.twig" %}

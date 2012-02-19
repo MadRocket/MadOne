@@ -12,7 +12,7 @@ class Madone_Module_Feedback_Application extends Madone_Application {
 
     function index() {
         print $this->render('feedback/index.twig', array(
-			'page' => $this->page,
+
 			'mode' => null,
             'vars' => Madone_Utilites::vars()
 		));
@@ -31,7 +31,7 @@ class Madone_Module_Feedback_Application extends Madone_Application {
         }
 
         print $this->render('feedback/index.twig', array(
-			'page' => $this->page,
+
 			'mode' => $mode,
             'vars' => Madone_Utilites::vars()
 		));

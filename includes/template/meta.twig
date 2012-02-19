@@ -1,16 +1,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
     {%- block site_title -%}
-        {%- if page.meta_title -%}
-            {{ page.meta_title }}
+        {%- if _page.meta_title -%}
+            {{ _page.meta_title }}
         {%- else -%}
-            {{ page.title }} &mdash; {{ madone['config'].site_title }}
+            {{ _page.title }} &mdash; {{ madone['config'].site_title }}
         {%- endif -%}
     {%- endblock -%}
 </title>
-{%- if page.meta_keywords %}
-<meta name="keywords" content="{{page.meta_keywords}}">
+{%- if _page.meta_keywords %}
+<meta name="keywords" content="{{_page.meta_keywords}}">
 {%- endif -%}
-{%- if page.meta_description %}
-<meta name="description" content="{{page.meta_description}}">
+{%- if _page.meta_description %}
+<meta name="description" content="{{_page.meta_description}}">
 {%- endif -%}
