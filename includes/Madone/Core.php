@@ -11,9 +11,11 @@ class Madone_Core extends Pimple {
     protected $languages = array();
     protected $language = null;
     protected $langRegExp = null;
-    protected $developmentMode = true;
+    protected $developmentMode = null;
 
     public function __construct() {
+		$this->detectDevelompentMode();
+
         $this['config'] = $this->share(function($container){
             return new Madone_Config();
         });
@@ -23,7 +25,7 @@ class Madone_Core extends Pimple {
         });
 
         $this['response'] = $this->share(function($container) {
-            return new Response( );
+            return new Response();
         });
 
         $this['storm_dir'] = "{$_SERVER['DOCUMENT_ROOT']}/includes/storm";
@@ -33,15 +35,22 @@ class Madone_Core extends Pimple {
         $this['template_dir'] = "{$_SERVER['DOCUMENT_ROOT']}/includes/template";
         $this['template_cache_dir'] = "{$_SERVER['DOCUMENT_ROOT']}/cache/template";
 
-        $this['template'] = function($container) {
+        $this['template'] = function(Madone_Core $container) {
             $path = array("{$container['template_dir']}/_default", $container['template_dir']);
 
-            // TODO: Disable cache in dev mode
-//            $twig = new Twig_Environment(new Twig_Loader_Filesystem($path), array('cache' => $container['template_cache_dir']));
-            $twig = new Twig_Environment(new Twig_Loader_Filesystem($path));
+            if($container->getDevelopmentMode()) {
+                // Disable cache in dev mode
+                $twig = new Twig_Environment(new Twig_Loader_Filesystem($path));
+                $twig->addExtension(new Twig_Extensions_Extension_Debug());
+            }
+            else {
+                $twig = new Twig_Environment(
+                    new Twig_Loader_Filesystem($path),
+                    array('cache' => $container['template_cache_dir'])
+                );
+            }
 
             $twig->addExtension(new Twig_Extensions_Extension_Text());
-            $twig->addExtension(new Twig_Extensions_Extension_Debug());
 
             $factory = new AssetFactory($container['assets_dir']);
             $twig->addExtension(new \Assetic\Extension\Twig\AsseticExtension( $factory ));
@@ -59,9 +68,6 @@ class Madone_Core extends Pimple {
         $locales = $this['config']->locales;
 
         Storm_Core::load($this['storm_dir'], $models, $locales);
-
-		// Определим нужно ли влючать режим разработки
-		$this->detectDevelompentMode();
 
 		// На инициализацию устанавливаем собственные обработчики ошибок и исключений
 		$this->setErrorHandlers();
@@ -89,7 +95,7 @@ class Madone_Core extends Pimple {
 		}
 	}
 	
-	protected function getDevelopmentMode() {
+	public function getDevelopmentMode() {
 		return $this->developmentMode;
 	}
 	
@@ -193,9 +199,8 @@ class Madone_Core extends Pimple {
             $app_classname = "Madone_Module_{$p->module}_Application";
             if(class_exists($app_classname)) {
                 $app = new $app_classname($this);
-                /**
-                 * @var $app Madone_Application
-                 */
+
+                /** @var $app Madone_Application */
                 $app_response = $app->run($p, $app_uri);
 
                 if($app_response) {
