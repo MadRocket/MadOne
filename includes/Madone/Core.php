@@ -36,6 +36,7 @@ class Madone_Core extends Pimple {
         $this['template'] = function($container) {
             $path = array("{$container['template_dir']}/_default", $container['template_dir']);
 
+            // TODO: Disable cache in dev mode
 //            $twig = new Twig_Environment(new Twig_Loader_Filesystem($path), array('cache' => $container['template_cache_dir']));
             $twig = new Twig_Environment(new Twig_Loader_Filesystem($path));
 
