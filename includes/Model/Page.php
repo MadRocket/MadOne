@@ -10,13 +10,6 @@ class Model_Page extends Storm_Model_Tree {
 			'name'		=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 100, 'index' => true ) ),
             'uri'		=> new Storm_Db_Field_Char( array( 'localized'=> false, 'maxlength' => 700, 'index' => true ) ),
         	'text'		=> new Storm_Db_Field_Text( array( 'default' => '' ) ),
-        	'type'		=> new Storm_Db_Field_Fk( array(
-        									'model' => 'Model_Pagetype',
-        									'related' => 'pages', 
-        									'null' => false, 
-        									'index' => true, 
-        									'default' => 0
-            ) ),
 
             'template' => new Storm_Db_Field_Char( array('maxlength' => 255, 'localized' => false, 'default' => null) ),
 
