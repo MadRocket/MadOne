@@ -11,7 +11,7 @@ class Storm_Db_Field_Char extends Storm_Db_Field
      * Конструктор.
      * Проверяет параметры, касающиеся настроек поля
      */
-    function __construct( array $params )
+    function __construct( array $params = array('maxlength' => 255) )
     {
         // Проверим длину поля
         if( ! ( isset( $params['maxlength'] ) && $params['maxlength'] > 0 ) )
