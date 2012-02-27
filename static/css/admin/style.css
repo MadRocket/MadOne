@@ -332,3 +332,18 @@ form.form-stacked div.actions {
 .cke_skin_kama *, .cke_skin_kama a:hover, .cke_skin_kama a:link, .cke_skin_kama a:visited, .cke_skin_kama a:active {
     float: none;
 }
+
+.cke_top {
+    border-bottom: 1px solid lightgray !important;
+}
+span.cke_skin_kama {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+}
+.cke_skin_kama .cke_wrapper {
+    background-color: transparent !important;
+    padding: 0 !important;
+}
