@@ -1,0 +1,51 @@
+<h1>Структура сайта</h1>
+
+<div class="module-content">
+    <form id="page-form" class="a-unit-form" method="post" enctype="multipart/form-data" style="display: block;">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#1" data-toggle="tab">Основные поля</a></li>
+                <li><a href="#2" data-toggle="tab">SEO-поля</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                        <label>Название страницы</label>
+                        <input class="span7" type="text" name="title" value="{{ page.title }}">
+
+                        <label>Название по-английски</label>
+                        <input class="span7" type="text" name="name" value="{{ page.name }}"> <span class="help-inline">для адресной строки</span>
+
+                        <label>Модуль:</label>
+                        <select name="module" class="span7">
+                            {% for module in modules %}
+                            <option value="{{ module.name }}">{{ module.title }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label>Текст страницы:</label>
+                        <textarea name="text" rich="yes">
+                            {{ page.text }}
+                        </textarea>
+                </div>
+                <div class="tab-pane" id="2">
+                        <label>Заголовок:</label>
+                        <input class="span7" size="30" type="text" name="meta_title" value="{{ page.meta_title }}">
+                        <span class="help-inline">Заголовок страницы</span>
+
+                        <label>Ключевые слова:</label>
+                        <textarea class="span7" name="meta_keywords" wrap="wrap">{{ page.meta_keywords }}</textarea>
+                    <span class="help-inline">Ключевые слова стрницы, meta-тэг keywords</span>
+
+                        <label>Описание:</label>
+                        <textarea class="span7" name="meta_description" wrap="wrap">{{ page.meta_description }}</textarea>
+                        <span class="help-inline">Описание стрницы, meta-тэг description</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="submit btn btn-primary" type="submit">Сохранить</button>
+            {#<button class="cancel btn" type="reset">Отмена</button>#}
+        </div>
+    </form>
+</div>

@@ -1,6 +1,10 @@
 <?php
 
 class Madone_Module_Pages_Admin extends Madone_Module {
+    protected $routes = array(
+        "/" => 'index',
+        "/[i:id]" => "item"
+    );
 
     function index() {
         // Получаем дерево страниц
@@ -14,7 +18,6 @@ class Madone_Module_Pages_Admin extends Madone_Module {
             }
         }
 
-//        $types = Model_Pagetypes( array( 'enabled' => true ) )->order( 'position' )->all();
         $modules = array(
             array('name' => 'Pages', 'title' => "Текстовая страница"),
             array('name' => 'News', 'title' => "Новости"),
@@ -25,7 +28,29 @@ class Madone_Module_Pages_Admin extends Madone_Module {
         return $this->getTemplate( 'index.twig', array(
             'root' => $pages[0],
             'items' => $pages[0]->getChildren(),
-//            'types' => $types,
+            'modules' => $modules
+        ) );
+    }
+
+    function item($id) {
+        $page = Model_Pages()->get($id);
+
+        if($this->container['request']->getMethod() == 'POST') {
+            $page->copyFrom($_POST);
+            $page->save();
+
+            header("Location: /admin/pages/");
+            return true;
+        }
+
+        $modules = array(
+            array('name' => 'Pages', 'title' => "Текстовая страница"),
+            array('name' => 'News', 'title' => "Новости"),
+            array('name' => 'Showcase', 'title' => "Каталог"),
+            array('name' => 'Gallery', 'title' => "Галерея"),
+        );
+        return $this->getTemplate( 'item.twig', array(
+            'page' => $page,
             'modules' => $modules
         ) );
     }
