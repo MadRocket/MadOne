@@ -103,8 +103,8 @@ class Madone_Core extends Pimple {
 	 *	Установка обработчиков ошибок и исключений.
 	 */
 	protected function setErrorHandlers() {
-		set_error_handler( array( "Madone_Core", "fatal_error_handler" ), E_RECOVERABLE_ERROR | E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE );
-		set_exception_handler( array( "Madone_Core", "uncaught_exception_handler" ) );
+		set_error_handler( array( $this, "fatal_error_handler" ), E_RECOVERABLE_ERROR | E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE );
+		set_exception_handler( array( $this, "uncaught_exception_handler" ) );
 	}
 	
 	/**
