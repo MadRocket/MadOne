@@ -347,3 +347,6 @@ span.cke_skin_kama {
     background-color: transparent !important;
     padding: 0 !important;
 }
+.cke_browser_webkit {
+	outline: none !important;
+}
