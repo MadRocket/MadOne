@@ -11,7 +11,7 @@ class Madone_Config {
         'db_port'      => '',
         'db_name'      => 'Madone_dev',
         'db_user'      => 'root',
-        'db_password'  => 'root',
+        'db_password'  => '',
         'db_charset'   => 'utf8',
         'db_prefix'    => '',
 
