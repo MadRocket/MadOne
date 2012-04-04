@@ -13,12 +13,12 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        
+
         "symfony/http-foundation": "2.1.*",
         "symfony/config": "2.1.*",
-        "twig/twig": "1.5.*",
+        "twig/twig": "*",
         "twig/extensions": "*",
-        "swiftmailer/swiftmailer": "4.1.*",
+        "swiftmailer/swiftmailer": "*",
         "pimple/pimple": "*",
         "kriswallsmith/assetic": "*",
         "imagine/Imagine": "*"
