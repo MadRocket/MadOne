@@ -8,7 +8,7 @@
         <label>Повторите новый пароль:</label>
         <input type="password"  name="new_password_retype" id="new-password-retype" />
         <div class="form-actions">
-            <button type="submit" id="change-password" disabled="disabled" class="btn btn-primary">Изменить пароль</button>
+            <button type="button" id="change-password" disabled="disabled" class="btn btn-primary">Изменить пароль</button>
         </div>
     </form>
 </div>
@@ -22,12 +22,12 @@ $(function() {
             $( '#change-password' ).trigger( 'click' );
         }
     } );
-    
+
     // Показ кнопки сохранения
     $( '#old-password' ).bind( 'keyup change focus blur', function ( event ) {
         $( '#change-password' ).attr( 'disabled', ! /./.test( $(this).val() ) );
     } );
-    
+
     // Смена пароля
     $( '#change-password' ).click( function ( e ) {
         // Новый пароль достаточно длинный?
@@ -37,7 +37,7 @@ $(function() {
             $( '#new-password-retype' ).val( '' );
             return false;
         }
-        
+
         // Новый пароль совпадает с его повтором?
         if( $( '#new-password' ).val() != $( '#new-password-retype' ).val() ) {
             alert( $( '#new-password-retype' ).val().length ? 'Вы неправильно набрали повтор нового пароля. Введите еще раз, пароль и его повтор должны совпадать.' : 'Введите повтор нового пароля.' );
