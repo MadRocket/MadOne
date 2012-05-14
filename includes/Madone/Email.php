@@ -1,8 +1,7 @@
 <?php
+require $_SERVER['DOCUMENT_ROOT'].'/vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 class Madone_Email {
-
     static function send($subject, $from, $to, $body) {
-
         if (! $from) {
             $from = array( Madone_Config::getInstance()->{'site_title'} => "noreply@{$_SERVER['HTTP_HOST']}" );
         }

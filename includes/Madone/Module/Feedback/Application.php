@@ -1,42 +1,33 @@
-<?
-/**
- * Module_Feedback_Application class.
- * @extends Madone_Application
- */
-class Madone_Module_Feedback_Application extends Madone_Application {
+<?php
 
+class Madone_Module_Feedback_Application extends Madone_Application {
     protected $routes = array(
         '/?' => 'index',
         'send' => 'send'
     );
 
     function index() {
-        print $this->render('feedback/index.twig', array(
-
-			'mode' => null,
-            'vars' => Madone_Utilites::vars()
-		));
-		return true;
-    }
-
-    function send() {
+        $this->page->text .= $this->form();
         $vars = Madone_Utilites::vars();
-		$mode = null;
+        $mode = null;
 
         if( array_key_exists( 'text', $vars ) && $vars['text'] ) {
             Model_Feedbackmessages()->create( $vars );
             $mode = 'added';
-        } else {
+        }
+        else {
             $mode = 'notext';
         }
 
-        print $this->render('feedback/index.twig', array(
-
-			'mode' => $mode,
+        return $this->render('index.twig', array(
+            'mode' => $mode,
             'vars' => Madone_Utilites::vars()
-		));
-		return true;
+        ));
+    }
+
+    function form() {
+        return $this->render('form.twig', array(
+            'vars' => Madone_Utilites::vars()
+        ));
     }
 }
-
-?>
